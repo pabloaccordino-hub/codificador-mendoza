@@ -1,0 +1,19 @@
+{
+  "GLUCOSA EN SUERO": {"code":"LAB.01.073","description":"Glucemia","confidence":"confirmada"},
+  "HEMOGRAMA COMPLETO": {"code":"LAB.01.085","description":"Hemograma","confidence":"confirmada"},
+  "UREMIA": {"code":"LAB.01.157","description":"Urea plasmática","confidence":"validada por equivalencia"},
+  "URICEMIA": {"code":"LAB.01.003","description":"Ácido úrico en suero y plasma","confidence":"confirmada"},
+  "COLESTEROL EN SUERO": {"code":"LAB.02.020","description":"Colesterol total libre y esterificado","confidence":"revisar"},
+  "COLESTEROL HDL": {"code":"LAB.02.018","description":"Colesterol HDL libre y esterificado","confidence":"revisar"},
+  "COLESTEROL LDL": {"code":"LAB.02.019","description":"Colesterol LDL libre y esterificado","confidence":"revisar"},
+  "TRIGLICÉRIDOS": {"code":"LAB.01.154","description":"Triglicéridos","confidence":"confirmada"},
+  "FAL - FOSFATASA ALCALINA": {"code":"LAB.01.065","description":"Fosfatasa alcalina","confidence":"confirmada"},
+  "GOT (AST) - ASPARTATO AMINOTRANSFERASA": {"code":"LAB.01.152","description":"Transaminasa, glutámico oxalacética (GOT, AST)","confidence":"confirmada"},
+  "GPT (ALT) - ALANINO AMINO TRANSFERASA": {"code":"LAB.01.153","description":"Transaminasa, glutámico pirúvica (GPT, AGT)","confidence":"confirmada"},
+  "BILIRRUBINEMIA": {"code":"LAB.01.014","description":"Bilirrubina total","confidence":"validada por equivalencia"},
+  "CREATININA + FILTRADO GLOMERULAR": {"code":"LAB.01.040","description":"Creatinina en plasma o suero","confidence":"confirmada"},
+  "T4 TOTAL - TIROXINA TOTAL": {"code":"LAB.02.063","description":"T4 total (tiroxina total)","confidence":"confirmada"},
+  "TSH - TIROTROFINA": {"code":"LAB.02.069","description":"TSH, tirotrofina plasmática","confidence":"confirmada"},
+  "T3 - TRIIODOTIRONINA": {"code":"LAB.02.061","description":"T3 total (triiodotironina total)","confidence":"confirmada"},
+  "ORINA COMPLETA": {"code":"LAB.01.124","description":"Orina completa","confidence":"confirmada"}
+}

@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
+<title>Codificador Mendoza</title>
+<style>
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:#f3f4f6;margin:0;color:#111827}
+main{max-width:720px;margin:auto;padding:20px}
+.card{background:white;border-radius:18px;padding:20px;box-shadow:0 4px 18px #0001;margin-bottom:16px}
+h1{font-size:25px;margin:0 0 6px}.muted{color:#6b7280}
+button{width:100%;padding:14px;border:0;border-radius:12px;background:#111827;color:white;font-weight:700;font-size:16px;margin-top:10px}
+button.secondary{background:#e5e7eb;color:#111827}
+input[type=file]{width:100%;padding:12px;border:1px solid #d1d5db;border-radius:12px;box-sizing:border-box}
+.status{padding:12px;border-radius:12px;background:#f9fafb;margin-top:12px;white-space:pre-wrap}
+.ok{background:#ecfdf5;color:#065f46}.warn{background:#fffbeb;color:#92400e}
+.item{padding:10px 0;border-bottom:1px solid #eee}.code{font-weight:800}
+</style>
+</head>
+<body>
+<main>
+<div class="card">
+<h1>Codificador de Prestaciones</h1>
+<div class="muted">Nomenclador Mendoza · Marzo 2026</div>
+</div>
+<div class="card">
+<label><b>Seleccionar estudio PDF</b></label>
+<input id="pdf" type="file" accept="application/pdf">
+<button onclick="processFile()">ANALIZAR ESTUDIO</button>
+<div id="status" class="status">Esperando un PDF…</div>
+</div>
+<div id="results" class="card" style="display:none">
+<h2>Resultado</h2>
+<div id="list"></div>
+<button id="download" onclick="downloadResult()">GENERAR PDF CODIFICADO</button>
+</div>
+</main>
+<script>
+let lastText="", items=[];
+const rules=[
+ ["GLUCOSA EN SUERO","GLUCEMIA","01.073"],
+ ["GLUCEMIA","GLUCEMIA","01.073"]
+];
+function norm(s){return s.normalize("NFD").replace(/[\\u0300-\\u036f]/g,"").toUpperCase().replace(/\\s+/g," ").trim();}
+function findRules(text){
+ const n=norm(text); let out=[];
+ for(const [src,dst,code] of rules) if(n.includes(src)) out.push({src,dst,code});
+ return out;
+}
+async function processFile(){
+ const f=document.getElementById('pdf').files[0];
+ const st=document.getElementById('status');
+ if(!f){st.textContent="Seleccioná un PDF.";st.className="status warn";return;}
+ st.textContent="PDF recibido. Esta versión Android deja preparada la interfaz y las reglas base. Para leer PDF y conservar negrita, hace falta integrar el motor PDF/OCR en la versión instalable.";st.className="status";
+ // Browser-only fallback: display configured rules and explain limitation.
+ items=[...rules.map(x=>({src:x[0],dst:x[1],code:x[2]}))];
+ items.push({src:"ACTO BIOQUÍMICO",dst:"ACTO BIOQUÍMICO",code:"PENDIENTE DE VALIDACIÓN EN EL NOMENCLADOR"});
+ render();
+}
+function render(){
+ document.getElementById('results').style.display='block';
+ document.getElementById('list').innerHTML=items.map(x=>`<div class="item"><b>${x.src}</b><br>→ ${x.dst}<br><span class="code">${x.code}</span></div>`).join("");
+}
+function downloadResult(){
+ alert("La generación del PDF final se habilita en la versión instalable con motor PDF. Esta PWA es el prototipo de interfaz.");
+}
+</script>
+</body></html>
