@@ -1,556 +1,537 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Codificador de Prestaciones - Mendoza</title>
+<title>Codificador de Prestaciones - Mendoza</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+<style>
+* {
+    box-sizing: border-box;
+}
 
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: #f3f5f8;
-            color: #202124;
-        }
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f3f5f8;
+    color: #202124;
+}
 
-        header {
-            background: #17365d;
-            color: white;
-            padding: 25px;
-        }
+header {
+    background: #17365d;
+    color: white;
+    padding: 24px 30px;
+}
 
-        header h1 {
-            margin: 0;
-            font-size: 26px;
-        }
+header h1 {
+    margin: 0;
+    font-size: 26px;
+}
 
-        header p {
-            margin: 8px 0 0;
-            opacity: 0.9;
-        }
+header p {
+    margin: 8px 0 0;
+    opacity: .9;
+}
 
-        .container {
-            max-width: 1400px;
-            margin: 25px auto;
-            padding: 0 20px;
-        }
+.container {
+    max-width: 1400px;
+    margin: 25px auto;
+    padding: 0 20px;
+}
 
-        .card {
-            background: white;
-            border-radius: 12px;
-            padding: 22px;
-            margin-bottom: 20px;
-            box-shadow: 0 3px 12px rgba(0,0,0,.08);
-        }
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 22px;
+    margin-bottom: 20px;
+    box-shadow: 0 3px 12px rgba(0,0,0,.08);
+}
 
-        h2 {
-            margin-top: 0;
-            color: #17365d;
-        }
+h2 {
+    margin-top: 0;
+    color: #17365d;
+}
 
-        .info {
-            background: #cff4fc;
-            color: #055160;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 15px;
-            line-height: 1.5;
-        }
+textarea {
+    width: 100%;
+    min-height: 300px;
+    resize: vertical;
+    padding: 15px;
+    border: 1px solid #bbb;
+    border-radius: 8px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+}
 
-        textarea {
-            width: 100%;
-            min-height: 300px;
-            resize: vertical;
-            padding: 15px;
-            border: 1px solid #bbb;
-            border-radius: 8px;
-            font-family: Arial, Helvetica, sans-serif;
-            font-size: 16px;
-            line-height: 1.5;
-        }
+button {
+    border: 0;
+    border-radius: 7px;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 15px;
+    margin: 5px;
+}
 
-        button {
-            border: 0;
-            border-radius: 7px;
-            padding: 12px 20px;
-            cursor: pointer;
-            font-size: 15px;
-            margin: 5px;
-        }
+.btn-primary {
+    background: #17365d;
+    color: white;
+}
 
-        .btn-primary {
-            background: #17365d;
-            color: white;
-        }
+.btn-success {
+    background: #198754;
+    color: white;
+}
 
-        .btn-primary:hover {
-            background: #0e2846;
-        }
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
 
-        .btn-success {
-            background: #198754;
-            color: white;
-        }
+button:hover {
+    opacity: .9;
+}
 
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
+.estado {
+    margin-top: 15px;
+    padding: 12px;
+    border-radius: 7px;
+    background: #eef3f8;
+}
 
-        .btn-danger {
-            background: #dc3545;
-            color: white;
-        }
+.error {
+    background: #f8d7da;
+    color: #842029;
+}
 
-        .estado {
-            margin-top: 15px;
-            padding: 12px;
-            border-radius: 7px;
-            background: #eef3f8;
-        }
+.ok {
+    background: #d1e7dd;
+    color: #0f5132;
+}
 
-        .error {
-            background: #f8d7da;
-            color: #842029;
-        }
+.info {
+    background: #cff4fc;
+    color: #055160;
+    padding: 15px;
+    border-radius: 7px;
+    margin-bottom: 15px;
+}
 
-        .success {
-            background: #d1e7dd;
-            color: #0f5132;
-        }
+.resumen {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+}
 
-        .warning {
-            background: #fff3cd;
-            color: #664d03;
-        }
+.resumen-box {
+    background: #f5f7fa;
+    border-radius: 8px;
+    padding: 18px;
+}
 
-        .resumen {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
-        }
+.resumen-numero {
+    font-size: 28px;
+    font-weight: bold;
+    color: #17365d;
+}
 
-        .resumen-box {
-            background: #f5f7fa;
-            border-radius: 8px;
-            padding: 18px;
-        }
+.resumen-titulo {
+    color: #666;
+    margin-top: 5px;
+}
 
-        .resumen-numero {
-            font-size: 30px;
-            font-weight: bold;
-            color: #17365d;
-        }
+.tabla-container {
+    overflow-x: auto;
+}
 
-        .resumen-titulo {
-            color: #666;
-            margin-top: 5px;
-        }
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
 
-        .tabla-container {
-            overflow-x: auto;
-        }
+th {
+    background: #17365d;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
 
-        th {
-            background: #17365d;
-            color: white;
-            padding: 12px;
-            text-align: left;
-        }
+.codigo {
+    color: #17365d;
+    font-weight: bold;
+    white-space: nowrap;
+}
 
-        td {
-            padding: 12px;
-            border-bottom: 1px solid #ddd;
-        }
+.descripcion {
+    font-weight: bold;
+}
 
-        tr:hover {
-            background: #f5f7fa;
-        }
+.resultado {
+    color: #198754;
+    font-weight: bold;
+}
 
-        .codigo {
-            font-weight: bold;
-            color: #17365d;
-            white-space: nowrap;
-        }
+.no-encontrada {
+    color: #b02a37;
+}
 
-        .encontrado {
-            color: #198754;
-            font-weight: bold;
-        }
+.badge {
+    display: inline-block;
+    padding: 5px 9px;
+    border-radius: 20px;
+    font-size: 12px;
+    background: #d1e7dd;
+    color: #0f5132;
+}
 
-        .no-encontrado {
-            color: #dc3545;
-            font-weight: bold;
-        }
+.oculto {
+    display: none;
+}
 
-        .badge {
-            display: inline-block;
-            padding: 5px 9px;
-            border-radius: 20px;
-            font-size: 12px;
-            background: #d1e7dd;
-            color: #0f5132;
-        }
+.controles {
+    margin-top: 15px;
+}
 
-        .badge-warning {
-            background: #fff3cd;
-            color: #664d03;
-        }
+.nomenclador-info {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+}
 
-        .oculto {
-            display: none;
-        }
+.prestacion-original {
+    background: #f8f9fa;
+    border-radius: 6px;
+    padding: 6px 8px;
+}
 
-        .busqueda {
-            margin-bottom: 20px;
-        }
+@media(max-width:700px) {
 
-        .busqueda input {
-            width: 100%;
-            padding: 13px;
-            border: 1px solid #bbb;
-            border-radius: 7px;
-            font-size: 16px;
-        }
+    header {
+        padding: 18px;
+    }
 
-        .contador {
-            margin-top: 10px;
-            color: #666;
-        }
+    header h1 {
+        font-size: 21px;
+    }
 
-        footer {
-            text-align: center;
-            padding: 30px;
-            color: #777;
-        }
+    .container {
+        padding: 0 10px;
+    }
 
-        @media(max-width:700px) {
-            header h1 {
-                font-size: 21px;
-            }
+    .card {
+        padding: 15px;
+    }
 
-            .container {
-                padding: 0 10px;
-            }
+    textarea {
+        min-height: 250px;
+    }
 
-            .card {
-                padding: 15px;
-            }
+    th,
+    td {
+        font-size: 13px;
+    }
+}
+</style>
 
-            textarea {
-                min-height: 250px;
-            }
-
-            th,
-            td {
-                font-size: 13px;
-            }
-        }
-    </style>
 </head>
 
 <body>
 
 <header>
-    <h1>Codificador de Prestaciones de Laboratorio</h1>
-    <p>Nomenclador de Prestaciones de Salud de Mendoza — Marzo 2026</p>
+
+<h1>
+Codificador de Prestaciones de Laboratorio
+</h1>
+
+<p>
+Nomenclador de Prestaciones de Salud de Mendoza - Marzo 2026
+</p>
+
 </header>
+
 
 <div class="container">
 
-    <!-- ===================================================== -->
-    <!-- CARGA -->
-    <!-- ===================================================== -->
 
-    <div class="card">
+<!-- ===================================================== -->
+<!-- ESTADO DEL NOMENCLADOR -->
+<!-- ===================================================== -->
 
-        <h2>1. Prestaciones realizadas</h2>
+<div class="card">
 
-        <div class="info">
-            <strong>Instrucciones:</strong><br><br>
+<h2>
+Estado del nomenclador
+</h2>
 
-            Pegá en el cuadro de abajo las prestaciones tal como aparecen
-            en el estudio médico.
+<div id="estado" class="estado">
+Cargando nomenclador...
+</div>
 
-            <br><br>
+<div id="infoNomenclador" class="nomenclador-info"></div>
 
-            El sistema buscará las prestaciones utilizando el
-            <strong>título de la práctica</strong> y devolverá su código
-            correspondiente.
+</div>
 
-            <br><br>
 
-            <strong>No se utilizan coincidencias por palabras sueltas.</strong>
-        </div>
+<!-- ===================================================== -->
+<!-- PEGAR TEXTO -->
+<!-- ===================================================== -->
 
-        <textarea
-            id="textoPrestaciones"
-            placeholder="Ejemplo:
+<div class="card">
+
+<h2>
+1. Pegar prestaciones realizadas
+</h2>
+
+<div class="info">
+
+Pegá aquí el texto del estudio médico o solamente las prestaciones realizadas.
+
+<br><br>
+
+<strong>
+Importante:
+</strong>
+
+El sistema identifica las prestaciones por el nombre completo de la prestación.
+No utiliza coincidencias parciales de palabras sueltas.
+
+</div>
+
+<textarea
+    id="textoPrestaciones"
+    placeholder="Pegá aquí el texto del estudio médico...
+
+Ejemplo:
 
 HEMOGRAMA
 
+GLUCOSA EN SUERO
+
 VDRL (USR)
+
+HIV (AG/AC COMBO) ECLIA
 
 HBSAG- HEPATITIS B Ag Superficie (ECLIA)
 
 HEPATITIS C, Ac. IgG Anti- (HCV Ac IgG)
-
-HIV (AG/AC COMBO) ECLIA
 "></textarea>
 
-        <br><br>
 
-        <button
-            class="btn-primary"
-            onclick="codificar()">
+<div class="controles">
 
-            CODIFICAR PRESTACIONES
+<button
+    class="btn-primary"
+    onclick="codificarTexto()">
 
-        </button>
+Codificar prestaciones
 
-        <button
-            class="btn-secondary"
-            onclick="limpiar()">
-
-            LIMPIAR
-
-        </button>
-
-        <button
-            class="btn-success"
-            onclick="copiarResultados()">
-
-            COPIAR RESULTADOS
-
-        </button>
-
-        <div id="estado" class="estado">
-            Cargando nomenclador...
-        </div>
-
-    </div>
+</button>
 
 
-    <!-- ===================================================== -->
-    <!-- RESUMEN -->
-    <!-- ===================================================== -->
+<button
+    class="btn-secondary"
+    onclick="limpiar()">
 
-    <div
-        id="cardResumen"
-        class="card oculto">
+Limpiar
 
-        <h2>Resumen</h2>
+</button>
 
-        <div class="resumen">
+</div>
 
-            <div class="resumen-box">
-                <div
-                    id="total"
-                    class="resumen-numero">
-                    0
-                </div>
-
-                <div class="resumen-titulo">
-                    Prestaciones ingresadas
-                </div>
-            </div>
-
-            <div class="resumen-box">
-                <div
-                    id="codificadas"
-                    class="resumen-numero">
-                    0
-                </div>
-
-                <div class="resumen-titulo">
-                    Codificadas
-                </div>
-            </div>
-
-            <div class="resumen-box">
-                <div
-                    id="noCodificadas"
-                    class="resumen-numero">
-                    0
-                </div>
-
-                <div class="resumen-titulo">
-                    No encontradas
-                </div>
-            </div>
-
-        </div>
-
-    </div>
+</div>
 
 
-    <!-- ===================================================== -->
-    <!-- RESULTADOS -->
-    <!-- ===================================================== -->
+<!-- ===================================================== -->
+<!-- RESUMEN -->
+<!-- ===================================================== -->
 
-    <div
-        id="cardResultados"
-        class="card oculto">
+<div
+    id="cardResumen"
+    class="card oculto">
 
-        <h2>2. Resultado de la codificación</h2>
+<h2>
+2. Resumen
+</h2>
 
-        <div class="busqueda">
+<div class="resumen">
 
-            <input
-                type="text"
-                id="filtro"
-                placeholder="Buscar dentro de los resultados..."
-                oninput="filtrarResultados()">
+<div class="resumen-box">
 
-        </div>
+<div
+    id="totalDetectadas"
+    class="resumen-numero">
 
-        <div class="tabla-container">
+0
 
-            <table>
+</div>
 
-                <thead>
+<div class="resumen-titulo">
+Prestaciones detectadas
+</div>
 
-                    <tr>
-                        <th>#</th>
-                        <th>Prestación ingresada</th>
-                        <th>Descripción nomenclador</th>
-                        <th>Código</th>
-                        <th>Valor</th>
-                        <th>Estado</th>
-                    </tr>
-
-                </thead>
-
-                <tbody id="tablaResultados">
-                </tbody>
-
-            </table>
-
-        </div>
-
-    </div>
+</div>
 
 
-    <!-- ===================================================== -->
-    <!-- RESULTADO PARA COPIAR -->
-    <!-- ===================================================== -->
+<div class="resumen-box">
 
-    <div
-        id="cardCopia"
-        class="card oculto">
+<div
+    id="totalCodificadas"
+    class="resumen-numero">
 
-        <h2>3. Resultado para copiar</h2>
+0
 
-        <textarea
-            id="resultadoTexto"
-            readonly>
-        </textarea>
+</div>
 
-    </div>
+<div class="resumen-titulo">
+Con código
+</div>
+
+</div>
 
 
-    <!-- ===================================================== -->
-    <!-- NOMENCLADOR -->
-    <!-- ===================================================== -->
+<div class="resumen-box">
 
-    <div class="card">
+<div
+    id="totalNoEncontradas"
+    class="resumen-numero">
 
-        <h2>Estado del nomenclador</h2>
+0
 
-        <div id="estadoNomenclador">
-            Cargando...
-        </div>
+</div>
 
-    </div>
+<div class="resumen-titulo">
+No encontradas
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- ===================================================== -->
+<!-- RESULTADOS -->
+<!-- ===================================================== -->
+
+<div
+    id="cardResultados"
+    class="card oculto">
+
+<h2>
+3. Resultado de la codificación
+</h2>
+
+<div class="tabla-container">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>
+Prestación detectada
+</th>
+
+<th>
+Código
+</th>
+
+<th>
+Valor
+</th>
+
+<th>
+Estado
+</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tablaResultados">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+<!-- ===================================================== -->
+<!-- TEXTO CODIFICADO -->
+<!-- ===================================================== -->
+
+<div
+    id="cardTextoCodificado"
+    class="card oculto">
+
+<h2>
+4. Texto codificado
+</h2>
+
+<div class="info">
+
+Este texto conserva las prestaciones detectadas y agrega su código correspondiente.
+
+</div>
+
+<textarea
+    id="textoCodificado"
+    readonly>
+</textarea>
+
+<br>
+
+<button
+    class="btn-success"
+    onclick="copiarResultado()">
+
+Copiar resultado
+
+</button>
+
+</div>
+
 
 </div>
 
 
 <footer>
-    Codificador de Prestaciones de Laboratorio — Mendoza
+
+Codificador de Prestaciones de Laboratorio - Mendoza
+
 </footer>
 
 
 <script>
 
 /*
-=============================================================
+=========================================================
 VARIABLES
-=============================================================
+=========================================================
 */
 
 let nomenclador = [];
+
+let nomencladorCargado = false;
 
 let resultados = [];
 
 
 /*
-=============================================================
-NORMALIZAR TEXTO
-=============================================================
-
-IMPORTANTE:
-
-Esta función NO elimina palabras.
-
-Solamente normaliza:
-
-- mayúsculas/minúsculas
-- tildes
-- espacios
-- saltos de línea
-- espacios duplicados
-- algunos caracteres de separación
-
-Esto permite que:
-
-"HEMOGRAMA"
-
-y
-
-"Hemograma"
-
-se consideren la misma prestación.
-
-Pero:
-
-"HEMOGRAMA"
-
-NO coincide con:
-
-"HEMOGRAMA COMPLETO"
-
-=============================================================
-*/
-
-function normalizarTexto(texto) {
-
-    return String(texto || "")
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/\r\n/g, "\n")
-        .replace(/\r/g, "\n")
-        .replace(/[ \t]+/g, " ")
-        .trim()
-        .toLowerCase();
-
-}
-
-
-/*
-=============================================================
+=========================================================
 CARGAR NOMENCLADOR
-=============================================================
+=========================================================
 */
 
 async function cargarNomenclador() {
@@ -558,162 +539,116 @@ async function cargarNomenclador() {
     const estado =
         document.getElementById("estado");
 
-    const estadoNom =
-        document.getElementById("estadoNomenclador");
-
     try {
 
         estado.textContent =
             "Cargando nomenclador...";
 
-        /*
-        -----------------------------------------------------
-        IMPORTANTE
-        -----------------------------------------------------
+        estado.className =
+            "estado";
 
-        El archivo debe llamarse exactamente:
-
-        nomenclador_lab.json
-
-        y estar en la misma carpeta que index.html.
-        -----------------------------------------------------
-        */
 
         const respuesta =
             await fetch(
-                "./nomenclador_lab.json?version=" +
+                "nomenclador_lab.json?v=" +
                 Date.now()
             );
+
 
         if (!respuesta.ok) {
 
             throw new Error(
-                "No se pudo encontrar nomenclador_lab.json"
+                "No se pudo acceder a nomenclador_lab.json"
             );
 
         }
+
 
         const datos =
             await respuesta.json();
 
 
         /*
-        =====================================================
-        SOPORTE PARA EL FORMATO ACTUAL
-        =====================================================
+        =================================================
+        IMPORTANTE
+
+        TU JSON ACTUAL TIENE ESTE FORMATO:
 
         {
             "LAB.01.092": {
-                "descripcion": "Howel, tiempo de",
+                "descripcion": "...",
                 "valor": 4
             }
         }
-        =====================================================
+
+        Por eso NO se espera un array.
+        =================================================
         */
 
+
         if (
-            datos &&
-            typeof datos === "object" &&
-            !Array.isArray(datos)
+            !datos ||
+            typeof datos !== "object" ||
+            Array.isArray(datos)
         ) {
 
-            nomenclador =
-                Object.entries(datos)
-                .map(
-                    ([codigo, item]) => {
-
-                        return {
-
-                            codigo:
-                                String(codigo)
-                                .trim(),
-
-                            descripcion:
-                                String(
-                                    item?.descripcion ||
-                                    item?.nombre ||
-                                    item?.prestacion ||
-                                    ""
-                                ).trim(),
-
-                            valor:
-                                item?.valor ??
-                                ""
-
-                        };
-
-                    }
-                );
+            throw new Error(
+                "El nomenclador no tiene el formato esperado."
+            );
 
         }
 
 
-        /*
-        =====================================================
-        SOPORTE PARA ARRAY
-        =====================================================
-        */
+        nomenclador = [];
 
-        else if (Array.isArray(datos)) {
 
-            nomenclador =
-                datos.map(item => {
+        Object.entries(datos).forEach(
+            ([codigo, datosPrestacion]) => {
 
-                    return {
+                if (
+                    !datosPrestacion ||
+                    typeof datosPrestacion !== "object"
+                ) {
 
-                        codigo:
-                            String(
-                                item.codigo ||
-                                item.code ||
-                                item.codigo_prestacion ||
-                                ""
-                            ).trim(),
+                    return;
 
-                        descripcion:
-                            String(
-                                item.descripcion ||
-                                item.nombre ||
-                                item.prestacion ||
-                                ""
-                            ).trim(),
+                }
 
-                        valor:
-                            item.valor ??
-                            item.puntos ??
-                            item.arancel ??
-                            ""
 
-                    };
+                const descripcion =
+                    datosPrestacion.descripcion;
+
+
+                if (
+                    !descripcion ||
+                    typeof descripcion !== "string"
+                ) {
+
+                    return;
+
+                }
+
+
+                nomenclador.push({
+
+                    codigo:
+                        String(codigo).trim(),
+
+                    descripcion:
+                        descripcion.trim(),
+
+                    valor:
+                        datosPrestacion.valor ?? ""
 
                 });
 
-        }
+            }
+        );
 
 
-        else {
-
-            throw new Error(
-                "El JSON no contiene un formato válido."
-            );
-
-        }
-
-
-        /*
-        -----------------------------------------------------
-        ELIMINAR REGISTROS VACÍOS
-        -----------------------------------------------------
-        */
-
-        nomenclador =
-            nomenclador.filter(
-                item =>
-                    item.codigo &&
-                    item.descripcion
-            );
-
-
-        if (nomenclador.length === 0) {
+        if (
+            nomenclador.length === 0
+        ) {
 
             throw new Error(
                 "El nomenclador está vacío."
@@ -722,20 +657,23 @@ async function cargarNomenclador() {
         }
 
 
+        nomencladorCargado = true;
+
+
         estado.textContent =
             "Nomenclador cargado correctamente.";
 
         estado.className =
-            "estado success";
+            "estado ok";
 
 
-        estadoNom.innerHTML =
-
-            "<strong>✓ Nomenclador cargado</strong><br>" +
-
-            "Prestaciones disponibles: " +
-
-            nomenclador.length;
+        document
+        .getElementById(
+            "infoNomenclador"
+        )
+        .textContent =
+            nomenclador.length +
+            " prestaciones disponibles para codificación.";
 
 
         console.log(
@@ -749,6 +687,10 @@ async function cargarNomenclador() {
 
         console.error(error);
 
+
+        nomencladorCargado = false;
+
+
         estado.textContent =
             "ERROR: " +
             error.message;
@@ -756,16 +698,13 @@ async function cargarNomenclador() {
         estado.className =
             "estado error";
 
-        estadoNom.innerHTML =
 
-            "<strong>✗ Error al cargar el nomenclador</strong><br><br>" +
-
-            error.message +
-
-            "<br><br>" +
-
-            "Verificá que nomenclador_lab.json esté " +
-            "en la misma carpeta que index.html.";
+        document
+        .getElementById(
+            "infoNomenclador"
+        )
+        .textContent =
+            "Verificá que nomenclador_lab.json esté en la raíz del repositorio.";
 
     }
 
@@ -773,33 +712,195 @@ async function cargarNomenclador() {
 
 
 /*
-=============================================================
-CODIFICAR
-=============================================================
+=========================================================
+NORMALIZAR PARA COMPARACIÓN
+=========================================================
+
+IMPORTANTE:
+
+Esto NO hace coincidencias parciales.
+
+Solamente elimina diferencias técnicas de:
+- mayúsculas/minúsculas
+- acentos
+- espacios repetidos
+- algunos signos
+
+Ejemplo:
+
+"HEMOGRAMA"
+
+y
+
+"Hemograma"
+
+se consideran iguales.
+
+Pero:
+
+"HEMOGRAMA COMPLETO"
+
+NO coincide con:
+
+"HEMOGRAMA"
+
+=========================================================
 */
 
-function codificar() {
+function normalizarExacto(texto) {
 
-    const texto =
-        document
-        .getElementById(
-            "textoPrestaciones"
+    return String(texto)
+
+        .normalize("NFD")
+
+        .replace(
+            /[\u0300-\u036f]/g,
+            ""
         )
-        .value;
+
+        .toUpperCase()
+
+        .replace(
+            /\s+/g,
+            " "
+        )
+
+        .trim();
+
+}
 
 
-    if (!texto.trim()) {
+/*
+=========================================================
+ESCAPAR REGEX
+=========================================================
+*/
 
-        alert(
-            "Pegá primero las prestaciones realizadas."
-        );
+function escaparRegex(texto) {
 
-        return;
+    return texto.replace(
+        /[.*+?^${}()|[\]\\]/g,
+        "\\$&"
+    );
 
-    }
+}
 
 
-    if (nomenclador.length === 0) {
+/*
+=========================================================
+DETECTAR PRESTACIONES
+=========================================================
+
+NO busca palabras sueltas.
+
+Busca el nombre COMPLETO de cada prestación.
+
+=========================================================
+*/
+
+function detectarPrestaciones(texto) {
+
+    const resultadosEncontrados = [];
+
+    const textoNormalizado =
+        normalizarExacto(texto);
+
+
+    nomenclador.forEach(
+        prestacion => {
+
+            const descripcion =
+                normalizarExacto(
+                    prestacion.descripcion
+                );
+
+
+            if (!descripcion) {
+                return;
+            }
+
+
+            /*
+            ==============================================
+            COINCIDENCIA EXACTA DE LA DESCRIPCIÓN
+            ==============================================
+            */
+
+            const regex =
+                new RegExp(
+                    "(^|\\n|\\r|\\s)" +
+                    escaparRegex(descripcion) +
+                    "(?=\\s|$|\\n|\\r|:)",
+                    "i"
+                );
+
+
+            if (
+                regex.test(
+                    textoNormalizado
+                )
+            ) {
+
+                resultadosEncontrados.push({
+
+                    codigo:
+                        prestacion.codigo,
+
+                    descripcion:
+                        prestacion.descripcion,
+
+                    valor:
+                        prestacion.valor,
+
+                    estado:
+                        "Coincidencia exacta"
+
+                });
+
+            }
+
+        }
+    );
+
+
+    /*
+    =====================================================
+    ELIMINAR DUPLICADOS POR CÓDIGO
+    =====================================================
+    */
+
+    const vistos = new Set();
+
+    return resultadosEncontrados.filter(
+        item => {
+
+            if (
+                vistos.has(item.codigo)
+            ) {
+
+                return false;
+
+            }
+
+            vistos.add(item.codigo);
+
+            return true;
+
+        }
+    );
+
+}
+
+
+/*
+=========================================================
+CODIFICAR TEXTO
+=========================================================
+*/
+
+function codificarTexto() {
+
+    if (!nomencladorCargado) {
 
         alert(
             "El nomenclador todavía no está cargado."
@@ -810,402 +911,20 @@ function codificar() {
     }
 
 
-    /*
-    =========================================================
-    OBTENER LÍNEAS
-    =========================================================
-    */
-
-    const lineas =
-        texto
-        .split(/\n/)
-        .map(
-            linea =>
-                linea.trim()
+    const texto =
+        document
+        .getElementById(
+            "textoPrestaciones"
         )
-        .filter(
-            linea =>
-                linea.length > 0
-        );
+        .value;
 
 
-    resultados = [];
-
-
-    /*
-    =========================================================
-    PROCESAR CADA LÍNEA
-    =========================================================
-    */
-
-    lineas.forEach(
-        (linea, indice) => {
-
-            const textoNormalizado =
-                normalizarTexto(linea);
-
-
-            /*
-            -------------------------------------------------
-            BUSCAR COINCIDENCIA EXACTA
-            -------------------------------------------------
-            */
-
-            const coincidencia =
-                nomenclador.find(
-                    prestacion => {
-
-                        return (
-                            normalizarTexto(
-                                prestacion.descripcion
-                            ) ===
-                            textoNormalizado
-                        );
-
-                    }
-                );
-
-
-            if (coincidencia) {
-
-                resultados.push({
-
-                    numero:
-                        indice + 1,
-
-                    ingresada:
-                        linea,
-
-                    descripcion:
-                        coincidencia.descripcion,
-
-                    codigo:
-                        coincidencia.codigo,
-
-                    valor:
-                        coincidencia.valor,
-
-                    encontrado:
-                        true
-
-                });
-
-            }
-
-            else {
-
-                resultados.push({
-
-                    numero:
-                        indice + 1,
-
-                    ingresada:
-                        linea,
-
-                    descripcion:
-                        "",
-
-                    codigo:
-                        "",
-
-                    valor:
-                        "",
-
-                    encontrado:
-                        false
-
-                });
-
-            }
-
-        }
-    );
-
-
-    mostrarResultados();
-
-
-    document
-    .getElementById(
-        "cardResumen"
-    )
-    .classList
-    .remove("oculto");
-
-
-    document
-    .getElementById(
-        "cardResultados"
-    )
-    .classList
-    .remove("oculto");
-
-
-    document
-    .getElementById(
-        "cardCopia"
-    )
-    .classList
-    .remove("oculto");
-
-
-    actualizarResumen();
-
-
-    generarTextoCopia();
-
-
-    const cantidadNoEncontradas =
-        resultados.filter(
-            item =>
-                !item.encontrado
-        ).length;
-
-
-    if (cantidadNoEncontradas > 0) {
-
-        cambiarEstado(
-            "Proceso terminado. Hay " +
-            cantidadNoEncontradas +
-            " prestación(es) que no tienen coincidencia exacta."
-        );
-
-    }
-
-    else {
-
-        cambiarEstado(
-            "Todas las prestaciones fueron codificadas correctamente."
-        );
-
-    }
-
-}
-
-
-/*
-=============================================================
-MOSTRAR RESULTADOS
-=============================================================
-*/
-
-function mostrarResultados() {
-
-    const tabla =
-        document.getElementById(
-            "tablaResultados"
-        );
-
-
-    tabla.innerHTML = "";
-
-
-    resultados.forEach(
-        item => {
-
-            const fila =
-                document.createElement("tr");
-
-
-            if (item.encontrado) {
-
-                fila.innerHTML = `
-
-                    <td>
-                        ${item.numero}
-                    </td>
-
-                    <td>
-                        <strong>
-                            ${escapeHTML(
-                                item.ingresada
-                            )}
-                        </strong>
-                    </td>
-
-                    <td>
-                        ${escapeHTML(
-                            item.descripcion
-                        )}
-                    </td>
-
-                    <td class="codigo">
-                        ${escapeHTML(
-                            item.codigo
-                        )}
-                    </td>
-
-                    <td>
-                        ${escapeHTML(
-                            String(item.valor)
-                        )}
-                    </td>
-
-                    <td class="encontrado">
-                        ✓ COINCIDENCIA EXACTA
-                    </td>
-
-                `;
-
-            }
-
-            else {
-
-                fila.innerHTML = `
-
-                    <td>
-                        ${item.numero}
-                    </td>
-
-                    <td>
-                        <strong>
-                            ${escapeHTML(
-                                item.ingresada
-                            )}
-                        </strong>
-                    </td>
-
-                    <td>
-                        —
-                    </td>
-
-                    <td class="no-encontrado">
-                        —
-                    </td>
-
-                    <td>
-                        —
-                    </td>
-
-                    <td class="no-encontrado">
-                        ✗ NO ENCONTRADA
-                    </td>
-
-                `;
-
-            }
-
-
-            tabla.appendChild(fila);
-
-        }
-    );
-
-}
-
-
-/*
-=============================================================
-RESUMEN
-=============================================================
-*/
-
-function actualizarResumen() {
-
-    const total =
-        resultados.length;
-
-
-    const codificadas =
-        resultados.filter(
-            item =>
-                item.encontrado
-        ).length;
-
-
-    const noCodificadas =
-        total -
-        codificadas;
-
-
-    document
-    .getElementById("total")
-    .textContent =
-    total;
-
-
-    document
-    .getElementById("codificadas")
-    .textContent =
-    codificadas;
-
-
-    document
-    .getElementById("noCodificadas")
-    .textContent =
-    noCodificadas;
-
-}
-
-
-/*
-=============================================================
-GENERAR TEXTO PARA COPIAR
-=============================================================
-*/
-
-function generarTextoCopia() {
-
-    let salida = "";
-
-
-    resultados.forEach(
-        item => {
-
-            if (item.encontrado) {
-
-                salida +=
-                    item.ingresada +
-                    " → " +
-                    item.codigo +
-                    " → " +
-                    item.descripcion +
-                    " → Valor: " +
-                    item.valor +
-                    "\n";
-
-            }
-
-            else {
-
-                salida +=
-                    item.ingresada +
-                    " → SIN CÓDIGO\n";
-
-            }
-
-        }
-    );
-
-
-    document
-    .getElementById(
-        "resultadoTexto"
-    )
-    .value =
-    salida.trim();
-
-}
-
-
-/*
-=============================================================
-COPIAR RESULTADOS
-=============================================================
-*/
-
-async function copiarResultados() {
-
-    const campo =
-        document.getElementById(
-            "resultadoTexto"
-        );
-
-
-    if (!campo.value) {
+    if (
+        !texto.trim()
+    ) {
 
         alert(
-            "Primero tenés que codificar las prestaciones."
+            "Pegá primero el texto del estudio."
         );
 
         return;
@@ -1213,132 +932,21 @@ async function copiarResultados() {
     }
 
 
-    try {
-
-        await navigator.clipboard.writeText(
-            campo.value
+    resultados =
+        detectarPrestaciones(
+            texto
         );
 
 
-        cambiarEstado(
-            "Resultados copiados al portapapeles."
-        );
-
-    }
-
-    catch(error) {
-
-        campo.select();
-
-        document.execCommand(
-            "copy"
-        );
-
-
-        cambiarEstado(
-            "Resultados copiados."
-        );
-
-    }
-
-}
-
-
-/*
-=============================================================
-FILTRO
-=============================================================
-*/
-
-function filtrarResultados() {
-
-    const filtro =
-        normalizarTexto(
-            document
-            .getElementById(
-                "filtro"
-            )
-            .value
-        );
-
-
-    const filas =
-        document
-        .getElementById(
-            "tablaResultados"
-        )
-        .querySelectorAll("tr");
-
-
-    filas.forEach(
-        fila => {
-
-            const texto =
-                normalizarTexto(
-                    fila.textContent
-                );
-
-
-            if (
-                texto.includes(filtro)
-            ) {
-
-                fila.style.display =
-                    "";
-
-            }
-
-            else {
-
-                fila.style.display =
-                    "none";
-
-            }
-
-        }
+    mostrarResultados(
+        resultados
     );
 
-}
 
-
-/*
-=============================================================
-LIMPIAR
-=============================================================
-*/
-
-function limpiar() {
-
-    document
-    .getElementById(
-        "textoPrestaciones"
-    )
-    .value =
-    "";
-
-
-    document
-    .getElementById(
-        "resultadoTexto"
-    )
-    .value =
-    "";
-
-
-    document
-    .getElementById(
-        "filtro"
-    )
-    .value =
-    "";
-
-
-    document
-    .getElementById(
-        "tablaResultados"
-    )
-    .innerHTML =
-    "";
+    generarTextoCodificado(
+        texto,
+        resultados
+    );
 
 
     document
@@ -1346,7 +954,7 @@ function limpiar() {
         "cardResumen"
     )
     .classList
-    .add("oculto");
+    .remove("oculto");
 
 
     document
@@ -1354,28 +962,288 @@ function limpiar() {
         "cardResultados"
     )
     .classList
-    .add("oculto");
+    .remove("oculto");
 
 
     document
     .getElementById(
-        "cardCopia"
+        "cardTextoCodificado"
     )
     .classList
-    .add("oculto");
+    .remove("oculto");
 
 
-    cambiarEstado(
-        "Esperando prestaciones..."
-    );
+    if (
+        resultados.length === 0
+    ) {
+
+        cambiarEstado(
+            "No se encontraron coincidencias exactas.",
+            true
+        );
+
+    }
+
+    else {
+
+        cambiarEstado(
+            "Codificación terminada. Se encontraron " +
+            resultados.length +
+            " prestaciones.",
+            false
+        );
+
+    }
 
 }
 
 
 /*
-=============================================================
+=========================================================
+MOSTRAR RESULTADOS
+=========================================================
+*/
+
+function mostrarResultados(lista) {
+
+    const tabla =
+        document
+        .getElementById(
+            "tablaResultados"
+        );
+
+
+    tabla.innerHTML = "";
+
+
+    if (
+        lista.length === 0
+    ) {
+
+        tabla.innerHTML = `
+
+        <tr>
+
+            <td
+                colspan="4"
+                style="text-align:center;padding:30px">
+
+                No se encontraron coincidencias exactas.
+
+            </td>
+
+        </tr>
+
+        `;
+
+    }
+
+
+    lista.forEach(
+        item => {
+
+            const fila =
+                document.createElement(
+                    "tr"
+                );
+
+
+            fila.innerHTML = `
+
+                <td class="descripcion">
+
+                    ${escapeHTML(
+                        item.descripcion
+                    )}
+
+                </td>
+
+                <td class="codigo">
+
+                    ${escapeHTML(
+                        item.codigo
+                    )}
+
+                </td>
+
+                <td>
+
+                    ${escapeHTML(
+                        String(item.valor)
+                    )}
+
+                </td>
+
+                <td>
+
+                    <span class="badge">
+
+                        Coincidencia exacta
+
+                    </span>
+
+                </td>
+
+            `;
+
+
+            tabla.appendChild(
+                fila
+            );
+
+        }
+    );
+
+
+    document
+    .getElementById(
+        "totalDetectadas"
+    )
+    .textContent =
+    lista.length;
+
+
+    document
+    .getElementById(
+        "totalCodificadas"
+    )
+    .textContent =
+    lista.filter(
+        item =>
+        item.codigo
+    ).length;
+
+
+    document
+    .getElementById(
+        "totalNoEncontradas"
+    )
+    .textContent =
+    0;
+
+}
+
+
+/*
+=========================================================
+GENERAR TEXTO CODIFICADO
+=========================================================
+
+No modifica el texto original.
+
+Agrega una sección final con:
+
+PRESTACIÓN -> CÓDIGO -> VALOR
+
+=========================================================
+*/
+
+function generarTextoCodificado(
+    texto,
+    lista
+) {
+
+    let salida =
+        texto.trim();
+
+
+    salida +=
+        "\n\n" +
+        "====================================\n" +
+        "PRESTACIONES CODIFICADAS\n" +
+        "====================================\n";
+
+
+    if (
+        lista.length === 0
+    ) {
+
+        salida +=
+            "No se encontraron prestaciones.\n";
+
+    }
+
+    else {
+
+        lista.forEach(
+            item => {
+
+                salida +=
+                    item.descripcion +
+                    " → " +
+                    item.codigo +
+                    " → Valor: " +
+                    item.valor +
+                    "\n";
+
+            }
+        );
+
+    }
+
+
+    document
+    .getElementById(
+        "textoCodificado"
+    )
+    .value =
+    salida;
+
+}
+
+
+/*
+=========================================================
+COPIAR RESULTADO
+=========================================================
+*/
+
+async function copiarResultado() {
+
+    const textarea =
+        document
+        .getElementById(
+            "textoCodificado"
+        );
+
+
+    try {
+
+        await navigator.clipboard.writeText(
+            textarea.value
+        );
+
+
+        cambiarEstado(
+            "Resultado copiado al portapapeles.",
+            false
+        );
+
+    }
+
+    catch(error) {
+
+        textarea.select();
+
+        document.execCommand(
+            "copy"
+        );
+
+
+        cambiarEstado(
+            "Resultado copiado.",
+            false
+        );
+
+    }
+
+}
+
+
+/*
+=========================================================
 ESCAPAR HTML
-=============================================================
+=========================================================
 */
 
 function escapeHTML(texto) {
@@ -1411,13 +1279,14 @@ function escapeHTML(texto) {
 
 
 /*
-=============================================================
+=========================================================
 ESTADO
-=============================================================
+=========================================================
 */
 
 function cambiarEstado(
-    mensaje
+    mensaje,
+    error = false
 ) {
 
     const estado =
@@ -1431,25 +1300,107 @@ function cambiarEstado(
 
 
     estado.className =
-        "estado";
+        error
+        ? "estado error"
+        : "estado";
 
 }
 
 
 /*
-=============================================================
-INICIO
-=============================================================
+=========================================================
+LIMPIAR
+=========================================================
 */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    function() {
+function limpiar() {
 
-        cargarNomenclador();
+    document
+    .getElementById(
+        "textoPrestaciones"
+    )
+    .value =
+    "";
 
-    }
-);
+
+    document
+    .getElementById(
+        "textoCodificado"
+    )
+    .value =
+    "";
+
+
+    document
+    .getElementById(
+        "tablaResultados"
+    )
+    .innerHTML =
+    "";
+
+
+    document
+    .getElementById(
+        "cardResumen"
+    )
+    .classList
+    .add("oculto");
+
+
+    document
+    .getElementById(
+        "cardResultados"
+    )
+    .classList
+    .add("oculto");
+
+
+    document
+    .getElementById(
+        "cardTextoCodificado"
+    )
+    .classList
+    .add("oculto");
+
+
+    document
+    .getElementById(
+        "totalDetectadas"
+    )
+    .textContent =
+    "0";
+
+
+    document
+    .getElementById(
+        "totalCodificadas"
+    )
+    .textContent =
+    "0";
+
+
+    document
+    .getElementById(
+        "totalNoEncontradas"
+    )
+    .textContent =
+    "0";
+
+
+    cambiarEstado(
+        "Nomenclador cargado. Esperando texto..."
+    );
+
+}
+
+
+/*
+=========================================================
+INICIO
+=========================================================
+*/
+
+cargarNomenclador();
 
 </script>
 
