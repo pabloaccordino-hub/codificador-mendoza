@@ -1,19 +1,748 @@
 {
-  "GLUCOSA EN SUERO": {"code":"LAB.01.073","description":"Glucemia","confidence":"confirmada"},
-  "HEMOGRAMA COMPLETO": {"code":"LAB.01.085","description":"Hemograma","confidence":"confirmada"},
-  "UREMIA": {"code":"LAB.01.157","description":"Urea plasmática","confidence":"validada por equivalencia"},
-  "URICEMIA": {"code":"LAB.01.003","description":"Ácido úrico en suero y plasma","confidence":"confirmada"},
-  "COLESTEROL EN SUERO": {"code":"LAB.02.020","description":"Colesterol total libre y esterificado","confidence":"revisar"},
-  "COLESTEROL HDL": {"code":"LAB.02.018","description":"Colesterol HDL libre y esterificado","confidence":"revisar"},
-  "COLESTEROL LDL": {"code":"LAB.02.019","description":"Colesterol LDL libre y esterificado","confidence":"revisar"},
-  "TRIGLICÉRIDOS": {"code":"LAB.01.154","description":"Triglicéridos","confidence":"confirmada"},
-  "FAL - FOSFATASA ALCALINA": {"code":"LAB.01.065","description":"Fosfatasa alcalina","confidence":"confirmada"},
-  "GOT (AST) - ASPARTATO AMINOTRANSFERASA": {"code":"LAB.01.152","description":"Transaminasa, glutámico oxalacética (GOT, AST)","confidence":"confirmada"},
-  "GPT (ALT) - ALANINO AMINO TRANSFERASA": {"code":"LAB.01.153","description":"Transaminasa, glutámico pirúvica (GPT, AGT)","confidence":"confirmada"},
-  "BILIRRUBINEMIA": {"code":"LAB.01.014","description":"Bilirrubina total","confidence":"validada por equivalencia"},
-  "CREATININA + FILTRADO GLOMERULAR": {"code":"LAB.01.040","description":"Creatinina en plasma o suero","confidence":"confirmada"},
-  "T4 TOTAL - TIROXINA TOTAL": {"code":"LAB.02.063","description":"T4 total (tiroxina total)","confidence":"confirmada"},
-  "TSH - TIROTROFINA": {"code":"LAB.02.069","description":"TSH, tirotrofina plasmática","confidence":"confirmada"},
-  "T3 - TRIIODOTIRONINA": {"code":"LAB.02.061","description":"T3 total (triiodotironina total)","confidence":"confirmada"},
-  "ORINA COMPLETA": {"code":"LAB.01.124","description":"Orina completa","confidence":"confirmada"}
+  "GLUCOSA EN SUERO": {
+    "code": "LAB.01.073",
+    "description": "Glucemia",
+    "confidence": "confirmada"
+  },
+  "HEMOGRAMA COMPLETO": {
+    "code": "LAB.01.085",
+    "description": "Hemograma",
+    "confidence": "confirmada"
+  },
+  "UREMIA": {
+    "code": "LAB.01.157",
+    "description": "Urea plasmática",
+    "confidence": "validada por equivalencia"
+  },
+  "URICEMIA": {
+    "code": "LAB.01.003",
+    "description": "Ácido úrico en suero y plasma",
+    "confidence": "confirmada"
+  },
+  "COLESTEROL EN SUERO": {
+    "code": "LAB.02.020",
+    "description": "Colesterol total libre y esterificado",
+    "confidence": "revisar"
+  },
+  "COLESTEROL HDL": {
+    "code": "LAB.02.018",
+    "description": "Colesterol HDL libre y esterificado",
+    "confidence": "revisar"
+  },
+  "COLESTEROL LDL": {
+    "code": "LAB.02.019",
+    "description": "Colesterol LDL libre y esterificado",
+    "confidence": "revisar"
+  },
+  "TRIGLICÉRIDOS": {
+    "code": "LAB.01.154",
+    "description": "Triglicéridos",
+    "confidence": "confirmada"
+  },
+  "FAL - FOSFATASA ALCALINA": {
+    "code": "LAB.01.065",
+    "description": "Fosfatasa alcalina",
+    "confidence": "confirmada"
+  },
+  "GOT (AST) - ASPARTATO AMINOTRANSFERASA": {
+    "code": "LAB.01.152",
+    "description": "Transaminasa, glutámico oxalacética (GOT, AST)",
+    "confidence": "confirmada"
+  },
+  "GPT (ALT) - ALANINO AMINO TRANSFERASA": {
+    "code": "LAB.01.153",
+    "description": "Transaminasa, glutámico pirúvica (GPT, AGT)",
+    "confidence": "confirmada"
+  },
+  "BILIRRUBINEMIA": {
+    "code": "LAB.01.014",
+    "description": "Bilirrubina total",
+    "confidence": "validada por equivalencia"
+  },
+  "CREATININA": {
+    "code": "LAB.01.040",
+    "description": "Creatinina en plasma o suero",
+    "confidence": "confirmada"
+  },
+  "CREATININA + FILTRADO GLOMERULAR": {
+    "code": "LAB.01.040",
+    "description": "Creatinina en plasma o suero",
+    "confidence": "confirmada"
+  },
+  "T4 TOTAL": {
+    "code": "LAB.02.063",
+    "description": "T4 total (tiroxina total)",
+    "confidence": "confirmada"
+  },
+  "TIROXINA TOTAL": {
+    "code": "LAB.02.063",
+    "description": "T4 total (tiroxina total)",
+    "confidence": "confirmada"
+  },
+  "TSH": {
+    "code": "LAB.02.069",
+    "description": "TSH, tirotrofina plasmática",
+    "confidence": "confirmada"
+  },
+  "TIROTROFINA": {
+    "code": "LAB.02.069",
+    "description": "TSH, tirotrofina plasmática",
+    "confidence": "confirmada"
+  },
+  "T3": {
+    "code": "LAB.02.061",
+    "description": "T3 total (triiodotironina total)",
+    "confidence": "confirmada"
+  },
+  "TRIIODOTIRONINA": {
+    "code": "LAB.02.061",
+    "description": "T3 total (triiodotironina total)",
+    "confidence": "confirmada"
+  },
+  "ORINA COMPLETA": {
+    "code": "LAB.01.124",
+    "description": "Orina completa",
+    "confidence": "confirmada"
+  },
+
+  "ABACAVIR": {
+    "code": "LAB.10.001",
+    "description": "Abacavir, test de hipersensibilidad",
+    "confidence": "confirmada"
+  },
+  "ACETAMINOFENO": {
+    "code": "LAB.03.001",
+    "description": "Acetaminofeno",
+    "confidence": "confirmada"
+  },
+  "ACETILCOLINESTERASA ERITROCITARIA": {
+    "code": "LAB.03.002",
+    "description": "Acetil colinesterasa eritrocitaria (ACHE)",
+    "confidence": "confirmada"
+  },
+  "ACETONURIA": {
+    "code": "LAB.01.001",
+    "description": "Acetonuria",
+    "confidence": "confirmada"
+  },
+  "ACIDO 5 HIDROXI-INDOL ACETICO": {
+    "code": "LAB.04.001",
+    "description": "Acido 5 hidroxi-indol acetico",
+    "confidence": "confirmada"
+  },
+  "ÁCIDO CÍTRICO URINARIO": {
+    "code": "LAB.03.209",
+    "description": "Ácido Cítrico - urinario",
+    "confidence": "confirmada"
+  },
+  "ÁCIDO FÓLICO": {
+    "code": "LAB.03.003",
+    "description": "Acido fólico",
+    "confidence": "confirmada"
+  },
+  "ÁCIDO LÁCTICO EN SANGRE": {
+    "code": "LAB.04.002",
+    "description": "Acido láctico en sangre",
+    "confidence": "confirmada"
+  },
+  "ÁCIDO PIRÚVICO": {
+    "code": "LAB.03.004",
+    "description": "Acido piruvico",
+    "confidence": "confirmada"
+  },
+  "ÁCIDO SALICÍLICO": {
+    "code": "LAB.03.005",
+    "description": "Ácido salicílico",
+    "confidence": "confirmada"
+  },
+  "ÁCIDO ÚRICO EN ORINA": {
+    "code": "LAB.01.002",
+    "description": "Acido úrico en orina",
+    "confidence": "confirmada"
+  },
+  "ÁCIDO VALPROICO": {
+    "code": "LAB.03.006",
+    "description": "Ácido valproico",
+    "confidence": "confirmada"
+  },
+  "ÁCIDOS BILIARES": {
+    "code": "LAB.05.001",
+    "description": "Ácidos biliares",
+    "confidence": "confirmada"
+  },
+  "ÁCIDOS ORGÁNICOS URINARIOS": {
+    "code": "LAB.08.071",
+    "description": "Ácidos Orgánicos - urinarios",
+    "confidence": "confirmada"
+  },
+  "ACTH": {
+    "code": "LAB.03.007",
+    "description": "ACTH (adrenocorticotrofina)",
+    "confidence": "confirmada"
+  },
+  "ADENOVIRUS IGG": {
+    "code": "LAB.04.004",
+    "description": "Adenovirus IgG, Ac. Anti",
+    "confidence": "confirmada"
+  },
+  "ADENOVIRUS IGM": {
+    "code": "LAB.04.005",
+    "description": "Adenovirus IgM, Ac. Anti",
+    "confidence": "confirmada"
+  },
+  "ADENOVIRUS AG": {
+    "code": "LAB.04.006",
+    "description": "Adenovirus, Ag",
+    "confidence": "confirmada"
+  },
+  "ADENOVIRUS PCR": {
+    "code": "LAB.08.004",
+    "description": "Adenovirus, virología molecular (PCR)",
+    "confidence": "confirmada"
+  },
+  "ALBÚMINA": {
+    "code": "LAB.01.005",
+    "description": "Albúmina en suero o plasma",
+    "confidence": "confirmada"
+  },
+  "ALDOLASA": {
+    "code": "LAB.02.001",
+    "description": "Aldolasa (Ald)",
+    "confidence": "confirmada"
+  },
+  "ALDOSTERONA PLASMÁTICA": {
+    "code": "LAB.03.009",
+    "description": "Aldosterona plasmática",
+    "confidence": "confirmada"
+  },
+  "ALDOSTERONA URINARIA": {
+    "code": "LAB.03.010",
+    "description": "Aldosterona urinaria",
+    "confidence": "confirmada"
+  },
+  "ALFA 1 ANTITRIPSINA": {
+    "code": "LAB.03.011",
+    "description": "Alfa 1 antitripsina (α1 AT) - Líq. pleural / mat. fecal / sérica",
+    "confidence": "confirmada"
+  },
+  "ALFA FETO PROTEÍNA": {
+    "code": "LAB.03.012",
+    "description": "Alfa feto proteína (AFP)",
+    "confidence": "confirmada"
+  },
+  "AMEBIASIS": {
+    "code": "LAB.03.014",
+    "description": "Amebiasis, serología",
+    "confidence": "confirmada"
+  },
+  "AMIKACINA": {
+    "code": "LAB.04.011",
+    "description": "Amikacina",
+    "confidence": "confirmada"
+  },
+  "AMILASA EN ORINA": {
+    "code": "LAB.01.006",
+    "description": "Amilasa en orina",
+    "confidence": "confirmada"
+  },
+  "AMILASA EN SANGRE": {
+    "code": "LAB.01.007",
+    "description": "Amilasa en sangre",
+    "confidence": "confirmada"
+  },
+  "AMONIO EN SANGRE": {
+    "code": "LAB.04.012",
+    "description": "Amonio, concentración en sangre",
+    "confidence": "confirmada"
+  },
+  "ANDROSTENEDIONA": {
+    "code": "LAB.03.015",
+    "description": "Androstenediona",
+    "confidence": "confirmada"
+  },
+  "ANTIBIOGRAMA": {
+    "code": "LAB.02.002",
+    "description": "Antibiograma (ATBG / ATB)",
+    "confidence": "confirmada"
+  },
+  "ANTIBIOGRAMA AUTOMATIZADO": {
+    "code": "LAB.06.001",
+    "description": "Antibiograma (automatizado)",
+    "confidence": "confirmada"
+  },
+  "ANTÍGENO PROSTÁTICO ESPECÍFICO": {
+    "code": "LAB.04.029",
+    "description": "Antígeno prostático especifico (PSA)",
+    "confidence": "confirmada"
+  },
+  "PSA": {
+    "code": "LAB.04.029",
+    "description": "Antígeno prostático especifico (PSA)",
+    "confidence": "confirmada"
+  },
+  "PSA LIBRE": {
+    "code": "LAB.05.014",
+    "description": "Antígeno prostático especifico libre (PSA LIBRE)",
+    "confidence": "confirmada"
+  },
+  "ANTITROMBINA": {
+    "code": "LAB.04.030",
+    "description": "Antitrombina",
+    "confidence": "confirmada"
+  },
+  "ANTITROMBINA III INMUNOLÓGICA": {
+    "code": "LAB.04.031",
+    "description": "Antitrombina III (AT III), inmunológica",
+    "confidence": "confirmada"
+  },
+  "APOLIPOPROTEÍNA A": {
+    "code": "LAB.03.030",
+    "description": "Apolipoproteina A",
+    "confidence": "confirmada"
+  },
+  "APOLIPOPROTEÍNA B": {
+    "code": "LAB.03.031",
+    "description": "Apolipoproteina B",
+    "confidence": "confirmada"
+  },
+  "APTT": {
+    "code": "LAB.02.016",
+    "description": "Coagulograma básico (TP y APTT)",
+    "confidence": "validada por equivalencia"
+  },
+  "ARTRITIS REUMATOIDEA": {
+    "code": "LAB.01.008",
+    "description": "Artritis reumatoidea (LATEX)",
+    "confidence": "confirmada"
+  },
+  "BACILOSCOPIA DIRECTA": {
+    "code": "LAB.03.034",
+    "description": "Baciloscopia directa",
+    "confidence": "confirmada"
+  },
+  "BACILOSCOPIA ZIEHL NIELSEN": {
+    "code": "LAB.01.010",
+    "description": "Baciloscopia directa Ziehl Nielsen",
+    "confidence": "confirmada"
+  },
+  "BACTERIOLÓGICO DIRECTO": {
+    "code": "LAB.02.004",
+    "description": "Bacteriológico directo",
+    "confidence": "confirmada"
+  },
+  "BACTERIOLÓGICO DIRECTO Y CULTIVO": {
+    "code": "LAB.02.005",
+    "description": "Bacteriológico directo y cultivo con identificación. BIO. GER.",
+    "confidence": "confirmada"
+  },
+  "BACTERIOLÓGICO TINCIÓN DE GRAM": {
+    "code": "LAB.01.011",
+    "description": "Bacteriológico directo, tinción de Gram",
+    "confidence": "confirmada"
+  },
+  "BACTERIOLÓGICO CULTIVOS VARIOS": {
+    "code": "LAB.04.040",
+    "description": "Bacteriológico, cultivos varios",
+    "confidence": "confirmada"
+  },
+  "BILIRRUBINA DIRECTA": {
+    "code": "LAB.01.012",
+    "description": "Bilirrubina directa",
+    "confidence": "confirmada"
+  },
+  "BILIRRUBINA EN ORINA": {
+    "code": "LAB.01.013",
+    "description": "Bilirrubina en orina",
+    "confidence": "confirmada"
+  },
+  "BILIRRUBINA TOTAL": {
+    "code": "LAB.01.014",
+    "description": "Bilirrubina total",
+    "confidence": "confirmada"
+  },
+  "CALCIO IÓNICO EN ORINA": {
+    "code": "LAB.01.017",
+    "description": "Calcio iónico en orina",
+    "confidence": "confirmada"
+  },
+  "CALCIO IÓNICO EN SANGRE": {
+    "code": "LAB.01.018",
+    "description": "Calcio iónico en sangre",
+    "confidence": "confirmada"
+  },
+  "CALCIO TOTAL EN ORINA": {
+    "code": "LAB.01.020",
+    "description": "Calcio total en orina",
+    "confidence": "confirmada"
+  },
+  "CALCIO TOTAL EN SANGRE": {
+    "code": "LAB.01.021",
+    "description": "Calcio total en sangre",
+    "confidence": "confirmada"
+  },
+  "CALCITONINA": {
+    "code": "LAB.04.045",
+    "description": "Calcitonina plasmática",
+    "confidence": "confirmada"
+  },
+  "CETONEMIA": {
+    "code": "LAB.01.022",
+    "description": "Cetonemia",
+    "confidence": "confirmada"
+  },
+  "CHAGAS ELISA": {
+    "code": "LAB.02.013",
+    "description": "Chagas (ELISA)",
+    "confidence": "confirmada"
+  },
+  "CHAGAS IGM": {
+    "code": "LAB.03.044",
+    "description": "Chagas IgM (ELISA)",
+    "confidence": "confirmada"
+  },
+  "CHAGAS HAI": {
+    "code": "LAB.01.024",
+    "description": "Chagas, aglutinación indirecta (HAI)",
+    "confidence": "confirmada"
+  },
+  "CHAGAS IFI": {
+    "code": "LAB.03.046",
+    "description": "Chagas, inmunofluorescencia (IFI)",
+    "confidence": "confirmada"
+  },
+  "CHIKUNGUNYA PCR": {
+    "code": "LAB.08.012",
+    "description": "Chikungunya (PCR)",
+    "confidence": "confirmada"
+  },
+  "CITOMEGALOVIRUS IGG": {
+    "code": "LAB.03.048",
+    "description": "Citomegalovirus IgG, Ac. anti (CMV)",
+    "confidence": "confirmada"
+  },
+  "CITOMEGALOVIRUS IGM": {
+    "code": "LAB.04.067",
+    "description": "Citomegalovirus IgM, Ac. anti (CMV)",
+    "confidence": "confirmada"
+  },
+  "CITOMEGALOVIRUS PCR": {
+    "code": "LAB.09.010",
+    "description": "Citomegalovirus (PCR)",
+    "confidence": "confirmada"
+  },
+  "CLORO EN ORINA": {
+    "code": "LAB.01.028",
+    "description": "Cloro en orina",
+    "confidence": "confirmada"
+  },
+  "CLORO EN SANGRE": {
+    "code": "LAB.01.029",
+    "description": "Cloro en sangre",
+    "confidence": "confirmada"
+  },
+  "COAGULOGRAMA BÁSICO": {
+    "code": "LAB.02.016",
+    "description": "Coagulograma básico (TP y APTT)",
+    "confidence": "confirmada"
+  },
+  "COBRE EN SANGRE": {
+    "code": "LAB.04.068",
+    "description": "Cobre en sangre",
+    "confidence": "confirmada"
+  },
+  "COCAÍNA": {
+    "code": "LAB.04.069",
+    "description": "Cocaína",
+    "confidence": "confirmada"
+  },
+  "COLESTEROL HDL LIBRE Y ESTERIFICADO": {
+    "code": "LAB.02.018",
+    "description": "Colesterol HDL libre y esterificado",
+    "confidence": "confirmada"
+  },
+  "COLESTEROL LDL LIBRE Y ESTERIFICADO": {
+    "code": "LAB.02.019",
+    "description": "Colesterol LDL libre y esterificado",
+    "confidence": "confirmada"
+  },
+  "COLESTEROL TOTAL LIBRE Y ESTERIFICADO": {
+    "code": "LAB.02.020",
+    "description": "Colesterol total libre y esterificado",
+    "confidence": "confirmada"
+  },
+  "CPK MB": {
+    "code": "LAB.03.058",
+    "description": "CPK MB (creatina fosfoquinasa isoenzima MB)",
+    "confidence": "confirmada"
+  },
+  "CPK TOTAL": {
+    "code": "LAB.03.059",
+    "description": "CPK total (creatina fosfoquinasa)",
+    "confidence": "confirmada"
+  },
+  "CREATINA EN ORINA": {
+    "code": "LAB.03.060",
+    "description": "Creatina en orina",
+    "confidence": "confirmada"
+  },
+  "CREATININA EN PLASMA O SUERO": {
+    "code": "LAB.01.040",
+    "description": "Creatinina en plasma o suero",
+    "confidence": "confirmada"
+  },
+  "CREATININA CLEARANCE": {
+    "code": "LAB.01.041",
+    "description": "Creatinina, clearence o depuración de",
+    "confidence": "confirmada"
+  },
+  "CRIOAGLUTININA": {
+    "code": "LAB.01.042",
+    "description": "Crioaglutinina",
+    "confidence": "confirmada"
+  },
+  "CRIOGLOBULINAS": {
+    "code": "LAB.01.043",
+    "description": "Crioglobulinas",
+    "confidence": "confirmada"
+  },
+  "CORTISOL BASAL": {
+    "code": "LAB.03.053",
+    "description": "Cortisol basal (8 AM)",
+    "confidence": "confirmada"
+  },
+  "CORTISOL LIBRE PLASMÁTICO": {
+    "code": "LAB.03.054",
+    "description": "Cortisol libre plasmático",
+    "confidence": "confirmada"
+  },
+  "CORTISOL LIBRE URINARIO": {
+    "code": "LAB.03.055",
+    "description": "Cortisol libre urinario",
+    "confidence": "confirmada"
+  },
+  "CORTISOL VESPERTINO": {
+    "code": "LAB.03.057",
+    "description": "Cortisol vespertino (4 PM)",
+    "confidence": "confirmada"
+  },
+  "DENGUE PCR": {
+    "code": "LAB.08.018",
+    "description": "Dengue (PCR)",
+    "confidence": "confirmada"
+  },
+  "DENGUE IGG": {
+    "code": "LAB.05.162",
+    "description": "Dengue, Ac anti IgG",
+    "confidence": "confirmada"
+  },
+  "DENGUE IGM": {
+    "code": "LAB.05.163",
+    "description": "Dengue, Ac anti IgM",
+    "confidence": "confirmada"
+  },
+  "DÍMERO D": {
+    "code": "LAB.05.077",
+    "description": "Dímero D",
+    "confidence": "confirmada"
+  },
+  "DROGAS DE ABUSO EN ORINA": {
+    "code": "LAB.10.003",
+    "description": "Drogas de abuso en orina, por tiras reactivas",
+    "confidence": "confirmada"
+  },
+  "ERITROSEDIMENTACIÓN": {
+    "code": "LAB.01.051",
+    "description": "Eritrosedimentación",
+    "confidence": "confirmada"
+  },
+  "ESTRADIOL": {
+    "code": "LAB.04.096",
+    "description": "Estradiol plasmático",
+    "confidence": "confirmada"
+  },
+  "FERRITINA": {
+    "code": "LAB.03.078",
+    "description": "Ferritina",
+    "confidence": "confirmada"
+  },
+  "FERREMIA": {
+    "code": "LAB.01.060",
+    "description": "Ferremia (hierro en sangre) (Fe)",
+    "confidence": "confirmada"
+  },
+  "FIBRINÓGENO": {
+    "code": "LAB.01.061",
+    "description": "Fibrinógeno",
+    "confidence": "confirmada"
+  },
+  "FOSFATASA ALCALINA": {
+    "code": "LAB.01.065",
+    "description": "Fosfatasa alcalina",
+    "confidence": "confirmada"
+  },
+  "FOSFORO EN ORINA": {
+    "code": "LAB.01.066",
+    "description": "Fosforo en orina",
+    "confidence": "confirmada"
+  },
+  "FOSFORO EN PLASMA O SUERO": {
+    "code": "LAB.01.067",
+    "description": "Fosforo en plasma o suero",
+    "confidence": "confirmada"
+  },
+  "FRUCTOSAMINA": {
+    "code": "LAB.03.083",
+    "description": "Fructosamina",
+    "confidence": "confirmada"
+  },
+  "FSH": {
+    "code": "LAB.04.115",
+    "description": "FSH (hormona folículo estimulante)",
+    "confidence": "confirmada"
+  },
+  "GAMMA GT": {
+    "code": "LAB.01.071",
+    "description": "Gamma glutamil transpeptidasa (Gamma GT)",
+    "confidence": "confirmada"
+  },
+  "GASTRINA PLASMÁTICA": {
+    "code": "LAB.03.088",
+    "description": "Gastrina plasmatica",
+    "confidence": "confirmada"
+  },
+  "GLUCOSA": {
+    "code": "LAB.01.075",
+    "description": "Glucosa",
+    "confidence": "confirmada"
+  },
+  "GLUCOSA EN ORINA": {
+    "code": "LAB.01.076",
+    "description": "Glucosa en orina",
+    "confidence": "confirmada"
+  },
+  "GLUCOSA POST PRANDIAL": {
+    "code": "LAB.03.092",
+    "description": "Glucosa post prandial",
+    "confidence": "confirmada"
+  },
+  "HEPATOGRAMA": {
+    "code": "LAB.02.035",
+    "description": "Hepatograma",
+    "confidence": "confirmada"
+  },
+  "HEMATOCRITO": {
+    "code": "LAB.01.082",
+    "description": "Hematocrito",
+    "confidence": "confirmada"
+  },
+  "HEMATÍES": {
+    "code": "LAB.03.098",
+    "description": "Hematíes, recuento de (glóbulos rojos)",
+    "confidence": "confirmada"
+  },
+  "HEMOGLOBINA GLICOSILADA": {
+    "code": "LAB.03.103",
+    "description": "Hemoglobina Glicosilada (HB A1C)",
+    "confidence": "confirmada"
+  },
+  "HEMOGLOBINA A1C": {
+    "code": "LAB.03.103",
+    "description": "Hemoglobina Glicosilada (HB A1C)",
+    "confidence": "confirmada"
+  },
+  "HEPATITIS B ANTÍGENO DE SUPERFICIE": {
+    "code": "LAB.03.115",
+    "description": "Hepatitis B, antígeno de superficie (HBs Ag)",
+    "confidence": "confirmada"
+  },
+  "HEPATITIS B HBS AG": {
+    "code": "LAB.03.115",
+    "description": "Hepatitis B, antígeno de superficie (HBs Ag)",
+    "confidence": "confirmada"
+  },
+  "HEPATITIS C PCR": {
+    "code": "LAB.08.027",
+    "description": "Hepatitis C (PCR)",
+    "confidence": "confirmada"
+  },
+  "HIV PCR": {
+    "code": "LAB.08.033",
+    "description": "HIV (PCR)",
+    "confidence": "confirmada"
+  },
+  "HIV TEST RÁPIDO": {
+    "code": "LAB.05.107",
+    "description": "HIV test rápido",
+    "confidence": "confirmada"
+  },
+  "HIV ELISA": {
+    "code": "LAB.03.120",
+    "description": "HIV, Ac. anti (ELISA)",
+    "confidence": "confirmada"
+  },
+  "HOMA": {
+    "code": "LAB.03.121",
+    "description": "HOMA, índice evaluación modelo homeostático",
+    "confidence": "confirmada"
+  },
+  "HIERRO EN MÉDULA ÓSEA": {
+    "code": "LAB.03.119",
+    "description": "Hierro en medula ósea (reacción de Perls)",
+    "confidence": "confirmada"
+  },
+  "INMUNOGLOBULINA A": {
+    "code": "LAB.01.044",
+    "description": "Determinación de Inmunoglobulina A",
+    "confidence": "confirmada"
+  },
+  "INMUNOGLOBULINA G": {
+    "code": "LAB.01.045",
+    "description": "Determinación de Inmunoglobulina G",
+    "confidence": "confirmada"
+  },
+  "INMUNOGLOBULINA M": {
+    "code": "LAB.01.046",
+    "description": "Determinación de Inmunoglobulina M",
+    "confidence": "confirmada"
+  },
+  "POTASIO": {
+    "code": "LAB.01.130",
+    "description": "Potasio en sangre",
+    "confidence": "revisar"
+  },
+  "SODIO": {
+    "code": "LAB.01.137",
+    "description": "Sodio en sangre",
+    "confidence": "revisar"
+  },
+  "TRANSAMINASA GOT": {
+    "code": "LAB.01.152",
+    "description": "Transaminasa, glutámico oxalacética (GOT, AST)",
+    "confidence": "confirmada"
+  },
+  "AST": {
+    "code": "LAB.01.152",
+    "description": "Transaminasa, glutámico oxalacética (GOT, AST)",
+    "confidence": "confirmada"
+  },
+  "TRANSAMINASA GPT": {
+    "code": "LAB.01.153",
+    "description": "Transaminasa, glutámico pirúvica (GPT, AGT)",
+    "confidence": "confirmada"
+  },
+  "ALT": {
+    "code": "LAB.01.153",
+    "description": "Transaminasa, glutámico pirúvica (GPT, AGT)",
+    "confidence": "confirmada"
+  },
+  "TRIGLICERIDOS": {
+    "code": "LAB.01.154",
+    "description": "Triglicéridos",
+    "confidence": "confirmada"
+  },
+  "UREA PLASMÁTICA": {
+    "code": "LAB.01.157",
+    "description": "Urea plasmática",
+    "confidence": "confirmada"
+  }
 }
