@@ -8,21 +8,67 @@
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,Helvetica,sans-serif;background:#f4f6f8;color:#1f2937;min-height:100vh}
 header{background:#111827;color:#fff;padding:22px 30px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
-header h1{font-size:25px;margin-bottom:6px} header p{color:#cbd5e1;font-size:14px}
-main{max-width:1450px;margin:28px auto;padding:0 18px}.card{background:#fff;border-radius:12px;padding:22px;margin-bottom:18px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
-h2{font-size:19px;margin-bottom:15px}.upload{border:2px dashed #94a3b8;border-radius:12px;padding:40px 20px;text-align:center;background:#f8fafc;cursor:pointer}.upload:hover,.upload.drag{border-color:#2563eb;background:#eff6ff}
-.upload-icon{font-size:42px;margin-bottom:10px}.upload strong{display:block;margin-bottom:7px}#pdfInput{display:none}
-.buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}button{border:0;border-radius:8px;padding:12px 17px;font-size:14px;font-weight:700;cursor:pointer}button:disabled{opacity:.5;cursor:not-allowed}
-.btn-primary{background:#2563eb;color:#fff}.btn-success{background:#16a34a;color:#fff}.btn-secondary{background:#475569;color:#fff}.btn-light{background:#e2e8f0;color:#1e293b}
-.status{display:none;margin-top:14px;padding:12px 15px;border-radius:8px;font-size:14px}.status.show{display:block}.info{background:#dbeafe;color:#1e40af}.ok{background:#dcfce7;color:#166534}.warn{background:#fef3c7;color:#92400e}.err{background:#fee2e2;color:#991b1b}
+header h1{font-size:25px;margin-bottom:6px}
+header p{color:#cbd5e1;font-size:14px}
+main{max-width:1450px;margin:28px auto;padding:0 18px}
+.card{background:#fff;border-radius:12px;padding:22px;margin-bottom:18px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+h2{font-size:19px;margin-bottom:15px}
+.upload{border:2px dashed #94a3b8;border-radius:12px;padding:40px 20px;text-align:center;background:#f8fafc;cursor:pointer}
+.upload:hover,.upload.drag{border-color:#2563eb;background:#eff6ff}
+.upload-icon{font-size:42px;margin-bottom:10px}
+.upload strong{display:block;margin-bottom:7px}
+#pdfInput{display:none}
+.buttons{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+button{border:0;border-radius:8px;padding:12px 17px;font-size:14px;font-weight:700;cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}
+.btn-primary{background:#2563eb;color:#fff}
+.btn-success{background:#16a34a;color:#fff}
+.btn-secondary{background:#475569;color:#fff}
+.btn-light{background:#e2e8f0;color:#1e293b}
+.status{display:none;margin-top:14px;padding:12px 15px;border-radius:8px;font-size:14px}
+.status.show{display:block}
+.info{background:#dbeafe;color:#1e40af}
+.ok{background:#dcfce7;color:#166534}
+.warn{background:#fef3c7;color:#92400e}
+.err{background:#fee2e2;color:#991b1b}
 .file{display:none;margin-top:14px;padding:13px;background:#f1f5f9;border-radius:8px;font-size:14px}
-.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:15px}.stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:9px;text-align:center;padding:15px}.num{display:block;font-size:25px;font-weight:700;color:#2563eb}.lab{font-size:12px;color:#64748b}
-.search{width:100%;padding:11px 13px;border:1px solid #cbd5e1;border-radius:8px;margin-bottom:12px;font-size:14px}.table{overflow:auto;border:1px solid #e2e8f0;border-radius:8px}table{width:100%;border-collapse:collapse;min-width:1150px}th{background:#1e293b;color:#fff;padding:11px;text-align:left;font-size:12px}td{padding:10px 11px;border-bottom:1px solid #e2e8f0;font-size:12px;vertical-align:top}.code{font-family:monospace;font-weight:700;color:#2563eb;white-space:nowrap}.badge{display:inline-block;padding:4px 7px;border-radius:5px;font-size:10px;font-weight:700}.confirmada{background:#dcfce7;color:#166534}.revisar{background:#fef3c7;color:#92400e}.ubicada{background:#dbeafe;color:#1e40af}.regla{background:#ede9fe;color:#5b21b6}.empty{text-align:center;padding:28px;color:#64748b}
-.base{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.basebox{background:#f8fafc;border:1px solid #e2e8f0;padding:12px;border-radius:8px;font-size:13px}.note{margin-top:12px;padding:12px;background:#f8fafc;border-left:4px solid #2563eb;font-size:13px;line-height:1.45}footer{text-align:center;color:#64748b;font-size:12px;padding:22px}
-@media(max-width:1050px){.stats{grid-template-columns:repeat(3,1fr)}.base{grid-template-columns:1fr}}@media(max-width:600px){.stats{grid-template-columns:1fr 1fr}.buttons button{width:100%}}
-@media print{header,.upload,.file,.buttons,.search,.base,.note,footer{display:none!important}.card{box-shadow:none;padding:5px}main{margin:0;padding:0}.stats{display:none}}
+.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-bottom:15px}
+.stat{background:#f8fafc;border:1px solid #e2e8f0;border-radius:9px;text-align:center;padding:15px}
+.num{display:block;font-size:25px;font-weight:700;color:#2563eb}
+.lab{font-size:12px;color:#64748b}
+.search{width:100%;padding:11px 13px;border:1px solid #cbd5e1;border-radius:8px;margin-bottom:12px;font-size:14px}
+.table{overflow:auto;border:1px solid #e2e8f0;border-radius:8px}
+table{width:100%;border-collapse:collapse;min-width:1150px}
+th{background:#1e293b;color:#fff;padding:11px;text-align:left;font-size:12px}
+td{padding:10px 11px;border-bottom:1px solid #e2e8f0;font-size:12px;vertical-align:top}
+.code{font-family:monospace;font-weight:700;color:#2563eb;white-space:nowrap}
+.badge{display:inline-block;padding:4px 7px;border-radius:5px;font-size:10px;font-weight:700}
+.confirmada{background:#dcfce7;color:#166534}
+.revisar{background:#fef3c7;color:#92400e}
+.ubicada{background:#dbeafe;color:#1e40af}
+.regla{background:#ede9fe;color:#5b21b6}
+.empty{text-align:center;padding:28px;color:#64748b}
+.base{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.basebox{background:#f8fafc;border:1px solid #e2e8f0;padding:12px;border-radius:8px;font-size:13px}
+.note{margin-top:12px;padding:12px;background:#f8fafc;border-left:4px solid #2563eb;font-size:13px;line-height:1.45}
+footer{text-align:center;color:#64748b;font-size:12px;padding:22px}
+@media(max-width:1050px){
+.stats{grid-template-columns:repeat(3,1fr)}
+.base{grid-template-columns:1fr}
+}
+@media(max-width:600px){
+.stats{grid-template-columns:1fr 1fr}
+.buttons button{width:100%}
+}
+@media print{
+header,.upload,.file,.buttons,.search,.base,.note,footer{display:none!important}
+.card{box-shadow:none;padding:5px}
+main{margin:0;padding:0}
+.stats{display:none}
+}
 </style>
 </head>
+
 <body>
 
 <header>
@@ -33,28 +79,50 @@ h2{font-size:19px;margin-bottom:15px}.upload{border:2px dashed #94a3b8;border-ra
 <main>
 
 <section class="card">
+
 <h2>1. Cargar estudio médico</h2>
 
 <div id="uploadArea" class="upload">
+
 <div class="upload-icon">📄</div>
+
 <strong>Seleccionar PDF del estudio médico</strong>
-<span>Hacé clic aquí o arrastrá el archivo PDF</span>
-<input id="pdfInput" type="file" accept="application/pdf,.pdf">
+
+<span>
+Hacé clic aquí o arrastrá el archivo PDF
+</span>
+
+<input
+id="pdfInput"
+type="file"
+accept="application/pdf,.pdf"
+>
+
 </div>
 
 <div id="fileInfo" class="file"></div>
 
 <div class="buttons">
-<button id="btnProcesar" class="btn-primary" disabled>
+
+<button
+id="btnProcesar"
+class="btn-primary"
+disabled
+>
 🔎 Procesar estudio
 </button>
 
-<button id="btnLimpiar" class="btn-light">
+<button
+id="btnLimpiar"
+class="btn-light"
+>
 Limpiar
 </button>
+
 </div>
 
 <div id="status" class="status"></div>
+
 </section>
 
 
@@ -136,15 +204,27 @@ Todavía no se procesó ningún estudio.
 
 <div class="buttons">
 
-<button id="btnPDF" class="btn-success" disabled>
+<button
+id="btnPDF"
+class="btn-success"
+disabled
+>
 📄 Descargar PDF codificado
 </button>
 
-<button id="btnJSON" class="btn-success" disabled>
+<button
+id="btnJSON"
+class="btn-success"
+disabled
+>
 📥 Exportar JSON
 </button>
 
-<button id="btnImprimir" class="btn-secondary" disabled>
+<button
+id="btnImprimir"
+class="btn-secondary"
+disabled
+>
 🖨️ Imprimir tabla
 </button>
 
@@ -171,18 +251,33 @@ pero no se escribe sobre el PDF porque no existe un título físico que codifica
 <div class="base">
 
 <div class="basebox">
+
 <b>nomenclador_lab.json</b>
-<div id="estadoLab">Cargando...</div>
+
+<div id="estadoLab">
+Cargando...
+</div>
+
 </div>
 
 <div class="basebox">
+
 <b>equivalencias.json</b>
-<div id="estadoEq">Cargando...</div>
+
+<div id="estadoEq">
+Cargando...
+</div>
+
 </div>
 
 <div class="basebox">
+
 <b>Motor de reconocimiento</b>
-<div id="estadoMotor">Listo para cargar.</div>
+
+<div id="estadoMotor">
+Listo para cargar.
+</div>
+
 </div>
 
 </div>
@@ -695,7 +790,7 @@ const aliases={
 "LKM ANTICUERPOS ANTI":
 "LAB.04.018",
 
-"ASMA ANTICUERPO ANTISMUSCULO LISO":
+"ASMA ANTICUERPO ANTIMUSCULO LISO":
 "LAB.03.018",
 
 "IGA INMUNOGLOBULINA A":
@@ -793,6 +888,7 @@ const aliases={
 
 };
 
+
 for(
 const [a,c]
 of Object.entries(aliases)
@@ -802,6 +898,7 @@ c,
 a,
 "alias incorporado"
 );
+
 
 entries.sort(
 (a,b)=>{
@@ -1000,6 +1097,7 @@ line.height =
 Math.max(
 ...line.items.map(
 i=>i.height
+)
 );
 
 }
@@ -1031,6 +1129,8 @@ lines
 return pages;
 
 }
+
+
 function localizarFrase(
 line,
 phraseNorm
@@ -1229,7 +1329,7 @@ entry.norm.length
 
 if(
 antes &&
-!/^[-:|()]*$/.test(
+!/^(?:[-:|()]*)$/.test(
 antes
 )
 )
@@ -1294,11 +1394,6 @@ String(
 entry.code || ""
 );
 
-const official =
-normalizar(
-entry.official || ""
-);
-
 const esAntigeno =
 /\bANTIGEN[OA]\b|\bAGS?\b/
 .test(n);
@@ -1329,7 +1424,7 @@ return false;
 
 
 /*
-LAB.08.041 es específicamente
+El código LAB.08.041 es específicamente
 antígeno de Influenza B + PCR.
 */
 
@@ -1838,7 +1933,9 @@ score:0
 });
 
 }
-   async function procesar(){
+
+
+async function procesar(){
 
 if(!archivoPDF){
 
@@ -2225,7 +2322,6 @@ function render(){
 
 const body =
 $("resultados");
-
 
 body.innerHTML =
 "";
@@ -2730,4 +2826,4 @@ iniciar();
 </script>
 
 </body>
-</html> 
+</html>
