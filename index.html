@@ -7,386 +7,373 @@
 <title>Codificador de Prestaciones - Mendoza</title>
 
 <style>
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
 }
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
-  background: #f4f6f8;
-  color: #1f2937;
-  min-height: 100vh;
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f4f6f8;
+  color:#1f2937;
+  min-height:100vh;
 }
 
-header {
-  background: #111827;
-  color: white;
-  padding: 22px 30px;
-  box-shadow: 0 2px 8px rgba(0,0,0,.15);
+header{
+  background:#111827;
+  color:white;
+  padding:22px 30px;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
 }
 
-header h1 {
-  font-size: 25px;
-  margin-bottom: 6px;
+header h1{
+  font-size:25px;
+  margin-bottom:6px;
 }
 
-header p {
-  color: #cbd5e1;
-  font-size: 14px;
+header p{
+  color:#cbd5e1;
+  font-size:14px;
 }
 
-main {
-  width: 100%;
-  max-width: 1250px;
-  margin: 30px auto;
-  padding: 0 20px;
+main{
+  width:100%;
+  max-width:1250px;
+  margin:30px auto;
+  padding:0 20px;
 }
 
-.card {
-  background: white;
-  border-radius: 12px;
-  padding: 24px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 10px rgba(0,0,0,.08);
+.card{
+  background:white;
+  border-radius:12px;
+  padding:24px;
+  margin-bottom:20px;
+  box-shadow:0 2px 10px rgba(0,0,0,.08);
 }
 
-.card h2 {
-  font-size: 19px;
-  margin-bottom: 15px;
+.card h2{
+  font-size:19px;
+  margin-bottom:15px;
 }
 
-.upload-area {
-  border: 2px dashed #94a3b8;
-  border-radius: 12px;
-  padding: 45px 20px;
-  text-align: center;
-  background: #f8fafc;
-  transition: .2s;
-  cursor: pointer;
+.upload-area{
+  border:2px dashed #94a3b8;
+  border-radius:12px;
+  padding:45px 20px;
+  text-align:center;
+  background:#f8fafc;
+  transition:.2s;
+  cursor:pointer;
 }
 
-.upload-area:hover,
-.upload-area.dragover {
-  border-color: #2563eb;
-  background: #eff6ff;
+.upload-area:hover{
+  border-color:#2563eb;
+  background:#eff6ff;
 }
 
-.upload-icon {
-  font-size: 42px;
-  margin-bottom: 12px;
+.upload-area.dragover{
+  border-color:#2563eb;
+  background:#dbeafe;
 }
 
-.upload-area strong {
-  display: block;
-  font-size: 17px;
-  margin-bottom: 8px;
+.upload-icon{
+  font-size:42px;
+  margin-bottom:12px;
 }
 
-.upload-area span {
-  color: #64748b;
-  font-size: 14px;
+.upload-area strong{
+  display:block;
+  font-size:17px;
+  margin-bottom:8px;
 }
 
-input[type="file"] {
-  display: none;
+.upload-area span{
+  color:#64748b;
+  font-size:14px;
 }
 
-.buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 18px;
+#pdfInput{
+  display:none;
 }
 
-button {
-  border: none;
-  border-radius: 8px;
-  padding: 12px 18px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: .2s;
+.buttons{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:18px;
 }
 
-button:hover {
-  transform: translateY(-1px);
+button{
+  border:none;
+  border-radius:8px;
+  padding:12px 18px;
+  font-size:14px;
+  font-weight:600;
+  cursor:pointer;
+  transition:.2s;
 }
 
-button:disabled {
-  opacity: .5;
-  cursor: not-allowed;
-  transform: none;
+button:hover{
+  transform:translateY(-1px);
 }
 
-.btn-primary {
-  background: #2563eb;
-  color: white;
+button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+  transform:none;
 }
 
-.btn-primary:hover {
-  background: #1d4ed8;
+.btn-primary{
+  background:#2563eb;
+  color:white;
 }
 
-.btn-success {
-  background: #16a34a;
-  color: white;
+.btn-primary:hover{
+  background:#1d4ed8;
 }
 
-.btn-success:hover {
-  background: #15803d;
+.btn-success{
+  background:#16a34a;
+  color:white;
 }
 
-.btn-secondary {
-  background: #475569;
-  color: white;
+.btn-success:hover{
+  background:#15803d;
 }
 
-.btn-warning {
-  background: #d97706;
-  color: white;
+.btn-secondary{
+  background:#475569;
+  color:white;
 }
 
-.btn-danger {
-  background: #dc2626;
-  color: white;
+.btn-danger{
+  background:#dc2626;
+  color:white;
 }
 
-.btn-light {
-  background: #e2e8f0;
-  color: #1e293b;
+.btn-light{
+  background:#e2e8f0;
+  color:#1e293b;
 }
 
-.status {
-  display: none;
-  margin-top: 15px;
-  padding: 13px 16px;
-  border-radius: 8px;
-  font-size: 14px;
+.status{
+  display:none;
+  margin-top:15px;
+  padding:13px 16px;
+  border-radius:8px;
+  font-size:14px;
 }
 
-.status.info {
-  display: block;
-  background: #dbeafe;
-  color: #1e40af;
+.status.info{
+  display:block;
+  background:#dbeafe;
+  color:#1e40af;
 }
 
-.status.success {
-  display: block;
-  background: #dcfce7;
-  color: #166534;
+.status.success{
+  display:block;
+  background:#dcfce7;
+  color:#166534;
 }
 
-.status.warning {
-  display: block;
-  background: #fef3c7;
-  color: #92400e;
+.status.warning{
+  display:block;
+  background:#fef3c7;
+  color:#92400e;
 }
 
-.status.error {
-  display: block;
-  background: #fee2e2;
-  color: #991b1b;
+.status.error{
+  display:block;
+  background:#fee2e2;
+  color:#991b1b;
 }
 
-.file-info {
-  display: none;
-  margin-top: 15px;
-  padding: 15px;
-  background: #f1f5f9;
-  border-radius: 8px;
-  font-size: 14px;
+.file-info{
+  display:none;
+  margin-top:15px;
+  padding:15px;
+  background:#f1f5f9;
+  border-radius:8px;
+  font-size:14px;
 }
 
-.stats {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 12px;
-  margin-bottom: 20px;
+.file-info strong{
+  color:#0f172a;
 }
 
-.stat {
-  padding: 18px;
-  background: #f8fafc;
-  border-radius: 10px;
-  text-align: center;
-  border: 1px solid #e2e8f0;
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-bottom:20px;
 }
 
-.stat-number {
-  display: block;
-  font-size: 27px;
-  font-weight: 700;
-  color: #2563eb;
-  margin-bottom: 5px;
+.stat{
+  padding:18px;
+  background:#f8fafc;
+  border-radius:10px;
+  text-align:center;
+  border:1px solid #e2e8f0;
 }
 
-.stat-label {
-  color: #64748b;
-  font-size: 13px;
+.stat-number{
+  display:block;
+  font-size:27px;
+  font-weight:700;
+  color:#2563eb;
+  margin-bottom:5px;
 }
 
-.search-box {
-  width: 100%;
-  padding: 12px 14px;
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  font-size: 14px;
-  outline: none;
-  margin-bottom: 15px;
+.stat-label{
+  color:#64748b;
+  font-size:13px;
 }
 
-.search-box:focus {
-  border-color: #2563eb;
-  box-shadow: 0 0 0 3px rgba(37,99,235,.1);
+.table-container{
+  overflow-x:auto;
+  border:1px solid #e2e8f0;
+  border-radius:8px;
 }
 
-.table-container {
-  overflow-x: auto;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:950px;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 950px;
+th{
+  background:#1e293b;
+  color:white;
+  padding:12px;
+  text-align:left;
+  font-size:13px;
 }
 
-th {
-  background: #1e293b;
-  color: white;
-  padding: 12px;
-  text-align: left;
-  font-size: 13px;
+td{
+  padding:11px 12px;
+  border-bottom:1px solid #e2e8f0;
+  font-size:13px;
+  vertical-align:top;
 }
 
-td {
-  padding: 11px 12px;
-  border-bottom: 1px solid #e2e8f0;
-  font-size: 13px;
-  vertical-align: top;
+tr:last-child td{
+  border-bottom:none;
 }
 
-tr:last-child td {
-  border-bottom: none;
+tr:hover td{
+  background:#f8fafc;
 }
 
-tr:hover td {
-  background: #f8fafc;
+.code{
+  font-family:monospace;
+  font-weight:bold;
+  color:#2563eb;
+  white-space:nowrap;
 }
 
-.code {
-  font-family: monospace;
-  font-weight: bold;
-  color: #2563eb;
-  white-space: nowrap;
+.badge{
+  display:inline-block;
+  padding:5px 8px;
+  border-radius:5px;
+  font-size:11px;
+  font-weight:600;
 }
 
-.badge {
-  display: inline-block;
-  padding: 5px 8px;
-  border-radius: 5px;
-  font-size: 11px;
-  font-weight: 600;
+.badge-confirmada{
+  background:#dcfce7;
+  color:#166534;
 }
 
-.badge-confirmada {
-  background: #dcfce7;
-  color: #166534;
+.badge-revisar{
+  background:#fef3c7;
+  color:#92400e;
 }
 
-.badge-revisar {
-  background: #fef3c7;
-  color: #92400e;
+.badge-no{
+  background:#fee2e2;
+  color:#991b1b;
 }
 
-.badge-no {
-  background: #fee2e2;
-  color: #991b1b;
+.search-box{
+  width:100%;
+  padding:12px 14px;
+  border:1px solid #cbd5e1;
+  border-radius:8px;
+  font-size:14px;
+  outline:none;
+  margin-bottom:15px;
 }
 
-.badge-ocr {
-  background: #e0e7ff;
-  color: #3730a3;
+.search-box:focus{
+  border-color:#2563eb;
+  box-shadow:0 0 0 3px rgba(37,99,235,.1);
 }
 
-.empty {
-  text-align: center;
-  padding: 30px;
-  color: #64748b;
+.empty{
+  text-align:center;
+  padding:30px;
+  color:#64748b;
 }
 
-.progress-box {
-  display: none;
-  margin-top: 15px;
+.loading{
+  display:none;
+  text-align:center;
+  padding:25px;
+  color:#475569;
 }
 
-.progress-bar {
-  width: 100%;
-  height: 12px;
-  background: #e2e8f0;
-  border-radius: 20px;
-  overflow: hidden;
+.spinner{
+  width:28px;
+  height:28px;
+  border:3px solid #cbd5e1;
+  border-top-color:#2563eb;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+  margin:0 auto 10px;
 }
 
-.progress-value {
-  height: 100%;
-  width: 0%;
-  background: #2563eb;
-  transition: width .2s;
-}
-
-.progress-text {
-  font-size: 13px;
-  color: #64748b;
-  margin-top: 7px;
-}
-
-.info-box {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
-  padding: 14px;
-  border-radius: 8px;
-  margin-top: 15px;
-  font-size: 13px;
-  color: #475569;
-}
-
-footer {
-  text-align: center;
-  color: #64748b;
-  font-size: 12px;
-  padding: 25px;
-}
-
-@media (max-width: 900px) {
-  .stats {
-    grid-template-columns: repeat(3, 1fr);
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
   }
 }
 
-@media (max-width: 650px) {
-  .stats {
-    grid-template-columns: repeat(2, 1fr);
+footer{
+  text-align:center;
+  color:#64748b;
+  font-size:12px;
+  padding:25px;
+}
+
+@media(max-width:800px){
+
+  .stats{
+    grid-template-columns:repeat(2,1fr);
   }
 
-  header {
-    padding: 18px;
+  header{
+    padding:18px;
   }
 
-  main {
-    padding: 0 12px;
-    margin-top: 18px;
+  main{
+    padding:0 12px;
+    margin-top:18px;
   }
 
-  .card {
-    padding: 18px;
+  .card{
+    padding:18px;
+  }
+}
+
+@media(max-width:480px){
+
+  .stats{
+    grid-template-columns:1fr 1fr;
   }
 
-  .buttons button {
-    width: 100%;
+  .buttons button{
+    width:100%;
   }
 }
 </style>
@@ -403,2215 +390,1522 @@ footer {
 
 <section class="card">
 
-  <h2>1. Cargar estudio médico</h2>
+<h2>1. Cargar estudio médico</h2>
 
-  <div
-    id="uploadArea"
-    class="upload-area"
-  >
-    <div class="upload-icon">📄</div>
+<div
+  id="uploadArea"
+  class="upload-area"
+>
 
-    <strong>Seleccionar PDF del estudio médico</strong>
+  <div class="upload-icon">📄</div>
 
-    <span>
-      Hacé clic aquí o arrastrá el archivo PDF
-    </span>
+  <strong>Seleccionar PDF del estudio médico</strong>
 
-    <input
-      type="file"
-      id="pdfInput"
-      accept="application/pdf,.pdf"
-    >
-  </div>
-
-  <div id="fileInfo" class="file-info"></div>
-
-  <div class="buttons">
-
-    <button
-      id="btnProcesar"
-      class="btn-primary"
-      disabled
-    >
-      🔎 Procesar estudio
-    </button>
-
-    <button
-      id="btnOCR"
-      class="btn-warning"
-      disabled
-    >
-      🧠 Procesar con OCR
-    </button>
-
-    <button
-      id="btnLimpiar"
-      class="btn-light"
-    >
-      Limpiar
-    </button>
-
-  </div>
-
-  <div id="status" class="status"></div>
-
-  <div id="progressBox" class="progress-box">
-
-    <div class="progress-bar">
-      <div
-        id="progressValue"
-        class="progress-value"
-      ></div>
-    </div>
-
-    <div
-      id="progressText"
-      class="progress-text"
-    >
-      Procesando...
-    </div>
-
-  </div>
-
-  <div class="info-box">
-    <strong>Importante:</strong>
-    primero se intenta leer directamente el texto del PDF.
-    Si el PDF es un escaneo o una imagen y no contiene texto seleccionable,
-    utilizá <strong>Procesar con OCR</strong>.
-  </div>
-
-</section>
-
-
-<section class="card">
-
-  <h2>2. Resultado de codificación</h2>
-
-  <div class="stats">
-
-    <div class="stat">
-      <span id="totalPrestaciones" class="stat-number">0</span>
-      <span class="stat-label">Detectadas</span>
-    </div>
-
-    <div class="stat">
-      <span id="totalConfirmadas" class="stat-number">0</span>
-      <span class="stat-label">Confirmadas</span>
-    </div>
-
-    <div class="stat">
-      <span id="totalRevisar" class="stat-number">0</span>
-      <span class="stat-label">Para revisar</span>
-    </div>
-
-    <div class="stat">
-      <span id="totalNoEncontradas" class="stat-number">0</span>
-      <span class="stat-label">Sin código</span>
-    </div>
-
-    <div class="stat">
-      <span id="totalBase" class="stat-number">0</span>
-      <span class="stat-label">Equivalencias</span>
-    </div>
-
-  </div>
+  <span>
+    Hacé clic aquí o arrastrá el archivo PDF
+  </span>
 
   <input
-    type="text"
-    id="buscadorResultados"
-    class="search-box"
-    placeholder="Buscar prestación, código o descripción..."
+    type="file"
+    id="pdfInput"
+    accept=".pdf,application/pdf"
   >
 
-  <div class="table-container">
+</div>
 
-    <table>
+<div id="fileInfo" class="file-info"></div>
 
-      <thead>
+<div class="buttons">
 
-        <tr>
-          <th>Prestación detectada</th>
-          <th>Código</th>
-          <th>Descripción nomenclador</th>
-          <th>Confianza</th>
-          <th>Origen</th>
-        </tr>
+<button
+  id="btnProcesar"
+  class="btn-primary"
+  disabled
+>
+🔎 Procesar estudio
+</button>
 
-      </thead>
+<button
+  id="btnLimpiar"
+  class="btn-light"
+>
+Limpiar
+</button>
 
-      <tbody id="resultadosBody">
+</div>
 
-        <tr>
-          <td colspan="5" class="empty">
-            Todavía no se procesó ningún estudio.
-          </td>
-        </tr>
-
-      </tbody>
-
-    </table>
-
-  </div>
-
-  <div class="buttons">
-
-    <button
-      id="btnExportar"
-      class="btn-success"
-      disabled
-    >
-      📥 Exportar JSON
-    </button>
-
-    <button
-      id="btnDescargarTXT"
-      class="btn-secondary"
-      disabled
-    >
-      📄 Descargar TXT
-    </button>
-
-    <button
-      id="btnImprimir"
-      class="btn-secondary"
-      disabled
-    >
-      🖨️ Imprimir
-    </button>
-
-  </div>
+<div id="status" class="status"></div>
 
 </section>
 
 
 <section class="card">
 
-  <h2>3. Base de equivalencias</h2>
+<h2>2. Resultado de codificación</h2>
 
-  <p style="font-size:14px;color:#64748b;margin-bottom:15px;">
-    La aplicación busca automáticamente
-    <strong>equivalencias.json</strong>
-    en la misma carpeta.
-  </p>
+<div class="stats">
 
-  <div id="estadoBase" class="status info">
-    Cargando base de equivalencias...
-  </div>
+<div class="stat">
+<span id="totalPrestaciones" class="stat-number">0</span>
+<span class="stat-label">Prestaciones detectadas</span>
+</div>
+
+<div class="stat">
+<span id="totalConfirmadas" class="stat-number">0</span>
+<span class="stat-label">Confirmadas</span>
+</div>
+
+<div class="stat">
+<span id="totalRevisar" class="stat-number">0</span>
+<span class="stat-label">Para revisar</span>
+</div>
+
+<div class="stat">
+<span id="totalNoEncontradas" class="stat-number">0</span>
+<span class="stat-label">Sin código</span>
+</div>
+
+</div>
+
+<input
+  type="text"
+  id="buscadorResultados"
+  class="search-box"
+  placeholder="Buscar prestación, código o descripción..."
+>
+
+<div class="table-container">
+
+<table>
+
+<thead>
+
+<tr>
+<th>Prestación detectada</th>
+<th>Código</th>
+<th>Descripción nomenclador</th>
+<th>Confianza</th>
+</tr>
+
+</thead>
+
+<tbody id="resultadosBody">
+
+<tr>
+<td colspan="4" class="empty">
+Todavía no se procesó ningún estudio.
+</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<div class="buttons">
+
+<button
+  id="btnExportar"
+  class="btn-success"
+  disabled
+>
+📥 Exportar JSON
+</button>
+
+<button
+  id="btnImprimir"
+  class="btn-secondary"
+  disabled
+>
+🖨️ Imprimir
+</button>
+
+</div>
+
+</section>
+
+
+<section class="card">
+
+<h2>Base de equivalencias</h2>
+
+<p style="font-size:14px;color:#64748b;margin-bottom:15px;">
+
+La aplicación utiliza
+<strong>equivalencias.json</strong>.
+
+<br><br>
+
+También es compatible con el formato:
+
+<code>
+"GLUCOSA EN SUERO": "LAB.01.073"
+</code>
+
+</p>
+
+<div id="estadoBase" class="status info">
+Cargando base de equivalencias...
+</div>
 
 </section>
 
 </main>
 
+
 <footer>
-  Codificador de Prestaciones Médicas · Nomenclador de Mendoza
+Codificador de Prestaciones Médicas · Nomenclador de Mendoza
 </footer>
 
 
-<!-- =========================================================
-     PDF.JS
-========================================================= -->
+<!-- PDF.JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 
-<script
-  src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs"
-  type="module">
-</script>
+<script>
+
+"use strict";
 
 
-<!-- =========================================================
-     TESSERACT OCR
-========================================================= -->
-
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-
-
-<script type="module">
-
-import * as pdfjsLib
-  from "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs";
-
-
-pdfjsLib.GlobalWorkerOptions.workerSrc =
-  "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.worker.min.mjs";
-
-
-/* =========================================================
+/* ==========================================================
    VARIABLES
-========================================================= */
+========================================================== */
 
 let equivalencias = {};
-
-let indiceEquivalencias = [];
-
 let archivoPDF = null;
-
 let textoPDF = "";
-
 let resultados = [];
 
 
-/* =========================================================
+/* ==========================================================
+   CONFIGURACIÓN PDF.JS
+========================================================== */
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+
+/* ==========================================================
    ELEMENTOS
-========================================================= */
+========================================================== */
 
 const pdfInput =
-  document.getElementById("pdfInput");
+document.getElementById("pdfInput");
 
 const uploadArea =
-  document.getElementById("uploadArea");
+document.getElementById("uploadArea");
 
 const btnProcesar =
-  document.getElementById("btnProcesar");
-
-const btnOCR =
-  document.getElementById("btnOCR");
+document.getElementById("btnProcesar");
 
 const btnLimpiar =
-  document.getElementById("btnLimpiar");
+document.getElementById("btnLimpiar");
 
 const btnExportar =
-  document.getElementById("btnExportar");
-
-const btnDescargarTXT =
-  document.getElementById("btnDescargarTXT");
+document.getElementById("btnExportar");
 
 const btnImprimir =
-  document.getElementById("btnImprimir");
+document.getElementById("btnImprimir");
+
+const buscador =
+document.getElementById("buscadorResultados");
 
 
-/* =========================================================
-   NORMALIZACIÓN
-========================================================= */
+/* ==========================================================
+   CARGAR EQUIVALENCIAS
+========================================================== */
 
-function normalizar(texto) {
+async function cargarEquivalencias(){
 
-  return String(texto || "")
-    .toUpperCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/Ñ/g, "N")
-    .replace(/[^A-Z0-9\s]/g, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+const estado =
+document.getElementById("estadoBase");
+
+try{
+
+const respuesta =
+await fetch(
+"equivalencias.json?nocache=" +
+Date.now()
+);
+
+if(!respuesta.ok){
+
+throw new Error(
+"No se encontró equivalencias.json"
+);
+
+}
+
+const datos =
+await respuesta.json();
+
+
+/*
+   IMPORTANTE:
+
+   Tu JSON actual tiene:
+
+   "GLUCOSA EN SUERO": "LAB.01.073"
+
+   pero también permitimos:
+
+   "GLUCOSA EN SUERO": {
+       "code":"LAB.01.073",
+       "description":"..."
+   }
+*/
+
+equivalencias = {};
+
+for(
+const [nombre, valor]
+of Object.entries(datos)
+){
+
+if(typeof valor === "string"){
+
+equivalencias[nombre] = {
+
+code:valor,
+
+description:nombre,
+
+confidence:"confirmada"
+
+};
+
+}
+
+else if(
+valor &&
+typeof valor === "object"
+){
+
+equivalencias[nombre] = {
+
+code:valor.code || "",
+
+description:
+valor.description || nombre,
+
+confidence:
+valor.confidence || "confirmada"
+
+};
+
+}
 
 }
 
 
-/* =========================================================
-   NORMALIZACIÓN INTELIGENTE
-========================================================= */
+const cantidad =
+Object.keys(equivalencias).length;
 
-function normalizarAvanzado(texto) {
 
-  let t = normalizar(texto);
+estado.className =
+"status success";
 
-  const reemplazos = [
+estado.textContent =
+"Base cargada correctamente: " +
+cantidad +
+" equivalencias disponibles.";
 
-    [/\bGLUCEMIA\b/g, "GLUCOSA"],
-    [/\bGLICEMIA\b/g, "GLUCOSA"],
 
-    [/\bGLUCOSA SERICA\b/g, "GLUCOSA EN SUERO"],
-    [/\bGLUCOSA SERICA\b/g, "GLUCOSA EN SUERO"],
+}catch(error){
 
-    [/\bGLUCOSA SANGUINEA\b/g, "GLUCOSA EN SANGRE"],
-    [/\bGLUCOSA PLASMATICA\b/g, "GLUCOSA EN PLASMA"],
+console.error(error);
 
-    [/\bUREA\b/g, "UREMIA"],
+estado.className =
+"status error";
 
-    [/\bURATO\b/g, "ACIDO URICO"],
+estado.textContent =
+"No se pudo cargar equivalencias.json. " +
+"Si abriste index.html con doble clic, abrí el proyecto mediante un servidor local.";
 
-    [/\bCOLESTEROL TOTAL\b/g, "COLESTEROL EN SUERO"],
 
-    [/\bHDL COLESTEROL\b/g, "COLESTEROL HDL"],
-    [/\bLDL COLESTEROL\b/g, "COLESTEROL LDL"],
-
-    [/\bTG\b/g, "TRIGLICERIDOS"],
-
-    [/\bAST\b/g, "GOT"],
-    [/\bASAT\b/g, "GOT"],
-    [/\bTGO\b/g, "GOT"],
-
-    [/\bALT\b/g, "GPT"],
-    [/\bALAT\b/g, "GPT"],
-    [/\bTGP\b/g, "GPT"],
-
-    [/\bHEMOGLOBINA A1C\b/g, "HEMOGLOBINA GLICOSILADA"],
-    [/\bHB A1C\b/g, "HEMOGLOBINA GLICOSILADA"],
-    [/\bHBA1C\b/g, "HEMOGLOBINA GLICOSILADA"],
-
-    [/\bTIROTROFINA\b/g, "TSH"],
-    [/\bHORMONA TIROESTIMULANTE\b/g, "TSH"],
-
-    [/\bTIROXINA TOTAL\b/g, "T4 TOTAL"],
-
-    [/\bTRIIODOTIRONINA\b/g, "T3"],
-
-    [/\bANTIGENO PROSTATICO ESPECIFICO\b/g, "PSA"],
-
-    [/\bHBS AG\b/g, "HEPATITIS B ANTIGENO DE SUPERFICIE"],
-
-    [/\bHEPATITIS B ANTIGENO DE SUPERFICIE\b/g,
-      "HEPATITIS B ANTIGENO DE SUPERFICIE"]
-
-  ];
-
-  for (const [patron, reemplazo] of reemplazos) {
-    t = t.replace(patron, reemplazo);
-  }
-
-  return t;
 }
-
-
-/* =========================================================
-   CARGAR BASE
-========================================================= */
-
-async function cargarEquivalencias() {
-
-  const estado =
-    document.getElementById("estadoBase");
-
-  try {
-
-    const respuesta =
-      await fetch(
-        "equivalencias.json",
-        {
-          cache: "no-store"
-        }
-      );
-
-    if (!respuesta.ok) {
-      throw new Error(
-        "No se pudo abrir equivalencias.json"
-      );
-    }
-
-    const datos =
-      await respuesta.json();
-
-    procesarBase(datos);
-
-    estado.className =
-      "status success";
-
-    estado.textContent =
-      `Base cargada correctamente: ${
-        indiceEquivalencias.length
-      } equivalencias disponibles.`;
-
-    document
-      .getElementById("totalBase")
-      .textContent =
-      indiceEquivalencias.length;
-
-  } catch (error) {
-
-    console.error(error);
-
-    estado.className =
-      "status warning";
-
-    estado.textContent =
-      "No se pudo cargar automáticamente equivalencias.json. " +
-      "Si abriste index.html directamente desde Windows, " +
-      "usá un servidor local (por ejemplo Live Server).";
-
-  }
 
 }
 
 
-/* =========================================================
-   PROCESAR CUALQUIER FORMATO DE BASE
-========================================================= */
+/* ==========================================================
+   NORMALIZAR TEXTO
+========================================================== */
 
-function procesarBase(datos) {
+function normalizar(texto){
 
-  equivalencias = {};
-
-  indiceEquivalencias = [];
-
-
-  for (
-    const [clave, valor]
-    of Object.entries(datos || {})
-  ) {
-
-    /*
-     * FORMATO 1
-     *
-     * "GLUCOSA EN SUERO": "LAB.01.073"
-     */
-
-    if (
-      typeof valor === "string"
-    ) {
-
-      const nombre =
-        clave;
-
-      const codigo =
-        valor;
-
-      agregarEquivalencia(
-        nombre,
-        codigo,
-        nombre,
-        "confirmada"
-      );
-
-      continue;
-    }
-
-
-    /*
-     * FORMATO 2
-     *
-     * "LAB.01.073": {
-     *   descripcion: "...",
-     *   valor: 4
-     * }
-     */
-
-    if (
-      valor &&
-      typeof valor === "object"
-    ) {
-
-      const codigo =
-        clave;
-
-      const descripcion =
-        valor.descripcion ||
-        valor.description ||
-        "";
-
-      if (descripcion) {
-
-        agregarEquivalencia(
-          descripcion,
-          codigo,
-          descripcion,
-          "confirmada"
-        );
-
-      }
-
-    }
-
-  }
-
-
-  /*
-   * Agregar equivalencias manuales
-   * importantes para las variantes.
-   */
-
-  agregarEquivalencia(
-    "GLUCEMIA",
-    "LAB.01.073",
-    "Glucemia",
-    "confirmada"
-  );
-
-  agregarEquivalencia(
-    "GLUCOSA EN SUERO",
-    "LAB.01.073",
-    "Glucemia",
-    "confirmada"
-  );
-
-  agregarEquivalencia(
-    "GLUCOSA SERICA",
-    "LAB.01.073",
-    "Glucemia",
-    "confirmada"
-  );
-
-
-  /*
-   * Eliminar duplicados
-   */
-
-  const mapa =
-    new Map();
-
-  for (
-    const item
-    of indiceEquivalencias
-  ) {
-
-    const claveNormalizada =
-      normalizarAvanzado(
-        item.nombre
-      );
-
-    if (
-      !mapa.has(claveNormalizada)
-    ) {
-
-      mapa.set(
-        claveNormalizada,
-        item
-      );
-
-    }
-
-  }
-
-  indiceEquivalencias =
-    Array.from(
-      mapa.values()
-    );
+return String(texto || "")
+.toUpperCase()
+.normalize("NFD")
+.replace(/[\u0300-\u036f]/g,"")
+.replace(/[^\w\s]/g," ")
+.replace(/\s+/g," ")
+.trim();
 
 }
 
 
-/* =========================================================
-   AGREGAR EQUIVALENCIA
-========================================================= */
+/* ==========================================================
+   ESCAPAR HTML
+========================================================== */
 
-function agregarEquivalencia(
-  nombre,
-  codigo,
-  descripcion,
-  confianza
-) {
+function escapeHTML(valor){
 
-  if (!nombre || !codigo) {
-    return;
-  }
-
-  const nombreNormalizado =
-    normalizarAvanzado(nombre);
-
-  if (!nombreNormalizado) {
-    return;
-  }
-
-  indiceEquivalencias.push({
-
-    nombre,
-    nombreNormalizado,
-
-    codigo,
-
-    descripcion:
-      descripcion || nombre,
-
-    confianza:
-      confianza || "confirmada"
-
-  });
+return String(valor ?? "")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
 
 }
 
 
-/* =========================================================
+/* ==========================================================
    SELECCIONAR PDF
-========================================================= */
+========================================================== */
 
 pdfInput.addEventListener(
-  "change",
-  function(event) {
+"change",
+function(event){
 
-    const archivo =
-      event.target.files[0];
+const archivo =
+event.target.files[0];
 
-    if (archivo) {
+if(archivo){
 
-      seleccionarPDF(
-        archivo
-      );
+seleccionarPDF(archivo);
 
-    }
+}
 
-  }
-);
-
-
-/* =========================================================
-   CLICK ÁREA PDF
-========================================================= */
-
-uploadArea.addEventListener(
-  "click",
-  function() {
-
-    pdfInput.click();
-
-  }
-);
-
-
-/* =========================================================
-   DRAG
-========================================================= */
-
-uploadArea.addEventListener(
-  "dragover",
-  function(event) {
-
-    event.preventDefault();
-
-    uploadArea.classList.add(
-      "dragover"
-    );
-
-  }
-);
+});
 
 
 uploadArea.addEventListener(
-  "dragleave",
-  function() {
+"click",
+function(){
 
-    uploadArea.classList.remove(
-      "dragover"
-    );
+pdfInput.click();
 
-  }
+});
+
+
+function seleccionarPDF(archivo){
+
+if(
+archivo.type !== "application/pdf" &&
+!archivo.name.toLowerCase().endsWith(".pdf")
+){
+
+mostrarEstado(
+"El archivo seleccionado no es un PDF.",
+"error"
 );
 
-
-uploadArea.addEventListener(
-  "drop",
-  function(event) {
-
-    event.preventDefault();
-
-    uploadArea.classList.remove(
-      "dragover"
-    );
-
-    const archivo =
-      event.dataTransfer.files[0];
-
-    if (archivo) {
-
-      seleccionarPDF(
-        archivo
-      );
-
-    }
-
-  }
-);
-
-
-/* =========================================================
-   SELECCIONAR ARCHIVO
-========================================================= */
-
-function seleccionarPDF(archivo) {
-
-  const esPDF =
-    archivo.type ===
-      "application/pdf" ||
-    archivo.name
-      .toLowerCase()
-      .endsWith(".pdf");
-
-
-  if (!esPDF) {
-
-    mostrarEstado(
-      "El archivo seleccionado no es un PDF.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  archivoPDF =
-    archivo;
-
-
-  const info =
-    document.getElementById(
-      "fileInfo"
-    );
-
-
-  info.style.display =
-    "block";
-
-
-  info.innerHTML = `
-
-    <strong>Archivo:</strong>
-    ${escapeHTML(archivo.name)}
-
-    <br>
-
-    <strong>Tamaño:</strong>
-    ${formatearBytes(archivo.size)}
-
-  `;
-
-
-  btnProcesar.disabled =
-    false;
-
-  btnOCR.disabled =
-    false;
-
-
-  mostrarEstado(
-    "PDF cargado correctamente. Ahora podés procesarlo.",
-    "success"
-  );
+return;
 
 }
 
 
-/* =========================================================
-   BOTÓN PROCESAR
-========================================================= */
+archivoPDF = archivo;
+
+
+const info =
+document.getElementById("fileInfo");
+
+info.style.display =
+"block";
+
+info.innerHTML = `
+
+<strong>Archivo:</strong>
+${escapeHTML(archivo.name)}
+
+<br>
+
+<strong>Tamaño:</strong>
+${formatearBytes(archivo.size)}
+
+<br>
+
+<strong>Estado:</strong>
+PDF listo para procesar.
+
+`;
+
+
+btnProcesar.disabled = false;
+
+
+mostrarEstado(
+"PDF cargado correctamente. Ahora presioná «Procesar estudio».",
+"success"
+);
+
+}
+
+
+/* ==========================================================
+   DRAG & DROP
+========================================================== */
+
+uploadArea.addEventListener(
+"dragover",
+function(event){
+
+event.preventDefault();
+
+uploadArea.classList.add("dragover");
+
+});
+
+
+uploadArea.addEventListener(
+"dragleave",
+function(){
+
+uploadArea.classList.remove("dragover");
+
+});
+
+
+uploadArea.addEventListener(
+"drop",
+function(event){
+
+event.preventDefault();
+
+uploadArea.classList.remove("dragover");
+
+const archivo =
+event.dataTransfer.files[0];
+
+if(archivo){
+
+seleccionarPDF(archivo);
+
+}
+
+});
+
+
+/* ==========================================================
+   PROCESAR PDF
+========================================================== */
 
 btnProcesar.addEventListener(
-  "click",
-  procesarPDF
+"click",
+procesarPDF
 );
 
 
-async function procesarPDF() {
+async function procesarPDF(){
 
-  if (!archivoPDF) {
+if(!archivoPDF){
 
-    mostrarEstado(
-      "Primero seleccioná un PDF.",
-      "warning"
-    );
+mostrarEstado(
+"Primero seleccioná un PDF.",
+"warning"
+);
 
-    return;
-
-  }
-
-
-  if (
-    indiceEquivalencias.length === 0
-  ) {
-
-    mostrarEstado(
-      "La base de equivalencias no está cargada.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  mostrarProgreso(
-    true,
-    5,
-    "Abriendo PDF..."
-  );
-
-
-  btnProcesar.disabled =
-    true;
-
-  btnOCR.disabled =
-    true;
-
-
-  try {
-
-    textoPDF =
-      await extraerTextoPDF(
-        archivoPDF
-      );
-
-
-    if (
-      !textoPDF ||
-      normalizar(textoPDF).length < 10
-    ) {
-
-      mostrarEstado(
-        "El PDF no contiene texto seleccionable. " +
-        "Utilizá «Procesar con OCR».",
-        "warning"
-      );
-
-      mostrarProgreso(
-        false
-      );
-
-      return;
-
-    }
-
-
-    mostrarProgreso(
-      true,
-      60,
-      "Buscando prestaciones..."
-    );
-
-
-    resultados =
-      buscarPrestaciones(
-        textoPDF
-      );
-
-
-    mostrarResultados();
-
-    activarBotones();
-
-
-    mostrarProgreso(
-      true,
-      100,
-      "Proceso terminado."
-    );
-
-
-    mostrarEstado(
-      `Procesamiento terminado. Se detectaron ${
-        resultados.length
-      } prestaciones.`,
-      "success"
-    );
-
-
-  } catch (error) {
-
-    console.error(error);
-
-    mostrarEstado(
-      "No se pudo procesar el PDF. " +
-      "Si es un escaneo, utilizá OCR.",
-      "error"
-    );
-
-  } finally {
-
-    btnProcesar.disabled =
-      false;
-
-    btnOCR.disabled =
-      false;
-
-    setTimeout(
-      () => mostrarProgreso(false),
-      700
-    );
-
-  }
+return;
 
 }
 
 
-/* =========================================================
-   EXTRAER TEXTO PDF
-========================================================= */
+if(
+Object.keys(equivalencias).length === 0
+){
 
-async function extraerTextoPDF(
-  archivo
-) {
+mostrarEstado(
+"La base de equivalencias no está cargada.",
+"error"
+);
 
-  const buffer =
-    await archivo.arrayBuffer();
-
-
-  const pdf =
-    await pdfjsLib
-      .getDocument({
-        data: buffer
-      })
-      .promise;
-
-
-  let texto =
-    "";
-
-
-  for (
-    let paginaNumero = 1;
-    paginaNumero <= pdf.numPages;
-    paginaNumero++
-  ) {
-
-    mostrarProgreso(
-      true,
-      10 +
-        (
-          paginaNumero /
-          pdf.numPages
-        ) * 45,
-      `Leyendo página ${paginaNumero} de ${pdf.numPages}...`
-    );
-
-
-    const pagina =
-      await pdf.getPage(
-        paginaNumero
-      );
-
-
-    const contenido =
-      await pagina.getTextContent();
-
-
-    const items =
-      contenido.items || [];
-
-
-    /*
-     * Importante:
-     * agregamos espacios entre elementos.
-     * Esto evita que PDF.js una palabras.
-     */
-
-    const textoPagina =
-      items
-        .map(
-          item =>
-            item.str || ""
-        )
-        .join(" ");
-
-
-    texto +=
-      textoPagina +
-      "\n";
-
-  }
-
-
-  return texto;
+return;
 
 }
 
 
-/* =========================================================
-   OCR
-========================================================= */
+btnProcesar.disabled = true;
 
-btnOCR.addEventListener(
-  "click",
-  procesarConOCR
+
+mostrarEstado(
+"Procesando PDF. Esperá unos segundos...",
+"info"
 );
 
 
-async function procesarConOCR() {
+try{
 
-  if (!archivoPDF) {
 
-    mostrarEstado(
-      "Primero seleccioná un PDF.",
-      "warning"
-    );
+textoPDF =
+await extraerTextoPDF(archivoPDF);
 
-    return;
 
-  }
+if(
+!textoPDF ||
+textoPDF.trim().length < 5
+){
 
-
-  if (
-    indiceEquivalencias.length === 0
-  ) {
-
-    mostrarEstado(
-      "La base de equivalencias no está cargada.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  btnProcesar.disabled =
-    true;
-
-  btnOCR.disabled =
-    true;
-
-
-  try {
-
-    mostrarProgreso(
-      true,
-      2,
-      "Abriendo PDF para OCR..."
-    );
-
-
-    const buffer =
-      await archivoPDF.arrayBuffer();
-
-
-    const pdf =
-      await pdfjsLib
-        .getDocument({
-          data: buffer
-        })
-        .promise;
-
-
-    let textoOCR =
-      "";
-
-
-    /*
-     * Tesseract se carga desde CDN.
-     */
-
-    const worker =
-      await Tesseract.createWorker(
-        "spa",
-        1,
-        {
-          logger:
-            mensaje => {
-
-              if (
-                mensaje.status ===
-                "recognizing text"
-              ) {
-
-                const progreso =
-                  Math.round(
-                    mensaje.progress *
-                    100
-                  );
-
-                mostrarProgreso(
-                  true,
-                  progreso,
-                  `OCR: ${progreso}%`
-                );
-
-              }
-
-            }
-        }
-      );
-
-
-    for (
-      let numeroPagina = 1;
-      numeroPagina <= pdf.numPages;
-      numeroPagina++
-    ) {
-
-      mostrarProgreso(
-        true,
-        5 +
-          (
-            numeroPagina /
-            pdf.numPages
-          ) * 90,
-        `OCR página ${numeroPagina} de ${pdf.numPages}...`
-      );
-
-
-      const pagina =
-        await pdf.getPage(
-          numeroPagina
-        );
-
-
-      const viewport =
-        pagina.getViewport({
-          scale: 2
-        });
-
-
-      const canvas =
-        document.createElement(
-          "canvas"
-        );
-
-
-      const contexto =
-        canvas.getContext(
-          "2d"
-        );
-
-
-      canvas.width =
-        viewport.width;
-
-      canvas.height =
-        viewport.height;
-
-
-      await pagina.render({
-        canvasContext:
-          contexto,
-        viewport
-      }).promise;
-
-
-      const resultado =
-        await worker.recognize(
-          canvas
-        );
-
-
-      textoOCR +=
-        resultado.data.text +
-        "\n";
-
-
-      canvas.width =
-        1;
-
-      canvas.height =
-        1;
-
-    }
-
-
-    await worker.terminate();
-
-
-    textoPDF =
-      textoOCR;
-
-
-    resultados =
-      buscarPrestaciones(
-        textoPDF
-      );
-
-
-    mostrarResultados();
-
-    activarBotones();
-
-
-    mostrarProgreso(
-      true,
-      100,
-      "OCR terminado."
-    );
-
-
-    mostrarEstado(
-      `OCR terminado. Se detectaron ${
-        resultados.length
-      } prestaciones.`,
-      "success"
-    );
-
-
-  } catch (error) {
-
-    console.error(error);
-
-    mostrarEstado(
-      "No se pudo ejecutar el OCR. " +
-      "Verificá tu conexión a Internet.",
-      "error"
-    );
-
-  } finally {
-
-    btnProcesar.disabled =
-      false;
-
-    btnOCR.disabled =
-      false;
-
-    setTimeout(
-      () => mostrarProgreso(false),
-      700
-    );
-
-  }
+throw new Error(
+"El PDF no contiene texto seleccionable."
+);
 
 }
 
 
-/* =========================================================
-   BUSCAR PRESTACIONES
-========================================================= */
+resultados =
+buscarEquivalencias(textoPDF);
 
-function buscarPrestaciones(
-  texto
-) {
 
-  const textoNormalizado =
-    normalizarAvanzado(
-      texto
-    );
+mostrarResultados();
 
 
-  const encontradas =
-    [];
+btnExportar.disabled =
+resultados.length === 0;
 
+btnImprimir.disabled =
+resultados.length === 0;
 
-  /*
-   * 1. Coincidencia exacta
-   */
 
-  for (
-    const item
-    of indiceEquivalencias
-  ) {
+mostrarEstado(
 
-    const nombre =
-      item.nombreNormalizado;
+"Procesamiento terminado. " +
+"Se detectaron " +
+resultados.length +
+" prestaciones.",
 
+"success"
 
-    if (
-      nombre.length < 3
-    ) {
-      continue;
-    }
+);
 
 
-    if (
-      textoNormalizado.includes(
-        nombre
-      )
-    ) {
+}catch(error){
 
-      encontradas.push({
+console.error(error);
 
-        original:
-          item.nombre,
+mostrarEstado(
 
-        code:
-          item.codigo,
+"No se pudo leer el PDF. " +
+"Si es un PDF escaneado como imagen, " +
+"necesita OCR.",
 
-        description:
-          item.descripcion,
+"error"
 
-        confidence:
-          "confirmada",
+);
 
-        origen:
-          "Coincidencia exacta"
+}finally{
 
-      });
+btnProcesar.disabled = false;
 
-    }
-
-  }
-
-
-  /*
-   * 2. Buscar prestaciones compuestas
-   * cuando el PDF las separa.
-   */
-
-  const palabrasTexto =
-    new Set(
-      textoNormalizado
-        .split(" ")
-        .filter(
-          p =>
-            p.length >= 3
-        )
-    );
-
-
-  for (
-    const item
-    of indiceEquivalencias
-  ) {
-
-    const yaExiste =
-      encontradas.some(
-        r =>
-          r.code ===
-          item.codigo
-      );
-
-
-    if (yaExiste) {
-      continue;
-    }
-
-
-    const palabras =
-      item.nombreNormalizado
-        .split(" ")
-        .filter(
-          p =>
-            p.length >= 4
-        );
-
-
-    if (
-      palabras.length < 2
-    ) {
-      continue;
-    }
-
-
-    let coincidencias =
-      0;
-
-
-    for (
-      const palabra
-      of palabras
-    ) {
-
-      if (
-        palabrasTexto.has(
-          palabra
-        )
-      ) {
-
-        coincidencias++;
-
-      }
-
-    }
-
-
-    const porcentaje =
-      coincidencias /
-      palabras.length;
-
-
-    if (
-      porcentaje >= 0.80
-    ) {
-
-      encontradas.push({
-
-        original:
-          item.nombre,
-
-        code:
-          item.codigo,
-
-        description:
-          item.descripcion,
-
-        confidence:
-          "revisar",
-
-        origen:
-          "Coincidencia aproximada"
-
-      });
-
-    }
-
-  }
-
-
-  /*
-   * 3. Eliminar duplicados por código
-   */
-
-  const mapa =
-    new Map();
-
-
-  for (
-    const resultado
-    of encontradas
-  ) {
-
-    const clave =
-      resultado.code ||
-      normalizar(
-        resultado.original
-      );
-
-
-    /*
-     * Si ya existe una coincidencia
-     * confirmada, conservarla.
-     */
-
-    if (
-      !mapa.has(clave)
-    ) {
-
-      mapa.set(
-        clave,
-        resultado
-      );
-
-    } else {
-
-      const anterior =
-        mapa.get(clave);
-
-
-      if (
-        anterior.confidence !==
-        "confirmada" &&
-        resultado.confidence ===
-        "confirmada"
-      ) {
-
-        mapa.set(
-          clave,
-          resultado
-        );
-
-      }
-
-    }
-
-  }
-
-
-  return Array.from(
-    mapa.values()
-  );
+}
 
 }
 
 
-/* =========================================================
+/* ==========================================================
+   EXTRAER TEXTO DEL PDF
+========================================================== */
+
+async function extraerTextoPDF(archivo){
+
+const buffer =
+await archivo.arrayBuffer();
+
+
+const pdf =
+await pdfjsLib
+.getDocument({
+data:buffer
+})
+.promise;
+
+
+let texto = "";
+
+
+for(
+let paginaNumero = 1;
+paginaNumero <= pdf.numPages;
+paginaNumero++
+){
+
+const pagina =
+await pdf.getPage(paginaNumero);
+
+
+const contenido =
+await pagina.getTextContent();
+
+
+/*
+   Conservamos mejor los saltos y espacios.
+*/
+
+const elementos =
+contenido.items;
+
+
+let textoPagina = "";
+
+
+for(const item of elementos){
+
+if(
+item.str !== undefined
+){
+
+textoPagina +=
+item.str + " ";
+
+}
+
+}
+
+
+texto +=
+"\n" +
+textoPagina;
+
+}
+
+
+return texto;
+
+}
+
+
+/* ==========================================================
+   CREAR TEXTO NORMALIZADO
+========================================================== */
+
+function prepararTexto(texto){
+
+return normalizar(texto);
+
+}
+
+
+/* ==========================================================
+   COINCIDENCIA POR PALABRAS
+========================================================== */
+
+function coincidenciaPorPalabras(
+nombre,
+texto
+){
+
+const palabras =
+normalizar(nombre)
+.split(" ")
+.filter(
+p => p.length >= 3
+);
+
+
+if(palabras.length === 0){
+
+return 0;
+
+}
+
+
+let encontradas = 0;
+
+
+for(const palabra of palabras){
+
+if(
+texto.includes(palabra)
+){
+
+encontradas++;
+
+}
+
+}
+
+
+return
+encontradas /
+palabras.length;
+
+}
+
+
+/* ==========================================================
+   BUSCAR EQUIVALENCIAS
+========================================================== */
+
+function buscarEquivalencias(texto){
+
+const textoNormalizado =
+prepararTexto(texto);
+
+
+const encontradas = [];
+
+
+for(
+const [nombre, datos]
+of Object.entries(equivalencias)
+){
+
+const nombreNormalizado =
+normalizar(nombre);
+
+
+if(!nombreNormalizado){
+
+continue;
+
+}
+
+
+let porcentaje = 0;
+
+let tipoCoincidencia =
+"";
+
+
+/*
+   ========================================================
+   1. COINCIDENCIA EXACTA
+   ========================================================
+*/
+
+if(
+textoNormalizado.includes(
+nombreNormalizado
+)
+){
+
+porcentaje = 1;
+
+tipoCoincidencia =
+"exacta";
+
+}
+
+
+/*
+   ========================================================
+   2. COINCIDENCIA POR PALABRAS
+   ========================================================
+*/
+
+else{
+
+porcentaje =
+coincidenciaPorPalabras(
+nombre,
+textoNormalizado
+);
+
+
+if(
+porcentaje >= 0.85
+){
+
+tipoCoincidencia =
+"alta";
+
+}
+
+else if(
+porcentaje >= 0.70
+){
+
+tipoCoincidencia =
+"media";
+
+}
+
+}
+
+
+/*
+   ========================================================
+   NO COINCIDE
+   ========================================================
+*/
+
+if(!tipoCoincidencia){
+
+continue;
+
+}
+
+
+/*
+   ========================================================
+   NIVEL DE CONFIANZA
+   ========================================================
+*/
+
+let confianza =
+"revisar";
+
+
+if(
+porcentaje === 1
+){
+
+confianza =
+"confirmada";
+
+}
+
+else if(
+porcentaje >= 0.85
+){
+
+confianza =
+"confirmada";
+
+}
+
+else{
+
+confianza =
+"revisar";
+
+}
+
+
+/*
+   Si la base dice expresamente revisar,
+   respetamos esa indicación.
+*/
+
+if(
+datos.confidence &&
+String(datos.confidence)
+.toLowerCase() === "revisar"
+){
+
+confianza =
+"revisar";
+
+}
+
+
+encontradas.push({
+
+original:nombre,
+
+code:datos.code || "",
+
+description:
+datos.description ||
+nombre,
+
+confidence:confianza,
+
+score:porcentaje,
+
+match:tipoCoincidencia
+
+});
+
+}
+
+
+/* ==========================================================
+   ELIMINAR DUPLICADOS
+========================================================== */
+
+/*
+   Si varias denominaciones llevan al mismo código,
+   mostramos una sola prestación.
+*/
+
+const porCodigo =
+new Map();
+
+
+for(
+const resultado
+of encontradas
+){
+
+const clave =
+resultado.code ||
+normalizar(
+resultado.original
+);
+
+
+if(
+!porCodigo.has(clave)
+){
+
+porCodigo.set(
+clave,
+resultado
+);
+
+}
+
+else{
+
+const existente =
+porCodigo.get(clave);
+
+
+/*
+   Conservamos la coincidencia
+   con mayor puntuación.
+*/
+
+if(
+resultado.score >
+existente.score
+){
+
+porCodigo.set(
+clave,
+resultado
+);
+
+}
+
+}
+
+}
+
+
+return Array.from(
+porCodigo.values()
+)
+.sort(
+(a,b) =>
+b.score - a.score
+);
+
+}
+
+
+/* ==========================================================
    MOSTRAR RESULTADOS
-========================================================= */
+========================================================== */
 
-function mostrarResultados() {
+function mostrarResultados(){
 
-  const tbody =
-    document.getElementById(
-      "resultadosBody"
-    );
-
-
-  tbody.innerHTML =
-    "";
+const tbody =
+document.getElementById(
+"resultadosBody"
+);
 
 
-  if (
-    resultados.length === 0
-  ) {
-
-    tbody.innerHTML = `
-
-      <tr>
-
-        <td
-          colspan="5"
-          class="empty"
-        >
-          No se encontraron prestaciones.
-          Si el PDF es un escaneo,
-          probá «Procesar con OCR».
-        </td>
-
-      </tr>
-
-    `;
+tbody.innerHTML = "";
 
 
-    actualizarEstadisticas();
+if(
+resultados.length === 0
+){
 
-    return;
+tbody.innerHTML = `
 
-  }
+<tr>
 
+<td
+colspan="4"
+class="empty"
+>
 
-  resultados.forEach(
-    resultado => {
+No se encontraron prestaciones.
 
-      const fila =
-        document.createElement(
-          "tr"
-        );
+<br><br>
 
+El PDF puede estar escaneado como imagen,
+o la denominación utilizada en el estudio
+todavía no está incluida en equivalencias.json.
 
-      fila.innerHTML = `
+</td>
 
-        <td>
-          ${escapeHTML(
-            resultado.original
-          )}
-        </td>
+</tr>
 
-        <td class="code">
-          ${
-            resultado.code
-              ? escapeHTML(
-                  resultado.code
-                )
-              : "SIN CÓDIGO"
-          }
-        </td>
+`;
 
-        <td>
-          ${escapeHTML(
-            resultado.description ||
-            "Sin descripción"
-          )}
-        </td>
+actualizarEstadisticas();
 
-        <td>
-          ${crearBadge(
-            resultado.confidence
-          )}
-        </td>
-
-        <td>
-          ${escapeHTML(
-            resultado.origen || ""
-          )}
-        </td>
-
-      `;
-
-
-      tbody.appendChild(
-        fila
-      );
-
-    }
-  );
-
-
-  actualizarEstadisticas();
+return;
 
 }
 
 
-/* =========================================================
+for(
+const resultado
+of resultados
+){
+
+const fila =
+document.createElement("tr");
+
+
+fila.innerHTML = `
+
+<td>
+
+<strong>
+${escapeHTML(resultado.original)}
+</strong>
+
+</td>
+
+<td class="code">
+
+${
+resultado.code
+?
+escapeHTML(resultado.code)
+:
+"SIN CÓDIGO"
+}
+
+</td>
+
+<td>
+
+${escapeHTML(
+resultado.description ||
+resultado.original
+)}
+
+</td>
+
+<td>
+
+${crearBadge(
+resultado.confidence
+)}
+
+</td>
+
+`;
+
+
+tbody.appendChild(fila);
+
+}
+
+
+actualizarEstadisticas();
+
+}
+
+
+/* ==========================================================
+   BADGE
+========================================================== */
+
+function crearBadge(confianza){
+
+const valor =
+String(
+confianza || "revisar"
+)
+.toLowerCase();
+
+
+let clase =
+"badge-revisar";
+
+
+if(
+valor === "confirmada"
+){
+
+clase =
+"badge-confirmada";
+
+}
+
+
+return `
+
+<span
+class="badge ${clase}"
+>
+
+${escapeHTML(confianza)}
+
+</span>
+
+`;
+
+}
+
+
+/* ==========================================================
    ESTADÍSTICAS
-========================================================= */
+========================================================== */
 
-function actualizarEstadisticas() {
+function actualizarEstadisticas(){
 
-  const total =
-    resultados.length;
-
-
-  const confirmadas =
-    resultados.filter(
-      r =>
-        r.confidence ===
-        "confirmada"
-    ).length;
+const total =
+resultados.length;
 
 
-  const revisar =
-    resultados.filter(
-      r =>
-        r.confidence ===
-        "revisar"
-    ).length;
+const confirmadas =
+resultados.filter(
+r =>
+r.confidence === "confirmada"
+).length;
 
 
-  const sinCodigo =
-    resultados.filter(
-      r =>
-        !r.code
-    ).length;
+const revisar =
+resultados.filter(
+r =>
+r.confidence === "revisar"
+).length;
 
 
-  document
-    .getElementById(
-      "totalPrestaciones"
-    )
-    .textContent =
-    total;
+const sinCodigo =
+resultados.filter(
+r =>
+!r.code
+).length;
 
 
-  document
-    .getElementById(
-      "totalConfirmadas"
-    )
-    .textContent =
-    confirmadas;
+document.getElementById(
+"totalPrestaciones"
+).textContent =
+total;
 
 
-  document
-    .getElementById(
-      "totalRevisar"
-    )
-    .textContent =
-    revisar;
+document.getElementById(
+"totalConfirmadas"
+).textContent =
+confirmadas;
 
 
-  document
-    .getElementById(
-      "totalNoEncontradas"
-    )
-    .textContent =
-    sinCodigo;
+document.getElementById(
+"totalRevisar"
+).textContent =
+revisar;
+
+
+document.getElementById(
+"totalNoEncontradas"
+).textContent =
+sinCodigo;
 
 }
 
 
-/* =========================================================
+/* ==========================================================
    BUSCADOR
-========================================================= */
+========================================================== */
 
-document
-  .getElementById(
-    "buscadorResultados"
-  )
-  .addEventListener(
-    "input",
-    function() {
-
-      const filtro =
-        normalizar(
-          this.value
-        );
+buscador.addEventListener(
+"input",
+filtrarResultados
+);
 
 
-      const filas =
-        document.querySelectorAll(
-          "#resultadosBody tr"
-        );
+function filtrarResultados(){
+
+const filtro =
+normalizar(
+buscador.value
+);
 
 
-      filas.forEach(
-        fila => {
-
-          const texto =
-            normalizar(
-              fila.textContent
-            );
+const filas =
+document.querySelectorAll(
+"#resultadosBody tr"
+);
 
 
-          fila.style.display =
-            !filtro ||
-            texto.includes(
-              filtro
-            )
-              ? ""
-              : "none";
+filas.forEach(
+fila => {
 
-        }
-      );
-
-    }
-  );
+const texto =
+normalizar(
+fila.textContent
+);
 
 
-/* =========================================================
+fila.style.display =
+!filtro ||
+texto.includes(filtro)
+?
+""
+:
+"none";
+
+}
+);
+
+}
+
+
+/* ==========================================================
    EXPORTAR JSON
-========================================================= */
+========================================================== */
 
 btnExportar.addEventListener(
-  "click",
-  function() {
-
-    if (
-      resultados.length === 0
-    ) {
-      return;
-    }
-
-
-    const datos =
-      resultados.map(
-        resultado => ({
-
-          prestacion:
-            resultado.original,
-
-          codigo:
-            resultado.code,
-
-          descripcion:
-            resultado.description,
-
-          confianza:
-            resultado.confidence,
-
-          origen:
-            resultado.origen
-
-        })
-      );
-
-
-    descargarArchivo(
-
-      JSON.stringify(
-        datos,
-        null,
-        2
-      ),
-
-      "prestaciones_codificadas.json",
-
-      "application/json"
-
-    );
-
-  }
+"click",
+exportarResultados
 );
 
 
-/* =========================================================
-   EXPORTAR TXT
-========================================================= */
+function exportarResultados(){
 
-btnDescargarTXT.addEventListener(
-  "click",
-  function() {
+if(
+resultados.length === 0
+){
 
-    if (
-      resultados.length === 0
-    ) {
-      return;
-    }
-
-
-    let contenido =
-      "PRESTACIONES CODIFICADAS\n";
-
-    contenido +=
-      "========================================\n\n";
-
-
-    resultados.forEach(
-      resultado => {
-
-        contenido +=
-          `Prestación: ${
-            resultado.original
-          }\n`;
-
-        contenido +=
-          `Código: ${
-            resultado.code ||
-            "SIN CÓDIGO"
-          }\n`;
-
-        contenido +=
-          `Descripción: ${
-            resultado.description ||
-            ""
-          }\n`;
-
-        contenido +=
-          `Confianza: ${
-            resultado.confidence
-          }\n`;
-
-        contenido +=
-          `Origen: ${
-            resultado.origen
-          }\n\n`;
-
-      }
-    );
-
-
-    descargarArchivo(
-
-      contenido,
-
-      "prestaciones_codificadas.txt",
-
-      "text/plain;charset=utf-8"
-
-    );
-
-  }
-);
-
-
-/* =========================================================
-   DESCARGAR ARCHIVO
-========================================================= */
-
-function descargarArchivo(
-  contenido,
-  nombre,
-  tipo
-) {
-
-  const blob =
-    new Blob(
-      [contenido],
-      {
-        type: tipo
-      }
-    );
-
-
-  const url =
-    URL.createObjectURL(
-      blob
-    );
-
-
-  const enlace =
-    document.createElement(
-      "a"
-    );
-
-
-  enlace.href =
-    url;
-
-  enlace.download =
-    nombre;
-
-
-  document.body.appendChild(
-    enlace
-  );
-
-
-  enlace.click();
-
-
-  enlace.remove();
-
-
-  setTimeout(
-    () =>
-      URL.revokeObjectURL(
-        url
-      ),
-    1000
-  );
+return;
 
 }
 
 
-/* =========================================================
+const datos =
+resultados.map(
+resultado => ({
+
+prestacion:
+resultado.original,
+
+codigo:
+resultado.code,
+
+descripcion:
+resultado.description,
+
+confianza:
+resultado.confidence
+
+})
+);
+
+
+const contenido =
+JSON.stringify(
+datos,
+null,
+2
+);
+
+
+const blob =
+new Blob(
+[contenido],
+{
+type:
+"application/json;charset=utf-8"
+}
+);
+
+
+const url =
+URL.createObjectURL(
+blob
+);
+
+
+const enlace =
+document.createElement("a");
+
+
+enlace.href =
+url;
+
+
+enlace.download =
+"prestaciones_codificadas.json";
+
+
+document.body.appendChild(
+enlace
+);
+
+
+enlace.click();
+
+
+enlace.remove();
+
+
+URL.revokeObjectURL(
+url
+);
+
+}
+
+
+/* ==========================================================
    IMPRIMIR
-========================================================= */
+========================================================== */
 
 btnImprimir.addEventListener(
-  "click",
-  function() {
+"click",
+function(){
 
-    window.print();
+window.print();
 
-  }
-);
-
-
-/* =========================================================
-   ACTIVAR BOTONES
-========================================================= */
-
-function activarBotones() {
-
-  const habilitar =
-    resultados.length > 0;
+});
 
 
-  btnExportar.disabled =
-    !habilitar;
-
-  btnDescargarTXT.disabled =
-    !habilitar;
-
-  btnImprimir.disabled =
-    !habilitar;
-
-}
-
-
-/* =========================================================
+/* ==========================================================
    LIMPIAR
-========================================================= */
+========================================================== */
 
 btnLimpiar.addEventListener(
-  "click",
-  limpiarTodo
+"click",
+limpiarTodo
 );
 
 
-function limpiarTodo() {
+function limpiarTodo(){
 
-  archivoPDF =
-    null;
+archivoPDF = null;
 
-  textoPDF =
-    "";
+textoPDF = "";
 
-  resultados =
-    [];
+resultados = [];
 
 
-  pdfInput.value =
-    "";
+pdfInput.value = "";
 
 
-  document
-    .getElementById(
-      "fileInfo"
-    )
-    .style.display =
-    "none";
+document.getElementById(
+"fileInfo"
+).style.display =
+"none";
 
 
-  btnProcesar.disabled =
-    true;
-
-  btnOCR.disabled =
-    true;
-
-  btnExportar.disabled =
-    true;
-
-  btnDescargarTXT.disabled =
-    true;
-
-  btnImprimir.disabled =
-    true;
+btnProcesar.disabled =
+true;
 
 
-  document
-    .getElementById(
-      "buscadorResultados"
-    )
-    .value =
-    "";
+btnExportar.disabled =
+true;
 
 
-  document
-    .getElementById(
-      "resultadosBody"
-    )
-    .innerHTML = `
-
-      <tr>
-
-        <td
-          colspan="5"
-          class="empty"
-        >
-          Todavía no se procesó ningún estudio.
-        </td>
-
-      </tr>
-
-    `;
+btnImprimir.disabled =
+true;
 
 
-  actualizarEstadisticas();
+buscador.value = "";
 
 
-  mostrarEstado(
-    "Listo para cargar otro estudio.",
-    "info"
-  );
+document.getElementById(
+"resultadosBody"
+).innerHTML = `
+
+<tr>
+
+<td
+colspan="4"
+class="empty"
+>
+
+Todavía no se procesó ningún estudio.
+
+</td>
+
+</tr>
+
+`;
+
+
+actualizarEstadisticas();
+
+
+mostrarEstado(
+"Listo para cargar otro estudio.",
+"info"
+);
 
 }
 
 
-/* =========================================================
-   BADGES
-========================================================= */
-
-function crearBadge(
-  confianza
-) {
-
-  const valor =
-    String(
-      confianza ||
-      "revisar"
-    ).toLowerCase();
-
-
-  if (
-    valor ===
-    "confirmada"
-  ) {
-
-    return `
-      <span class="badge badge-confirmada">
-        CONFIRMADA
-      </span>
-    `;
-
-  }
-
-
-  return `
-    <span class="badge badge-revisar">
-      REVISAR
-    </span>
-  `;
-
-}
-
-
-/* =========================================================
-   ESTADO
-========================================================= */
+/* ==========================================================
+   UTILIDADES
+========================================================== */
 
 function mostrarEstado(
-  mensaje,
-  tipo
-) {
+mensaje,
+tipo
+){
 
-  const estado =
-    document.getElementById(
-      "status"
-    );
-
-
-  estado.className =
-    `status ${tipo}`;
+const estado =
+document.getElementById(
+"status"
+);
 
 
-  estado.textContent =
-    mensaje;
-
-}
+estado.className =
+"status " + tipo;
 
 
-/* =========================================================
-   PROGRESO
-========================================================= */
-
-function mostrarProgreso(
-  visible,
-  porcentaje = 0,
-  texto = ""
-) {
-
-  const box =
-    document.getElementById(
-      "progressBox"
-    );
-
-
-  if (!visible) {
-
-    box.style.display =
-      "none";
-
-    return;
-
-  }
-
-
-  box.style.display =
-    "block";
-
-
-  document
-    .getElementById(
-      "progressValue"
-    )
-    .style.width =
-    `${Math.min(
-      100,
-      Math.max(
-        0,
-        porcentaje
-      )
-    )}%`;
-
-
-  document
-    .getElementById(
-      "progressText"
-    )
-    .textContent =
-    texto;
+estado.textContent =
+mensaje;
 
 }
 
 
-/* =========================================================
-   BYTES
-========================================================= */
+function formatearBytes(bytes){
 
-function formatearBytes(
-  bytes
-) {
+if(bytes === 0){
 
-  if (
-    bytes === 0
-  ) {
-    return "0 Bytes";
-  }
-
-
-  const unidades =
-    [
-      "Bytes",
-      "KB",
-      "MB",
-      "GB"
-    ];
-
-
-  const indice =
-    Math.floor(
-      Math.log(bytes) /
-      Math.log(1024)
-    );
-
-
-  return (
-    parseFloat(
-      (
-        bytes /
-        Math.pow(
-          1024,
-          indice
-        )
-      ).toFixed(2)
-    )
-    +
-    " "
-    +
-    unidades[
-      indice
-    ]
-  );
+return "0 Bytes";
 
 }
 
 
-/* =========================================================
-   ESCAPE HTML
-========================================================= */
+const unidades =
+[
+"Bytes",
+"KB",
+"MB",
+"GB"
+];
 
-function escapeHTML(
-  valor
-) {
 
-  return String(
-    valor ?? ""
-  )
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-    .replace(
-      /</g,
-      "&lt;"
-    )
-    .replace(
-      />/g,
-      "&gt;"
-    )
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-    .replace(
-      /'/g,
-      "&#039;"
-    );
+const indice =
+Math.floor(
+Math.log(bytes) /
+Math.log(1024)
+);
+
+
+return (
+
+parseFloat(
+
+(
+bytes /
+Math.pow(
+1024,
+indice
+)
+)
+.toFixed(2)
+
+)
+
++
+
+" "
+
++
+
+unidades[indice]
+
+);
 
 }
 
 
-/* =========================================================
-   INICIO
-========================================================= */
+/* ==========================================================
+   INICIAR
+========================================================== */
 
 cargarEquivalencias();
 
