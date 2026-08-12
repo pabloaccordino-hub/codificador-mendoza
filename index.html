@@ -33,7 +33,10 @@ button.secondary{background:#e5e7eb;color:#111827}.status{padding:12px;border-ra
 <input id="pdf" type="file" accept="application/pdf" style="margin-top:10px">
 <button onclick="analizar()">ANALIZAR ESTUDIO</button>
 <button class="secondary" onclick="location.reload()">LIMPIAR</button>
-<div id="status" class="status">Esperando PDF…</div>
+<details id="debugBox" style="margin-top:12px">
+  <summary><b>VER TEXTO LEÍDO DEL PDF</b></summary>
+  <pre id="debugText" style="white-space:pre-wrap;font-size:12px;max-height:400px;overflow:auto;background:#f3f4f6;padding:10px;border-radius:8px"></pre>
+</details>
 </section>
 
 <section id="resultado" class="card" style="display:none">
@@ -99,60 +102,92 @@ function rowsFromText(items,styles){
 }
 async function analizar(){
  const file=document.getElementById("pdf").files[0],st=document.getElementById("status");
- if(!file){st.textContent="Seleccioná un PDF.";st.className="status warn";return}
- sourceName=file.name;sourceBytes=new Uint8Array(await file.arrayBuffer());detections=[];ocrOnly=false;
- st.textContent="Leyendo PDF…";st.className="status";
- try{
-  const pdf=await pdfjsLib.getDocument({data:sourceBytes}).promise;
-  let anyText=false;
-  for(let p=1;p<=pdf.numPages;p++){
-   const page=await pdf.getPage(p),tc=await page.getTextContent();
-   if(tc.items.length)anyText=true;
-   for(const r of rowsFromText(tc.items,tc.styles)){
-    if(!isUpper(r.text))continue;
-    const h=exact(r.text)||fuzzy(r.text);
-    if(h)detections.push({page:p,source:r.text,description:h.description,code:h.code,confidence:h.confidence,x:r.x,y:r.y});
-   }
-  }
-  const seen=new Set();
-  detections=detections.filter(x=>{let k=x.page+"|"+norm(x.source)+"|"+x.code;if(seen.has(k))return false;seen.add(k);return true});
-  if(!anyText){
-   ocrOnly=true;
-   st.textContent="El PDF es un escaneo/imagen. Se puede hacer OCR, pero el OCR no conserva de forma fiable qué texto estaba en NEGRITA. Por seguridad, esta versión no codifica automáticamente un escaneo. Revisá el estudio o convertílo a PDF con texto seleccionable.";
+
+ if(!file){
+   st.textContent="Seleccioná un PDF.";
    st.className="status warn";
-  }else{
-   st.textContent=`Análisis terminado. Prestaciones MAYÚSCULA + NEGRITA encontradas: ${detections.length}.`;
-   st.className=detections.length?"status ok":"status warn";
-  }
-  document.getElementById("resultado").style.display="block";
-  render();
- }catch(e){st.textContent="No se pudo leer el PDF: "+e.message;st.className="status err"}
-}
-function render(){
- const aviso=document.getElementById("aviso"),lista=document.getElementById("lista"),gen=document.getElementById("generar");
- if(ocrOnly){
-  aviso.innerHTML='<div class="status warn"><b>REVISIÓN MANUAL NECESARIA.</b><br>El archivo no contiene texto estructurado; no se puede verificar la condición MAYÚSCULA + NEGRITA.</div>';
-  lista.innerHTML="";gen.disabled=true;return;
+   return;
  }
- if(detections.some(x=>x.code.startsWith("LAB."))){
-  aviso.innerHTML='<div class="status warn"><b>LABORATORIO:</b> debe incluirse ACTO BIOQUÍMICO. La app no inventa un código para ese concepto hasta que esté confirmado en la tabla/regla de facturación.</div>';
- }else aviso.innerHTML="";
- lista.innerHTML=detections.length?detections.map(x=>`<div class="item"><b>${esc(x.source)}</b><br>→ ${esc(x.description)}<br><span class="code">${esc(x.code)}</span><br><span class="small">Página ${x.page} · <span class="badge">${x.confidence}</span></span></div>`).join(""):'<div class="status warn">No se encontró una prestación codificable con las reglas actuales.</div>';
- gen.disabled=!detections.length;
-}
-function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-async function generarPDF(){
- const st=document.getElementById("status");st.textContent="Generando PDF…";
+
+ sourceName=file.name;
+ sourceBytes=new Uint8Array(await file.arrayBuffer());
+ detections=[];
+ ocrOnly=false;
+
+ st.textContent="Leyendo PDF…";
+ st.className="status";
+
  try{
-  const doc=await PDFLib.PDFDocument.load(sourceBytes),font=await doc.embedFont(PDFLib.StandardFonts.HelveticaBold);
-  for(const x of detections){
-   const page=doc.getPage(x.page-1),h=page.getHeight();
-   page.drawText(" ["+x.code+"]",{x:Math.min(x.x+180,page.getWidth()-145),y:Math.max(18,h-x.y-3),size:8,font});
-  }
-  const bytes=await doc.save(),url=URL.createObjectURL(new Blob([bytes],{type:"application/pdf"}));
-  const a=document.createElement("a");a.href=url;a.download=sourceName.replace(/\\.pdf$/i,"")+"_CODIFICADO.pdf";a.click();
-  setTimeout(()=>URL.revokeObjectURL(url),5000);st.textContent="PDF codificado generado.";st.className="status ok";
- }catch(e){st.textContent="Error al generar PDF: "+e.message;st.className="status err"}
+   const pdf=await pdfjsLib.getDocument({data:sourceBytes}).promise;
+
+   let textoDebug = "";
+   let anyText=false;
+
+   for(let p=1;p<=pdf.numPages;p++){
+
+     const page=await pdf.getPage(p);
+     const tc=await page.getTextContent();
+
+     if(tc.items.length) anyText=true;
+
+     textoDebug += "\n\n--- PÁGINA " + p + " ---\n";
+
+     for(const item of tc.items){
+       if(item.str && item.str.trim()){
+         textoDebug += "[" + item.str + "] ";
+       }
+     }
+
+     textoDebug += "\n";
+
+     for(const r of rowsFromText(tc.items,tc.styles)){
+       if(!isUpper(r.text)) continue;
+
+       const h=exact(r.text)||fuzzy(r.text);
+
+       if(h){
+         detections.push({
+           page:p,
+           source:r.text,
+           description:h.description,
+           code:h.code,
+           confidence:h.confidence,
+           x:r.x,
+           y:r.y
+         });
+       }
+     }
+   }
+
+   console.log("=== TEXTO LEÍDO POR PDF.JS ===");
+   console.log(textoDebug);
+
+   document.getElementById("debugText").textContent=textoDebug;
+   document.getElementById("debugBox").open=true;
+
+   const seen=new Set();
+
+   detections=detections.filter(x=>{
+     let k=x.page+"|"+norm(x.source)+"|"+x.code;
+     if(seen.has(k)) return false;
+     seen.add(k);
+     return true;
+   });
+
+   if(!anyText){
+     ocrOnly=true;
+     st.textContent="El PDF no contiene texto seleccionable.";
+     st.className="status warn";
+   }else{
+     st.textContent=`Análisis terminado. Prestaciones MAYÚSCULA encontradas: ${detections.length}.`;
+     st.className=detections.length?"status ok":"status warn";
+   }
+
+   document.getElementById("resultado").style.display="block";
+   render();
+
+ }catch(e){
+   st.textContent="No se pudo leer el PDF: "+e.message;
+   st.className="status err";
+ }
 }
-</script>
-</body></html>
