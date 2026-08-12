@@ -1,2239 +1,1690 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#111827">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Codificador de Prestaciones</title>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
 <style>
-*{
-    box-sizing:border-box
+* {
+    box-sizing: border-box;
 }
 
-body{
-    margin:0;
-    background:#f3f4f6;
-    color:#111827;
-    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif
+body {
+    margin: 0;
+    padding: 30px;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f3f4f6;
+    color: #111827;
 }
 
-main{
-    max-width:900px;
-    margin:auto;
-    padding:16px
+.container {
+    max-width: 1100px;
+    margin: auto;
+    background: white;
+    padding: 30px;
+    border-radius: 14px;
+    box-shadow: 0 5px 25px rgba(0,0,0,.08);
 }
 
-.card{
-    background:#fff;
-    border-radius:18px;
-    padding:18px;
-    margin:12px 0;
-    box-shadow:0 3px 15px #0001
+h1 {
+    margin: 0 0 5px;
+    font-size: 28px;
 }
 
-h1{
-    font-size:24px;
-    margin:0
+.subtitle {
+    color: #6b7280;
+    margin-bottom: 25px;
 }
 
-h2{
-    margin-top:0
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
-.muted,
-.small{
-    color:#6b7280
+input[type="file"] {
+    padding: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: white;
 }
 
-.small{
-    font-size:13px
+button {
+    border: 0;
+    border-radius: 8px;
+    padding: 11px 18px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
-input[type=file]{
-    width:100%;
-    padding:13px;
-    border:1px solid #d1d5db;
-    border-radius:12px;
-    background:#fff
+#analyzeBtn {
+    background: #111827;
+    color: white;
 }
 
-button{
-    border:0;
-    border-radius:12px;
-    padding:13px 16px;
-    background:#111827;
-    color:white;
-    font-weight:750;
-    font-size:15px;
-    margin-top:10px;
-    width:100%;
-    cursor:pointer
+#clearBtn {
+    background: #e5e7eb;
+    color: #111827;
 }
 
-button.secondary{
-    background:#e5e7eb;
-    color:#111827
+#pdfBtn {
+    background: #2563eb;
+    color: white;
 }
 
-button:disabled{
-    opacity:.5;
-    cursor:not-allowed
+button:disabled {
+    opacity: .5;
+    cursor: not-allowed;
 }
 
-.status{
-    padding:12px;
-    border-radius:12px;
-    background:#f9fafb;
-    margin-top:12px;
-    white-space:pre-wrap
+.status {
+    padding: 14px;
+    border-radius: 8px;
+    background: #f3f4f6;
+    margin-bottom: 20px;
+    font-weight: bold;
 }
 
-.ok{
-    background:#ecfdf5;
-    color:#065f46
+.success {
+    background: #ecfdf5;
+    color: #065f46;
 }
 
-.warn{
-    background:#fffbeb;
-    color:#92400e
+.warning {
+    background: #fffbeb;
+    color: #92400e;
 }
 
-.err{
-    background:#fef2f2;
-    color:#991b1b
+.error {
+    background: #fef2f2;
+    color: #991b1b;
 }
 
-.item{
-    padding:14px 0;
-    border-bottom:1px solid #e5e7eb
+.results {
+    border-top: 1px solid #e5e7eb;
+    padding-top: 20px;
 }
 
-.item:last-child{
-    border-bottom:0
+.result {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 12px 0;
+    border-bottom: 1px solid #e5e7eb;
 }
 
-.code{
-    font-weight:900;
-    font-size:17px
+.result-name {
+    font-weight: bold;
 }
 
-.badge{
-    display:inline-block;
-    padding:3px 8px;
-    border-radius:999px;
-    background:#eef2ff;
-    font-size:12px;
-    font-weight:800
+.result-code {
+    font-family: monospace;
+    font-weight: bold;
+    color: #2563eb;
+    white-space: nowrap;
 }
 
-.manual{
-    background:#fff7ed;
-    border:1px solid #fed7aa;
-    padding:12px;
-    border-radius:12px;
-    margin-top:8px
-}
-
-.acto{
-    background:#ecfdf5;
-    border:1px solid #a7f3d0;
-    padding:12px;
-    border-radius:12px;
-    margin:12px 0
-}
-
-.progress{
-    height:8px;
-    background:#e5e7eb;
-    border-radius:999px;
-    overflow:hidden;
-    margin-top:10px
-}
-
-.progress div{
-    height:100%;
-    width:0%;
-    background:#111827;
-    transition:.2s
+#pdfPreview {
+    width: 100%;
+    min-height: 700px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    margin-top: 25px;
+    display: none;
 }
 </style>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-
 </head>
 
 <body>
 
-<main>
+<div class="container">
 
-<section class="card">
+    <h1>Codificador de Prestaciones</h1>
 
-<h1>Codificador de Prestaciones</h1>
+    <div class="subtitle">
+        Nomenclador Mendoza · Marzo 2026
+    </div>
 
-<div class="muted">
-Nomenclador Mendoza · Marzo 2026
+    <div class="controls">
+
+        <input
+            type="file"
+            id="pdfInput"
+            accept="application/pdf"
+        >
+
+        <button id="analyzeBtn">
+            ANALIZAR ESTUDIO
+        </button>
+
+        <button id="clearBtn">
+            LIMPIAR
+        </button>
+
+        <button id="pdfBtn" disabled>
+            GENERAR PDF CODIFICADO
+        </button>
+
+    </div>
+
+    <div id="status" class="status">
+        Seleccioná el estudio médico en PDF.
+    </div>
+
+    <div class="results">
+
+        <h2>Resultado</h2>
+
+        <div id="resultsList">
+            No se ha analizado ningún estudio.
+        </div>
+
+    </div>
+
+    <iframe id="pdfPreview"></iframe>
+
 </div>
-
-</section>
-
-
-<section class="card">
-
-<b>Seleccioná el estudio médico en PDF</b>
-
-<input
-    id="pdf"
-    type="file"
-    accept="application/pdf"
-    style="margin-top:10px"
->
-
-<button onclick="analizar()">
-ANALIZAR ESTUDIO
-</button>
-
-<button
-    class="secondary"
-    onclick="location.reload()"
->
-LIMPIAR
-</button>
-
-<div
-    id="status"
-    class="status"
->
-Esperando PDF…
-</div>
-
-<div class="progress">
-    <div id="progressBar"></div>
-</div>
-
-</section>
-
-
-<section
-    id="resultado"
-    class="card"
-    style="display:none"
->
-
-<h2>Resultado</h2>
-
-<div id="aviso"></div>
-
-<div id="lista"></div>
-
-<button
-    id="generar"
-    onclick="generarPDF()"
->
-GENERAR PDF CODIFICADO
-</button>
-
-</section>
-
-</main>
-
 
 <script>
 
-/* =========================================================
+/* ============================================================
    CONFIGURACIÓN PDF.JS
-   ========================================================= */
+============================================================ */
 
 pdfjsLib.GlobalWorkerOptions.workerSrc =
-    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+"https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
 
-/* =========================================================
-   DATOS PRINCIPALES
-   =========================================================
+/* ============================================================
+   NOMENCLADOR
+============================================================ */
 
-   IMPORTANTE:
+const LAB_CATALOG = [
 
-   ACÁ TENÉS QUE DEJAR TU LISTA COMPLETA:
+{code:"LAB.01.012",description:"Bilirrubina directa"},
+{code:"LAB.01.013",description:"Bilirrubina en orina"},
+{code:"LAB.01.014",description:"Bilirrubina total"},
+{code:"LAB.01.017",description:"Calcio iónico en orina"},
+{code:"LAB.01.018",description:"Calcio iónico en sangre"},
+{code:"LAB.01.019",description:"Calcio sobrecarga, prueba de"},
+{code:"LAB.01.020",description:"Calcio total en orina"},
+{code:"LAB.01.021",description:"Calcio total en sangre"},
+{code:"LAB.01.040",description:"Creatinina en plasma o suero"},
+{code:"LAB.01.041",description:"Creatinina, clearence o depuración de"},
+{code:"LAB.01.043",description:"Crioglobulinas"},
+{code:"LAB.01.044",description:"Determinación de Inmunoglobulina A"},
+{code:"LAB.01.045",description:"Determinación de inmunoglobulina G"},
+{code:"LAB.01.046",description:"Determinación de inmunoglobulina M"},
+{code:"LAB.01.055",description:"Euglobulinas, test de"},
+{code:"LAB.01.056",description:"Fosforo en orina"},
+{code:"LAB.01.057",description:"Factor Reumatoideo"},
+{code:"LAB.01.058",description:"Fosforo, clearence, depuración o reabsorción tubular"},
+{code:"LAB.01.059",description:"Factor RH, factor D"},
+{code:"LAB.01.060",description:"Ferremia (hierro en sangre) (Fe)"},
+{code:"LAB.01.061",description:"Fibrinógeno"},
+{code:"LAB.01.062",description:"Fondo oscuro"},
+{code:"LAB.01.063",description:"Fosfatasa acida prostática"},
+{code:"LAB.01.064",description:"Fosfatasa acida total"},
+{code:"LAB.01.065",description:"Fosfatasa alcalina"},
+{code:"LAB.01.067",description:"Fosforo en plasma o suero"},
+{code:"LAB.01.069",description:"Función renal, concentración, prueba de"},
+{code:"LAB.01.070",description:"Función renal, dilución, prueba de"},
+{code:"LAB.01.071",description:"Gamma glutamil transpeptidasa (Gamma GT)"},
+{code:"LAB.01.072",description:"Glucemia, prueba de sobrecarga"},
+{code:"LAB.01.073",description:"Glucemia"},
+{code:"LAB.01.074",description:"Glucogeno"},
+{code:"LAB.01.075",description:"Glucosa"},
+{code:"LAB.01.076",description:"Glucosa en orina"},
+{code:"LAB.01.077",description:"Graham, test de"},
+{code:"LAB.01.078",description:"Grupo sanguíneo sistema ABO (aglutinación)"},
+{code:"LAB.01.079",description:"Grupo sanguíneo sistema ABO (hemoaglutinógenos)"},
+{code:"LAB.01.080",description:"Hanger, reacción de"},
+{code:"LAB.01.081",description:"Heinz, cuerpo de"},
+{code:"LAB.01.082",description:"Hematocrito"},
+{code:"LAB.01.083",description:"Hemoglobina / alcali, resist."},
+{code:"LAB.01.084",description:"Hemoglobina, dosaje en plasma"},
+{code:"LAB.01.086",description:"Hemolisinas titulación en caliente, sistema ABO"},
+{code:"LAB.01.087",description:"Hemolisinas titulación en frio, Donath Landsteiner"},
+{code:"LAB.01.088",description:"Hemolisinas, titulación de"},
+{code:"LAB.01.089",description:"Hemólisis, prueba de"},
+{code:"LAB.01.090",description:"Hemotipificación ABO y RH"},
+{code:"LAB.01.111",description:"Mac Lagan, reacción de timol"},
+{code:"LAB.01.112",description:"Magnesio en orina"},
+{code:"LAB.01.113",description:"Magnesio en sangre"},
+{code:"LAB.01.114",description:"Materia fecal, leucocitos"},
+{code:"LAB.01.115",description:"Materia fecal, parasitológico seriado"},
+{code:"LAB.01.116",description:"Moco cervical, cristalización de"},
+{code:"LAB.01.118",description:"Mononucleosis hemoaglutinación"},
+{code:"LAB.01.119",description:"Mononucleosis hemolit."},
+{code:"LAB.01.120",description:"Mononucleosis monotest"},
+{code:"LAB.01.121",description:"Mononucleosis, test de Davidson - Paul Bunell"},
+{code:"LAB.01.122",description:"Monóxido de carbono"},
+{code:"LAB.01.123",description:"Mucoproteinas"},
+{code:"LAB.01.125",description:"Osmolal, clearence"},
+{code:"LAB.01.126",description:"Osmolaridad, orina"},
+{code:"LAB.01.127",description:"Osmolaridad, suero"},
+{code:"LAB.01.128",description:"Peroxidasas"},
+{code:"LAB.01.129",description:"Plaquetas, recuento de"},
+{code:"LAB.01.130",description:"Plasma recalcificado, tiempo de"},
+{code:"LAB.01.131",description:"Potasio en orina"},
+{code:"LAB.01.132",description:"Potasio en plasma"},
+{code:"LAB.01.133",description:"Proteína C reactiva (PCR)"},
+{code:"LAB.01.134",description:"Proteínas en orina"},
+{code:"LAB.01.135",description:"Proteínas totales en plasma o suero"},
+{code:"LAB.01.136",description:"Proteínas, fracción albúmina"},
+{code:"LAB.01.137",description:"Proteínas, fracción prealbúmina"},
+{code:"LAB.01.138",description:"Proteínas, fracciones globulinas"},
+{code:"LAB.01.139",description:"Proteinuria 24 horas"},
+{code:"LAB.01.140",description:"Protrombina, consumo de"},
+{code:"LAB.01.141",description:"Protrombina, RIN"},
+{code:"LAB.01.142",description:"Protrombina, tiempo de (TP)"},
 
-   const LAB_CODES = [
-       ...
-   ];
+{code:"LAB.02.006",description:"Candidina, intradermo"},
+{code:"LAB.02.007",description:"Catecolaminas, spray en orina"},
+{code:"LAB.02.008",description:"Células de Downey"},
+{code:"LAB.02.009",description:"Células de Milani"},
+{code:"LAB.02.010",description:"Células L.E."},
+{code:"LAB.02.011",description:"Células titilantes"},
+{code:"LAB.02.012",description:"Ceruloplasmina"},
+{code:"LAB.02.013",description:"Chagas (ELISA)"},
+{code:"LAB.02.014",description:"Chagas, gota gruesa"},
+{code:"LAB.02.023",description:"Cryptococcus cultivo"},
+{code:"LAB.02.024",description:"Cuerpos de Heinz"},
+{code:"LAB.02.026",description:"Galactosemia"},
+{code:"LAB.02.027",description:"Giemsa, coloración de"},
+{code:"LAB.02.028",description:"Glucagon, test de"},
+{code:"LAB.02.029",description:"Glutamato dehidrogenasa"},
+{code:"LAB.02.030",description:"Gonadotrofina Coriónica Beta Libre"},
+{code:"LAB.02.031",description:"Haptoglobina"},
+{code:"LAB.02.032",description:"Hematíes, resistencia globular"},
+{code:"LAB.02.033",description:"Hemoglobina S"},
+{code:"LAB.02.034",description:"Hemosiderina, investigación citoquímica"},
+{code:"LAB.02.035",description:"Hepatograma"},
+{code:"LAB.02.045",description:"Materia fecal, ácido láctico"},
+{code:"LAB.02.046",description:"Materia fecal, esteatocrito"},
+{code:"LAB.02.048",description:"Materia fecal, parásitos hemáticos"},
+{code:"LAB.02.049",description:"Medulograma"},
+{code:"LAB.02.050",description:"Membrana basal, Ac. Anti"},
+{code:"LAB.02.051",description:"Micosis superficiales, estudio directo"},
+{code:"LAB.02.052",description:"Miocardio, Ac. anti"},
+{code:"LAB.02.053",description:"Mycoplasma PPLO"},
+{code:"LAB.02.054",description:"Nucleares, Ac. anti (ANA, FAN)"},
+{code:"LAB.02.055",description:"Pap endocervical"},
+{code:"LAB.02.056",description:"Pap exocervical"},
+{code:"LAB.02.057",description:"Paracoccidiodina, intradermoreacción"},
+{code:"LAB.02.058",description:"Piruvato-quinasa"},
 
-   NO LA BORRES.
+{code:"LAB.03.038",description:"Brucelosis (IFI)"},
+{code:"LAB.03.039",description:"Brucelosis, Ac. IgG ó totales anti"},
+{code:"LAB.03.040",description:"Calculo urinario, examen físico-químico"},
+{code:"LAB.03.041",description:"Candida, Ac. anti"},
+{code:"LAB.03.042",description:"Candida, Ac. anti (inmunodifusión)"},
+{code:"LAB.03.043",description:"Castelli, índice de"},
+{code:"LAB.03.044",description:"Chagas IgM (ELISA)"},
+{code:"LAB.03.045",description:"Chagas, hemocultivo para Tripanosoma"},
+{code:"LAB.03.059",description:"CPK total (creatina fosfoquinasa)"},
+{code:"LAB.03.060",description:"Creatina en orina"},
+{code:"LAB.03.061",description:"Cryptosporidium"},
+{code:"LAB.03.062",description:"Dehidroepiandrosterona (DHEA)"},
+{code:"LAB.03.063",description:"Determinación inmunoglobulina"},
+{code:"LAB.03.064",description:"Difenilhidantoina"},
+{code:"LAB.03.071",description:"Estado ácido base, pH real, PCO2, CO3H - Na, K, Cl"},
+{code:"LAB.03.072",description:"Estriol en orina"},
+{code:"LAB.03.073",description:"Etanol en sangre"},
+{code:"LAB.03.074",description:"Factor de coagulación V Leiden"},
+{code:"LAB.03.075",description:"Factor de coagulación X"},
+{code:"LAB.03.076",description:"Fenitoina"},
+{code:"LAB.03.077",description:"Fenobarbital"},
+{code:"LAB.03.078",description:"Ferritina"},
+{code:"LAB.03.079",description:"Fosfatasa acida leucocitaria"},
+{code:"LAB.03.080",description:"Fosfatasa alcalina isoenzimas"},
+{code:"LAB.03.081",description:"Fosfatasa alcalina leucocitaria"},
+{code:"LAB.03.083",description:"Fructosamina"},
+{code:"LAB.03.084",description:"FSH hormona folículo estimulante"},
+{code:"LAB.03.086",description:"FTA/200, inmunofluorescencia"},
+{code:"LAB.03.087",description:"FTA/ABS, inmunofluorescencia"},
+{code:"LAB.03.088",description:"Gastrina plasmática"},
+{code:"LAB.03.089",description:"Glucosa 6 fosfato deshidrogenasa"},
+{code:"LAB.03.090",description:"Glucosa 6-fosfato dehidrogenasa en eritrocito"},
+{code:"LAB.03.091",description:"Glucosa fosfato dehidrogenasa"},
+{code:"LAB.03.092",description:"Glucosa post prandial"},
+{code:"LAB.03.093",description:"Glucosa, curva de"},
+{code:"LAB.03.094",description:"Gonadotrofina coriónica BHCG, cualitativa"},
+{code:"LAB.03.095",description:"Gonadotrofina coriónica biológica cualitativa"},
+{code:"LAB.03.096",description:"Gonadotrofina coriónica inmunológica cualitativa"},
+{code:"LAB.03.097",description:"Ham, test de"},
+{code:"LAB.03.098",description:"Hematíes, recuento de"},
+{code:"LAB.03.099",description:"Hematíes resistencia globular osmótica"},
+{code:"LAB.03.100",description:"Hemocultivo aerobio"},
+{code:"LAB.03.101",description:"Hemofilia, clasificación"},
+{code:"LAB.03.102",description:"Hemoglobina F"},
+{code:"LAB.03.103",description:"Hemoglobina Glicosilada (HB A1C)"},
+{code:"LAB.03.104",description:"Hemoglobina reticulocitaria"},
+{code:"LAB.03.105",description:"Hemoglobina, electroforesis"},
+{code:"LAB.03.106",description:"Hemoglobinas inestables"},
+{code:"LAB.03.107",description:"Hemopexina, inmunodifusión cuantitativa"},
+{code:"LAB.03.108",description:"Heparina, resistencia a la"},
+{code:"LAB.03.109",description:"Heparina, test de tolerancia"},
+{code:"LAB.03.110",description:"Hepatitis A IgG, Ac. anti"},
+{code:"LAB.03.112",description:"Hepatitis A totales, Ac. anti"},
+{code:"LAB.03.113",description:"Hepatitis B, Ac. anti antígeno e"},
+{code:"LAB.03.114",description:"Hepatitis B, Ac. anti core total"},
+{code:"LAB.03.115",description:"Hepatitis B, antígeno de superficie"},
+{code:"LAB.03.116",description:"Hepatitis B, antígeno E"},
+{code:"LAB.03.117",description:"Hidatidosis, hemoaglutinación"},
+{code:"LAB.03.118",description:"Hidroxiprolinuria"},
+{code:"LAB.03.119",description:"Hierro en médula ósea"},
+{code:"LAB.03.120",description:"HIV, Ac. anti (ELISA)"},
+{code:"LAB.03.154",description:"Materia fecal, grasas cualitativo"},
+{code:"LAB.03.155",description:"Materia fecal, grasas cuantitativo"},
+{code:"LAB.03.156",description:"Materia fecal, sangre oculta"},
+{code:"LAB.03.157",description:"Metahemoglobina"},
+{code:"LAB.03.158",description:"Micosis profundas, cultivos e identificación"},
+{code:"LAB.03.159",description:"Micosis profundas, estudio directo"},
+{code:"LAB.03.160",description:"Micosis profundas, estudio directo con coloración"},
+{code:"LAB.03.162",description:"Micosis superficiales, estudio directo con coloración"},
+{code:"LAB.03.163",description:"Microalbuminuria"},
+{code:"LAB.03.164",description:"Mieloperoxidasa"},
+{code:"LAB.03.165",description:"Mioglobina"},
+{code:"LAB.03.166",description:"Músculo esquelético, Ac. anti"},
+{code:"LAB.03.167",description:"Mycobacterium, identificación"},
+{code:"LAB.03.168",description:"Neisseria meningitidis, cultivo"},
+{code:"LAB.03.169",description:"Nucleolar, Ac. anti"},
+{code:"LAB.03.171",description:"Oxígeno en sangre-PO2"},
+{code:"LAB.03.172",description:"Parathormona plasmática (PTH)"},
+{code:"LAB.03.173",description:"Parotiditis IgG, Ac. anti"},
+{code:"LAB.03.174",description:"Peroxidasa, Ac. anti"},
+{code:"LAB.03.175",description:"Plaquetarios, factores"},
+{code:"LAB.03.176",description:"Pneumocystis carinii"},
+{code:"LAB.03.177",description:"Porfobilinógeno en orina"},
+{code:"LAB.03.178",description:"Pregnanotriol"},
+{code:"LAB.03.179",description:"Progesterona"},
+{code:"LAB.03.180",description:"Progesterona, 17 hidroxi"},
+{code:"LAB.03.181",description:"Prolactina"},
+{code:"LAB.03.182",description:"Proteína C Reactiva - Ultrasensible"},
+{code:"LAB.03.210",description:"Carboxihemoglobina"},
+{code:"LAB.03.215",description:"Criocrito"},
 
-   Es la lista de códigos que ya tenés cargada.
-   ========================================================= */
+{code:"LAB.04.042",description:"Beta 2 microglobulina"},
+{code:"LAB.04.043",description:"Candida, antigenemia"},
+{code:"LAB.04.044",description:"Cafeína"},
+{code:"LAB.04.045",description:"Calcitonina plasmática"},
+{code:"LAB.04.046",description:"Cálculo de vesícula biliar, examen físico-químico"},
+{code:"LAB.04.047",description:"Canabinoides, Tetrahidrocannabinol"},
+{code:"LAB.04.049",description:"Candida, cultivo"},
+{code:"LAB.04.050",description:"Carbamazepina"},
+{code:"LAB.04.051",description:"Cardiolipinas IgA, Ac. anti"},
+{code:"LAB.04.052",description:"Cardiolipinas IgG, Ac. anti"},
+{code:"LAB.04.053",description:"Cardiolipinas IgM, Ac. anti"},
+{code:"LAB.04.054",description:"Catecolaminas libres"},
+{code:"LAB.04.055",description:"Células parietales, Ac. anti"},
+{code:"LAB.04.056",description:"CENP-B, Ac. anti"},
+{code:"LAB.04.057",description:"Centrómero, Ac. anti"},
+{code:"LAB.04.077",description:"Cromatina sexual"},
+{code:"LAB.04.078",description:"Dehidroepiandrostenediona"},
+{code:"LAB.04.079",description:"Anticuerpos Anticardiolipina IgG"},
+{code:"LAB.04.080",description:"Anticuerpos Anticardiolipina IgM"},
+{code:"LAB.04.081",description:"DGP Transglutaminasa IgG, Ac. anti"},
+{code:"LAB.04.094",description:"Esporotricosis, Ac. anti"},
+{code:"LAB.04.095",description:"Esputo seriado"},
+{code:"LAB.04.096",description:"Estradiol plasmático"},
+{code:"LAB.04.097",description:"Estradiol rápido"},
+{code:"LAB.04.098",description:"Estrógenos totales"},
+{code:"LAB.04.099",description:"Estrona plasmática"},
+{code:"LAB.04.100",description:"Factor de coagulación IX"},
+{code:"LAB.04.101",description:"Factor de coagulación VII"},
+{code:"LAB.04.102",description:"Factor de coagulación VIII"},
+{code:"LAB.04.103",description:"Factor reumatoideo (Nefelometría)"},
+{code:"LAB.04.104",description:"Fagocitosis, Índice de"},
+{code:"LAB.04.105",description:"Fenciclidinas"},
+{code:"LAB.04.106",description:"Fenilcetonuria"},
+{code:"LAB.04.107",description:"Fenilhidantoina"},
+{code:"LAB.04.108",description:"Fenotipo RH"},
+{code:"LAB.04.109",description:"Fibrina con reptilasa"},
+{code:"LAB.04.110",description:"Fibrina con trombina"},
+{code:"LAB.04.111",description:"Fitohemaglutininas"},
+{code:"LAB.04.112",description:"Fosfatasa acida prostática (ELISA)"},
+{code:"LAB.04.113",description:"Fosfatasa alcalina ósea"},
+{code:"LAB.04.114",description:"Fosfolípidos"},
+{code:"LAB.04.115",description:"FSH (hormona folículo estimulante)"},
+{code:"LAB.04.116",description:"Galactosuria"},
+{code:"LAB.04.117",description:"Gentamicina"},
+{code:"LAB.04.118",description:"Gliadina Deaminada IgA, Ac. anti"},
+{code:"LAB.04.120",description:"Glucagon en orina"},
+{code:"LAB.04.121",description:"Glutation peroxidasa"},
+{code:"LAB.04.122",description:"Gonadotrofina coriónica, cuantitativa"},
+{code:"LAB.04.123",description:"Grupo sanguíneo Kell"},
+{code:"LAB.04.124",description:"GP 120, Ac. anti"},
+{code:"LAB.04.125",description:"Graham, test seriado 7 días"},
+{code:"LAB.04.126",description:"Grupo sanguíneo ABO, confirmación de subgrupos"},
+{code:"LAB.04.127",description:"Grupo sanguíneo Duffy"},
+{code:"LAB.04.129",description:"Grupo sanguíneo Lewis A y B"},
+{code:"LAB.04.130",description:"Grupo sanguíneo Lido A"},
+{code:"LAB.04.131",description:"Grupo sanguíneo M-N-S"},
+{code:"LAB.04.132",description:"Helicobacter pylori, Ac. anti"},
+{code:"LAB.04.133",description:"Helicobacter pylori, cultivo"},
+{code:"LAB.04.134",description:"Helicobacter pylori, determinación de ureasa"},
+{code:"LAB.04.135",description:"Hemocultivo micológico"},
+{code:"LAB.04.136",description:"Hemocultivo para micobacterias"},
+{code:"LAB.04.137",description:"Hemocultivo x 2, método automatizado"},
+{code:"LAB.04.138",description:"Hemoglobina A2"},
+{code:"LAB.04.139",description:"Hepatitis B, Ac. anti antígeno de superficie"},
+{code:"LAB.04.142",description:"Hepatoglobina"},
+{code:"LAB.04.143",description:"Herpes IgM, Ac. anti"},
+{code:"LAB.04.144",description:"Hidatidosis, Ac. IgG ó Totales Anti"},
+{code:"LAB.04.145",description:"Hidatidosis, Ac. IgM Anti"},
+{code:"LAB.04.146",description:"Hidatidosis, Ac. IgM Anti"},
+{code:"LAB.04.147",description:"Hidratos de carbono, cromatografía bidimensional"},
+{code:"LAB.04.148",description:"Histoplasma, Ac"},
+{code:"LAB.04.149",description:"Histoplasma, Ac (ELISA)"},
+{code:"LAB.04.150",description:"Histoplasma, Ac (fijación de complemento)"},
+{code:"LAB.04.151",description:"Histoplasma, Ac (inmunodifusión cualitativa)"},
+{code:"LAB.04.152",description:"Histoplasma, Ac (inmunodifusión cuantitativa)"},
+{code:"LAB.04.153",description:"Histoplasma, antigenemia"},
+{code:"LAB.04.154",description:"Histoplasma, cultivo"},
+{code:"LAB.04.155",description:"Histoplasma, intradermorreacción"},
+{code:"LAB.04.156",description:"Histoplasmina"},
+{code:"LAB.04.157",description:"Histoplasmina intradermoreacción"},
+{code:"LAB.04.158",description:"HIV antígeno P24"},
+{code:"LAB.04.159",description:"HIV, Ac. anti"},
+{code:"LAB.04.188",description:"LKM 1, Ac. anti"},
+{code:"LAB.04.189",description:"LKM 2, Ac. anti"},
+{code:"LAB.04.190",description:"Manganeso en sangre"},
+{code:"LAB.04.191",description:"Materia fecal, Adenovirus Ag"},
+{code:"LAB.04.192",description:"Materia fecal, Candida"},
+{code:"LAB.04.193",description:"Materia fecal, coprocultivo con Campylobacter"},
+{code:"LAB.04.194",description:"Materia fecal, coprocultivo con Yersinia"},
+{code:"LAB.04.195",description:"Metadona"},
+{code:"LAB.04.196",description:"Micobacterias, cultivo"},
+{code:"LAB.04.197",description:"Microglobulina B2"},
+{code:"LAB.04.198",description:"Mitocondrial, Ac. anti (AMA M2)"},
+{code:"LAB.04.199",description:"Mitocondrial, Ac. anti (AMA M4)"},
+{code:"LAB.04.200",description:"Mucosa, examen cruzado"},
+{code:"LAB.04.201",description:"Mycobacterium TBC, cultivo"},
+{code:"LAB.04.202",description:"Mycoplasma genitalium, cultivo"},
+{code:"LAB.04.203",description:"Mycoplasma hominis, cultivo"},
+{code:"LAB.04.204",description:"Mycoplasma pneumoniae Ac. anti"},
+{code:"LAB.04.205",description:"Mycoplasma pneumoniae IgG, Ac. anti"},
+{code:"LAB.04.206",description:"Mycoplasma pneumoniae IgM, Ac. anti"},
+{code:"LAB.04.207",description:"Mycoplasma urealyticum, cultivo"},
+{code:"LAB.04.208",description:"Mycoplasma, antibiograma"},
+{code:"LAB.04.209",description:"Noradrenalina plasmática"},
+{code:"LAB.04.210",description:"Noradrenalina urinaria"},
+{code:"LAB.04.211",description:"Opiáceos"},
+{code:"LAB.04.212",description:"Osteocalcina"},
+{code:"LAB.04.214",description:"Paracoccidioides, Ac. anti"},
+{code:"LAB.04.215",description:"Paracoccidioides, Ac. anti (inmunodifusión)"},
+{code:"LAB.04.216",description:"Parainfluenza IgG, Ac. anti"},
+{code:"LAB.04.217",description:"Parainfluenza IgM, Ac. anti"},
+{code:"LAB.04.218",description:"Parásitos macroscópicos, identificación"},
+{code:"LAB.04.219",description:"Parotiditis (PCR)"},
+{code:"LAB.04.220",description:"Parotiditis IgM, Ac. anti"},
+{code:"LAB.04.221",description:"Parotiditis, cultivo"},
+{code:"LAB.04.222",description:"Péptido C de insulina"},
+{code:"LAB.04.223",description:"Péptido deaminado de gliadina"},
+{code:"LAB.04.224",description:"Plaquetas, adhesividad"},
+{code:"LAB.04.225",description:"Plaquetas, microagregación"},
+{code:"LAB.04.226",description:"Proteinograma electroforético, en suero"},
 
+{code:"LAB.05.022",description:"Beta 2 glicoproteína IgA, Ac. anti"},
+{code:"LAB.05.023",description:"Beta 2 glicoproteína IgG, Ac. anti"},
+{code:"LAB.05.024",description:"Beta 2 glicoproteína IgM, Ac. anti"},
+{code:"LAB.05.025",description:"Beta Cross Laps (suero)"},
+{code:"LAB.05.026",description:"Bordetella pertussis, Ag"},
+{code:"LAB.05.027",description:"Borrellia burgdorferi, Ac. IgG Anti"},
+{code:"LAB.05.028",description:"Borrellia burgdorferi, Ac. IgM Anti"},
+{code:"LAB.05.029",description:"Brewer, prueba de"},
+{code:"LAB.05.030",description:"Cadena liviana Kappa en orina"},
+{code:"LAB.05.031",description:"Cadena liviana Lambda en orina"},
+{code:"LAB.05.032",description:"Candida, fagocitosis de macrófagos"},
+{code:"LAB.05.033",description:"Candida, fagocitosis de polimorfonuclear"},
+{code:"LAB.05.034",description:"Candida, tipificación"},
+{code:"LAB.05.035",description:"Catecolaminas urinarias totales"},
+{code:"LAB.05.036",description:"Catéter, cultivo bacteriológico"},
+{code:"LAB.05.037",description:"CD13"},
+{code:"LAB.05.038",description:"CD14"},
+{code:"LAB.05.039",description:"CD19"},
+{code:"LAB.05.040",description:"CD23"},
+{code:"LAB.05.041",description:"CD25"},
+{code:"LAB.05.042",description:"CD3"},
+{code:"LAB.05.043",description:"CD34"},
+{code:"LAB.05.044",description:"CDA, captación inmunomagnética"},
+{code:"LAB.05.045",description:"CD4, citometría de flujo"},
+{code:"LAB.05.046",description:"CDA, ELISA"},
+{code:"LAB.05.047",description:"CD4, IFI"},
+{code:"LAB.05.048",description:"CD7"},
+{code:"LAB.05.049",description:"CD8 ELISA"},
+{code:"LAB.05.050",description:"CD8, captación inmunomagnética"},
+{code:"LAB.05.051",description:"CD8, citometría de flujo"},
+{code:"LAB.05.052",description:"CD8, IFI"},
+{code:"LAB.05.066",description:"Cross Laps"},
+{code:"LAB.05.067",description:"Cryptococcus en orina, Ac. anti"},
+{code:"LAB.05.068",description:"Cryptococcus en sangre, Ac. anti"},
+{code:"LAB.05.069",description:"Cryptococcus, Ag (ELISA)"},
+{code:"LAB.05.070",description:"Cryptococcus, Ag (LATEX)"},
+{code:"LAB.05.071",description:"Dengue IgG, Ac. anti"},
+{code:"LAB.05.072",description:"Dengue IgM, Ac. anti"},
+{code:"LAB.05.073",description:"Determinación Cadenas Kappa liviana séricas"},
+{code:"LAB.05.074",description:"Determinación Cadenas Lambda liviana séricas"},
+{code:"LAB.05.075",description:"Anticuerpos Antibeta 2 Glicoproteína IgG"},
+{code:"LAB.05.076",description:"Anticuerpos Antibeta 2 Glicoproteína IgM"},
+{code:"LAB.05.077",description:"Dímero D"},
+{code:"LAB.05.078",description:"DNA doble cadena o desnaturalizado"},
+{code:"LAB.05.088",description:"Extendido y cultivo de secreciones"},
+{code:"LAB.05.089",description:"Exudado de fauces, cultivo bacteriológico"},
+{code:"LAB.05.090",description:"Exudado, cultivo bacteriológico"},
+{code:"LAB.05.091",description:"Factor de coagulación II"},
+{code:"LAB.05.092",description:"Factor de coagulación IX, curva de dilución"},
+{code:"LAB.05.093",description:"Factor de coagulación VII, titulación de inhibidor"},
+{code:"LAB.05.094",description:"Factor de coagulación VIII, curva de dilución"},
+{code:"LAB.05.095",description:"Factor de coagulación XI"},
+{code:"LAB.05.096",description:"Factor de coagulación XII"},
+{code:"LAB.05.097",description:"Factor de coagulación XII, dosaje"},
+{code:"LAB.05.098",description:"Factor necrosis tumoral"},
+{code:"LAB.05.099",description:"Fenilalanina"},
+{code:"LAB.05.100",description:"Fibrina producto de degradación"},
+{code:"LAB.05.101",description:"Fibrinolítica, actividad en placa"},
+{code:"LAB.05.102",description:"Glicoproteína ácida"},
+{code:"LAB.05.103",description:"Haemophilus influenzae"},
+{code:"LAB.05.104",description:"Hemocultivo x 2, muestras método rápido"},
+{code:"LAB.05.105",description:"Histonas totales, Ac. anti"},
+{code:"LAB.05.106",description:"HIV ENYA / CORE"},
+{code:"LAB.05.107",description:"HIV test rápido"},
+{code:"LAB.05.108",description:"HIV, Ac. anti IFI"},
+{code:"LAB.05.121",description:"M2, Ac. anti"},
+{code:"LAB.05.122",description:"Materia fecal, directo"},
+{code:"LAB.05.123",description:"Materia fecal, Helicobacter pylori, Ag"},
+{code:"LAB.05.124",description:"Materia fecal, Rotavirus Ag"},
+{code:"LAB.05.125",description:"MBG, Ac. Anti"},
+{code:"LAB.05.126",description:"Meningitis, test"},
+{code:"LAB.05.127",description:"Metotrexate, dosaje"},
+{code:"LAB.05.128",description:"Micofenolato, dosaje"},
+{code:"LAB.05.129",description:"Microsomal tiroideo, Ac. Anti"},
+{code:"LAB.05.130",description:"Parvovirus B19 IgG, Ac. anti"},
+{code:"LAB.05.131",description:"Parvovirus B19 IgM, Ac. anti"},
+{code:"LAB.05.132",description:"Piridolina urinaria"},
+{code:"LAB.05.133",description:"Pneumocystis carinii, tricrómica en biopsia"},
+{code:"LAB.05.134",description:"Proteína C activada resistencia"},
+{code:"LAB.05.135",description:"Proteína C funcional"},
+{code:"LAB.05.136",description:"Proteína de unión a lipopolisacáridos"},
+{code:"LAB.05.137",description:"Proteína S inhibidor"},
+{code:"LAB.05.138",description:"Proteína S total"},
+{code:"LAB.05.139",description:"Proteína transportadora tiroxina"},
+{code:"LAB.05.140",description:"Proteinograma electroforético - LCR"},
 
-/*
-   SI TU LISTA YA ESTÁ ARRIBA DE ESTE BLOQUE:
+{code:"LAB.06.016",description:"Bordetella pertussis IgG, Ac. Anti"},
+{code:"LAB.06.017",description:"Bordetella pertussis IgM, Ac. Anti"},
+{code:"LAB.06.018",description:"CDR"},
+{code:"LAB.06.024",description:"Cross Match, DTT"},
+{code:"LAB.06.025",description:"Delta 4 androstenediona"},
+{code:"LAB.06.027",description:"Esputo, cultivo bacteriológico"},
+{code:"LAB.06.028",description:"Estrógenos, receptores"},
+{code:"LAB.06.029",description:"Factor Von Willebrand Funcional"},
+{code:"LAB.06.030",description:"Factor Von Willebrand Inmunológico"},
+{code:"LAB.06.031",description:"GAD, Ácido Glutámico Descarboxilasa, Ac. Anti"},
+{code:"LAB.06.032",description:"Gamma globulina en suero"},
+{code:"LAB.06.033",description:"Glúcidos en orina"},
+{code:"LAB.06.034",description:"Hantavirus IgG, Ac. anti"},
+{code:"LAB.06.035",description:"Hantavirus IgM, Ac. anti"},
+{code:"LAB.06.036",description:"Hepatitis C, Ac"},
+{code:"LAB.06.037",description:"Hepatitis DELTA, Ac. anti"},
+{code:"LAB.06.038",description:"HER - TORCH IgM, Ac. anti"},
+{code:"LAB.06.039",description:"Hisopado nasal, cultivo bacteriológico"},
+{code:"LAB.06.040",description:"Hisopado rectal EVR, cultivo bacteriológico"},
+{code:"LAB.06.041",description:"Hisopado rectal KPC, cultivo bacteriológico"},
+{code:"LAB.06.048",description:"Materia fecal, Clostridium difficile, toxina"},
+{code:"LAB.06.049",description:"Metanefrinas fraccionadas urinarias"},
+{code:"LAB.06.050",description:"Mycobacterium TBC PCR"},
+{code:"LAB.06.051",description:"Ovario, Ac. anti"},
+{code:"LAB.06.053",description:"Paludismo, Ac. anti"},
+{code:"LAB.06.054",description:"Péptidos citrulinados cíclicos, Ac. anti"},
+{code:"LAB.06.055",description:"Pro BNP"},
+{code:"LAB.06.056",description:"Procalcitonina"},
+{code:"LAB.06.057",description:"Progesterona, receptores"},
+{code:"LAB.06.058",description:"Proteína C inhibidor"},
+{code:"LAB.06.059",description:"Proteinasa 3, Ac. anti"},
+{code:"LAB.06.060",description:"Protrombina G20210A"},
 
-   const LAB_CODES = [...]
+{code:"LAB.07.003",description:"Exudado uretral, con Mycoplasma"},
+{code:"LAB.07.007",description:"Exudado uretral, con Chlamydia"},
+{code:"LAB.07.009",description:"Exudado vaginal, con Chlamydia"},
+{code:"LAB.07.010",description:"Exudado vaginal, con Mycoplasma"},
+{code:"LAB.07.013",description:"Progesterona, 17 hidroxi, prueba de ACTH"},
+{code:"LAB.07.014",description:"Proteína S funcional"},
 
-   NO LA VUELVAS A DECLARAR.
+{code:"LAB.08.008",description:"Bordetella pertussis PCR"},
+{code:"LAB.08.009",description:"Cariotipo mapa cromosómico bandeo G-C y R"},
+{code:"LAB.08.010",description:"Cariotipo mapa cromosómico convencional"},
+{code:"LAB.08.011",description:"CASPR2"},
+{code:"LAB.08.017",description:"CV2"},
+{code:"LAB.08.018",description:"Dengue PCR"},
+{code:"LAB.08.024",description:"EVR PCR"},
+{code:"LAB.08.025",description:"GABA B1-B2"},
+{code:"LAB.08.027",description:"Hepatitis E PCR"},
+{code:"LAB.08.028",description:"Hepcidina"},
+{code:"LAB.08.029",description:"Herpes 1, 2 PCR real time"},
+{code:"LAB.08.030",description:"Herpes 6 HHV-6"},
+{code:"LAB.08.032",description:"Herpes, cultivo en células"},
+{code:"LAB.08.033",description:"HIV PCR"},
+{code:"LAB.08.034",description:"HIV, Ac. anti Western Blot"},
+{code:"LAB.08.045",description:"Metapneumovirus PCR"},
+{code:"LAB.08.046",description:"Mycoplasma pneumoniae PCR"},
+{code:"LAB.08.048",description:"Neumococo, contrainmunoelectroforesis"},
+{code:"LAB.08.049",description:"Papilloma humano virus HPV PCR"},
+{code:"LAB.08.050",description:"Papilloma humano virus HPV en biopsia"},
+{code:"LAB.08.051",description:"Papilloma humano virus HPV en extendida"},
+{code:"LAB.08.052",description:"Papilloma humano virus HPV hibridación"},
+{code:"LAB.08.053",description:"Parvovirus PCR en biopsia"},
+{code:"LAB.08.054",description:"Parvovirus PCR en sangre"},
+{code:"LAB.08.055",description:"PNMA2"},
+{code:"LAB.08.056",description:"Polyomavirus BK PCR"},
+{code:"LAB.08.057",description:"Polyomavirus JC PCR"},
+{code:"LAB.08.072",description:"Calprotectina"},
+{code:"LAB.08.073",description:"Everolimus"},
+{code:"LAB.08.074",description:"Hepatitis E PCR"},
 
-   El programa utilizará automáticamente esa lista.
-*/
+{code:"LAB.09.008",description:"Cadena liviana Kappa libre en plasma"},
+{code:"LAB.09.009",description:"Cadena liviana Lambda libre en plasma"},
+{code:"LAB.09.013",description:"Fiebre amarilla PCR real time"},
+{code:"LAB.09.014",description:"Hepatitis C HCV ensayo confirmatorio"},
+{code:"LAB.09.015",description:"HHV-6 IgG"},
+{code:"LAB.09.016",description:"HIV carga viral"},
+{code:"LAB.09.017",description:"HIV cultivo"},
+{code:"LAB.09.026",description:"Neisseria gonorrhoeae PCR"},
+{code:"LAB.09.027",description:"Parainfluenza PCR"},
+{code:"LAB.09.028",description:"PIFG factor de crecimiento placentario"},
+{code:"LAB.09.029",description:"Pneumocystis carinii Gram Giemsa"},
+{code:"LAB.09.030",description:"Pneumocystis carinii inmunofluorescencia"},
+{code:"LAB.09.031",description:"Pneumocystis jiroveci inmunofluorescencia"},
+{code:"LAB.09.032",description:"Polimerasa en cadena"},
+{code:"LAB.09.033",description:"Proteína A plasmática asociada al embarazo PAPP-A"},
 
+{code:"LAB.10.002",description:"Carga viral, determinación"},
+{code:"LAB.10.005",description:"Hepatitis B carga viral"},
+{code:"LAB.10.006",description:"Hepatitis C carga viral"},
+{code:"LAB.10.010",description:"MOSG, Ac Anti"},
+{code:"LAB.10.011",description:"Neutrófilos, adhesividad estudios funcionales"},
+{code:"LAB.10.012",description:"Neutrófilos, fagocitosis estudios funcionales"},
 
-/* =========================================================
-   EQUIVALENCIAS IMPORTANTES
-   ========================================================= */
+{code:"LAB.11.001",description:"Cariotipo mapa cromosómico alta resolución"},
+{code:"LAB.11.004",description:"PCR HIV en semen"},
+{code:"LAB.11.005",description:"MuSK, Ac. Anti"},
 
-const EQUIV = {
-  "GLUCOSA EN SUERO": {
-    "code": "LAB.01.073",
-    "description": "Glucemia",
-    "confidence": "confirmada"
-  },
-  "HEMOGRAMA COMPLETO": {
-    "code": "LAB.01.085",
-    "description": "Hemograma",
-    "confidence": "confirmada"
-  },
-  "UREMIA": {
-    "code": "LAB.01.157",
-    "description": "Urea plasmática",
-    "confidence": "validada por equivalencia"
-  },
-  "URICEMIA": {
-    "code": "LAB.01.003",
-    "description": "Ácido úrico en suero y plasma",
-    "confidence": "confirmada"
-  },
-  "COLESTEROL EN SUERO": {
-    "code": "LAB.02.020",
-    "description": "Colesterol total libre y esterificado",
-    "confidence": "revisar"
-  },
-  "COLESTEROL HDL": {
-    "code": "LAB.02.018",
-    "description": "Colesterol HDL libre y esterificado",
-    "confidence": "revisar"
-  },
-  "COLESTEROL LDL": {
-    "code": "LAB.02.019",
-    "description": "Colesterol LDL libre y esterificado",
-    "confidence": "revisar"
-  },
-  "TRIGLICÉRIDOS": {
-    "code": "LAB.01.154",
-    "description": "Triglicéridos",
-    "confidence": "confirmada"
-  },
-  "FAL - FOSFATASA ALCALINA": {
-    "code": "LAB.01.065",
-    "description": "Fosfatasa alcalina",
-    "confidence": "confirmada"
-  },
-  "GOT (AST) - ASPARTATO AMINOTRANSFERASA": {
-    "code": "LAB.01.152",
-    "description": "Transaminasa, glutámico oxalacética (GOT, AST)",
-    "confidence": "confirmada"
-  },
-  "GPT (ALT) - ALANINO AMINO TRANSFERASA": {
-    "code": "LAB.01.153",
-    "description": "Transaminasa, glutámico pirúvica (GPT, AGT)",
-    "confidence": "confirmada"
-  },
-  "BILIRRUBINEMIA": {
-    "code": "LAB.01.014",
-    "description": "Bilirrubina total",
-    "confidence": "validada por equivalencia"
-  },
-  "CREATININA": {
-    "code": "LAB.01.040",
-    "description": "Creatinina en plasma o suero",
-    "confidence": "confirmada"
-  },
-  "CREATININA + FILTRADO GLOMERULAR": {
-    "code": "LAB.01.040",
-    "description": "Creatinina en plasma o suero",
-    "confidence": "confirmada"
-  },
-  "T4 TOTAL": {
-    "code": "LAB.02.063",
-    "description": "T4 total (tiroxina total)",
-    "confidence": "confirmada"
-  },
-  "TIROXINA TOTAL": {
-    "code": "LAB.02.063",
-    "description": "T4 total (tiroxina total)",
-    "confidence": "confirmada"
-  },
-  "TSH": {
-    "code": "LAB.02.069",
-    "description": "TSH, tirotrofina plasmática",
-    "confidence": "confirmada"
-  },
-  "TIROTROFINA": {
-    "code": "LAB.02.069",
-    "description": "TSH, tirotrofina plasmática",
-    "confidence": "confirmada"
-  },
-  "T3": {
-    "code": "LAB.02.061",
-    "description": "T3 total (triiodotironina total)",
-    "confidence": "confirmada"
-  },
-  "TRIIODOTIRONINA": {
-    "code": "LAB.02.061",
-    "description": "T3 total (triiodotironina total)",
-    "confidence": "confirmada"
-  },
-  "ORINA COMPLETA": {
-    "code": "LAB.01.124",
-    "description": "Orina completa",
-    "confidence": "confirmada"
-  },
+{code:"LAB.12.003",description:"Panel filmarray para 30 gérmenes"}
 
-  "ABACAVIR": {
-    "code": "LAB.10.001",
-    "description": "Abacavir, test de hipersensibilidad",
-    "confidence": "confirmada"
-  },
-  "ACETAMINOFENO": {
-    "code": "LAB.03.001",
-    "description": "Acetaminofeno",
-    "confidence": "confirmada"
-  },
-  "ACETILCOLINESTERASA ERITROCITARIA": {
-    "code": "LAB.03.002",
-    "description": "Acetil colinesterasa eritrocitaria (ACHE)",
-    "confidence": "confirmada"
-  },
-  "ACETONURIA": {
-    "code": "LAB.01.001",
-    "description": "Acetonuria",
-    "confidence": "confirmada"
-  },
-  "ACIDO 5 HIDROXI-INDOL ACETICO": {
-    "code": "LAB.04.001",
-    "description": "Acido 5 hidroxi-indol acetico",
-    "confidence": "confirmada"
-  },
-  "ÁCIDO CÍTRICO URINARIO": {
-    "code": "LAB.03.209",
-    "description": "Ácido Cítrico - urinario",
-    "confidence": "confirmada"
-  },
-  "ÁCIDO FÓLICO": {
-    "code": "LAB.03.003",
-    "description": "Acido fólico",
-    "confidence": "confirmada"
-  },
-  "ÁCIDO LÁCTICO EN SANGRE": {
-    "code": "LAB.04.002",
-    "description": "Acido láctico en sangre",
-    "confidence": "confirmada"
-  },
-  "ÁCIDO PIRÚVICO": {
-    "code": "LAB.03.004",
-    "description": "Acido piruvico",
-    "confidence": "confirmada"
-  },
-  "ÁCIDO SALICÍLICO": {
-    "code": "LAB.03.005",
-    "description": "Ácido salicílico",
-    "confidence": "confirmada"
-  },
-  "ÁCIDO ÚRICO EN ORINA": {
-    "code": "LAB.01.002",
-    "description": "Acido úrico en orina",
-    "confidence": "confirmada"
-  },
-  "ÁCIDO VALPROICO": {
-    "code": "LAB.03.006",
-    "description": "Ácido valproico",
-    "confidence": "confirmada"
-  },
-  "ÁCIDOS BILIARES": {
-    "code": "LAB.05.001",
-    "description": "Ácidos biliares",
-    "confidence": "confirmada"
-  },
-  "ÁCIDOS ORGÁNICOS URINARIOS": {
-    "code": "LAB.08.071",
-    "description": "Ácidos Orgánicos - urinarios",
-    "confidence": "confirmada"
-  },
-  "ACTH": {
-    "code": "LAB.03.007",
-    "description": "ACTH (adrenocorticotrofina)",
-    "confidence": "confirmada"
-  },
-  "ADENOVIRUS IGG": {
-    "code": "LAB.04.004",
-    "description": "Adenovirus IgG, Ac. Anti",
-    "confidence": "confirmada"
-  },
-  "ADENOVIRUS IGM": {
-    "code": "LAB.04.005",
-    "description": "Adenovirus IgM, Ac. Anti",
-    "confidence": "confirmada"
-  },
-  "ADENOVIRUS AG": {
-    "code": "LAB.04.006",
-    "description": "Adenovirus, Ag",
-    "confidence": "confirmada"
-  },
-  "ADENOVIRUS PCR": {
-    "code": "LAB.08.004",
-    "description": "Adenovirus, virología molecular (PCR)",
-    "confidence": "confirmada"
-  },
-  "ALBÚMINA": {
-    "code": "LAB.01.005",
-    "description": "Albúmina en suero o plasma",
-    "confidence": "confirmada"
-  },
-  "ALDOLASA": {
-    "code": "LAB.02.001",
-    "description": "Aldolasa (Ald)",
-    "confidence": "confirmada"
-  },
-  "ALDOSTERONA PLASMÁTICA": {
-    "code": "LAB.03.009",
-    "description": "Aldosterona plasmática",
-    "confidence": "confirmada"
-  },
-  "ALDOSTERONA URINARIA": {
-    "code": "LAB.03.010",
-    "description": "Aldosterona urinaria",
-    "confidence": "confirmada"
-  },
-  "ALFA 1 ANTITRIPSINA": {
-    "code": "LAB.03.011",
-    "description": "Alfa 1 antitripsina (α1 AT) - Líq. pleural / mat. fecal / sérica",
-    "confidence": "confirmada"
-  },
-  "ALFA FETO PROTEÍNA": {
-    "code": "LAB.03.012",
-    "description": "Alfa feto proteína (AFP)",
-    "confidence": "confirmada"
-  },
-  "AMEBIASIS": {
-    "code": "LAB.03.014",
-    "description": "Amebiasis, serología",
-    "confidence": "confirmada"
-  },
-  "AMIKACINA": {
-    "code": "LAB.04.011",
-    "description": "Amikacina",
-    "confidence": "confirmada"
-  },
-  "AMILASA EN ORINA": {
-    "code": "LAB.01.006",
-    "description": "Amilasa en orina",
-    "confidence": "confirmada"
-  },
-  "AMILASA EN SANGRE": {
-    "code": "LAB.01.007",
-    "description": "Amilasa en sangre",
-    "confidence": "confirmada"
-  },
-  "AMONIO EN SANGRE": {
-    "code": "LAB.04.012",
-    "description": "Amonio, concentración en sangre",
-    "confidence": "confirmada"
-  },
-  "ANDROSTENEDIONA": {
-    "code": "LAB.03.015",
-    "description": "Androstenediona",
-    "confidence": "confirmada"
-  },
-  "ANTIBIOGRAMA": {
-    "code": "LAB.02.002",
-    "description": "Antibiograma (ATBG / ATB)",
-    "confidence": "confirmada"
-  },
-  "ANTIBIOGRAMA AUTOMATIZADO": {
-    "code": "LAB.06.001",
-    "description": "Antibiograma (automatizado)",
-    "confidence": "confirmada"
-  },
-  "ANTÍGENO PROSTÁTICO ESPECÍFICO": {
-    "code": "LAB.04.029",
-    "description": "Antígeno prostático especifico (PSA)",
-    "confidence": "confirmada"
-  },
-  "PSA": {
-    "code": "LAB.04.029",
-    "description": "Antígeno prostático especifico (PSA)",
-    "confidence": "confirmada"
-  },
-  "PSA LIBRE": {
-    "code": "LAB.05.014",
-    "description": "Antígeno prostático especifico libre (PSA LIBRE)",
-    "confidence": "confirmada"
-  },
-  "ANTITROMBINA": {
-    "code": "LAB.04.030",
-    "description": "Antitrombina",
-    "confidence": "confirmada"
-  },
-  "ANTITROMBINA III INMUNOLÓGICA": {
-    "code": "LAB.04.031",
-    "description": "Antitrombina III (AT III), inmunológica",
-    "confidence": "confirmada"
-  },
-  "APOLIPOPROTEÍNA A": {
-    "code": "LAB.03.030",
-    "description": "Apolipoproteina A",
-    "confidence": "confirmada"
-  },
-  "APOLIPOPROTEÍNA B": {
-    "code": "LAB.03.031",
-    "description": "Apolipoproteina B",
-    "confidence": "confirmada"
-  },
-  "APTT": {
-    "code": "LAB.02.016",
-    "description": "Coagulograma básico (TP y APTT)",
-    "confidence": "validada por equivalencia"
-  },
-  "ARTRITIS REUMATOIDEA": {
-    "code": "LAB.01.008",
-    "description": "Artritis reumatoidea (LATEX)",
-    "confidence": "confirmada"
-  },
-  "BACILOSCOPIA DIRECTA": {
-    "code": "LAB.03.034",
-    "description": "Baciloscopia directa",
-    "confidence": "confirmada"
-  },
-  "BACILOSCOPIA ZIEHL NIELSEN": {
-    "code": "LAB.01.010",
-    "description": "Baciloscopia directa Ziehl Nielsen",
-    "confidence": "confirmada"
-  },
-  "BACTERIOLÓGICO DIRECTO": {
-    "code": "LAB.02.004",
-    "description": "Bacteriológico directo",
-    "confidence": "confirmada"
-  },
-  "BACTERIOLÓGICO DIRECTO Y CULTIVO": {
-    "code": "LAB.02.005",
-    "description": "Bacteriológico directo y cultivo con identificación. BIO. GER.",
-    "confidence": "confirmada"
-  },
-  "BACTERIOLÓGICO TINCIÓN DE GRAM": {
-    "code": "LAB.01.011",
-    "description": "Bacteriológico directo, tinción de Gram",
-    "confidence": "confirmada"
-  },
-  "BACTERIOLÓGICO CULTIVOS VARIOS": {
-    "code": "LAB.04.040",
-    "description": "Bacteriológico, cultivos varios",
-    "confidence": "confirmada"
-  },
-  "BILIRRUBINA DIRECTA": {
-    "code": "LAB.01.012",
-    "description": "Bilirrubina directa",
-    "confidence": "confirmada"
-  },
-  "BILIRRUBINA EN ORINA": {
-    "code": "LAB.01.013",
-    "description": "Bilirrubina en orina",
-    "confidence": "confirmada"
-  },
-  "BILIRRUBINA TOTAL": {
-    "code": "LAB.01.014",
-    "description": "Bilirrubina total",
-    "confidence": "confirmada"
-  },
-  "CALCIO IÓNICO EN ORINA": {
-    "code": "LAB.01.017",
-    "description": "Calcio iónico en orina",
-    "confidence": "confirmada"
-  },
-  "CALCIO IÓNICO EN SANGRE": {
-    "code": "LAB.01.018",
-    "description": "Calcio iónico en sangre",
-    "confidence": "confirmada"
-  },
-  "CALCIO TOTAL EN ORINA": {
-    "code": "LAB.01.020",
-    "description": "Calcio total en orina",
-    "confidence": "confirmada"
-  },
-  "CALCIO TOTAL EN SANGRE": {
-    "code": "LAB.01.021",
-    "description": "Calcio total en sangre",
-    "confidence": "confirmada"
-  },
-  "CALCITONINA": {
-    "code": "LAB.04.045",
-    "description": "Calcitonina plasmática",
-    "confidence": "confirmada"
-  },
-  "CETONEMIA": {
-    "code": "LAB.01.022",
-    "description": "Cetonemia",
-    "confidence": "confirmada"
-  },
-  "CHAGAS ELISA": {
-    "code": "LAB.02.013",
-    "description": "Chagas (ELISA)",
-    "confidence": "confirmada"
-  },
-  "CHAGAS IGM": {
-    "code": "LAB.03.044",
-    "description": "Chagas IgM (ELISA)",
-    "confidence": "confirmada"
-  },
-  "CHAGAS HAI": {
-    "code": "LAB.01.024",
-    "description": "Chagas, aglutinación indirecta (HAI)",
-    "confidence": "confirmada"
-  },
-  "CHAGAS IFI": {
-    "code": "LAB.03.046",
-    "description": "Chagas, inmunofluorescencia (IFI)",
-    "confidence": "confirmada"
-  },
-  "CHIKUNGUNYA PCR": {
-    "code": "LAB.08.012",
-    "description": "Chikungunya (PCR)",
-    "confidence": "confirmada"
-  },
-  "CITOMEGALOVIRUS IGG": {
-    "code": "LAB.03.048",
-    "description": "Citomegalovirus IgG, Ac. anti (CMV)",
-    "confidence": "confirmada"
-  },
-  "CITOMEGALOVIRUS IGM": {
-    "code": "LAB.04.067",
-    "description": "Citomegalovirus IgM, Ac. anti (CMV)",
-    "confidence": "confirmada"
-  },
-  "CITOMEGALOVIRUS PCR": {
-    "code": "LAB.09.010",
-    "description": "Citomegalovirus (PCR)",
-    "confidence": "confirmada"
-  },
-  "CLORO EN ORINA": {
-    "code": "LAB.01.028",
-    "description": "Cloro en orina",
-    "confidence": "confirmada"
-  },
-  "CLORO EN SANGRE": {
-    "code": "LAB.01.029",
-    "description": "Cloro en sangre",
-    "confidence": "confirmada"
-  },
-  "COAGULOGRAMA BÁSICO": {
-    "code": "LAB.02.016",
-    "description": "Coagulograma básico (TP y APTT)",
-    "confidence": "confirmada"
-  },
-  "COBRE EN SANGRE": {
-    "code": "LAB.04.068",
-    "description": "Cobre en sangre",
-    "confidence": "confirmada"
-  },
-  "COCAÍNA": {
-    "code": "LAB.04.069",
-    "description": "Cocaína",
-    "confidence": "confirmada"
-  },
-  "COLESTEROL HDL LIBRE Y ESTERIFICADO": {
-    "code": "LAB.02.018",
-    "description": "Colesterol HDL libre y esterificado",
-    "confidence": "confirmada"
-  },
-  "COLESTEROL LDL LIBRE Y ESTERIFICADO": {
-    "code": "LAB.02.019",
-    "description": "Colesterol LDL libre y esterificado",
-    "confidence": "confirmada"
-  },
-  "COLESTEROL TOTAL LIBRE Y ESTERIFICADO": {
-    "code": "LAB.02.020",
-    "description": "Colesterol total libre y esterificado",
-    "confidence": "confirmada"
-  },
-  "CPK MB": {
-    "code": "LAB.03.058",
-    "description": "CPK MB (creatina fosfoquinasa isoenzima MB)",
-    "confidence": "confirmada"
-  },
-  "CPK TOTAL": {
-    "code": "LAB.03.059",
-    "description": "CPK total (creatina fosfoquinasa)",
-    "confidence": "confirmada"
-  },
-  "CREATINA EN ORINA": {
-    "code": "LAB.03.060",
-    "description": "Creatina en orina",
-    "confidence": "confirmada"
-  },
-  "CREATININA EN PLASMA O SUERO": {
-    "code": "LAB.01.040",
-    "description": "Creatinina en plasma o suero",
-    "confidence": "confirmada"
-  },
-  "CREATININA CLEARANCE": {
-    "code": "LAB.01.041",
-    "description": "Creatinina, clearence o depuración de",
-    "confidence": "confirmada"
-  },
-  "CRIOAGLUTININA": {
-    "code": "LAB.01.042",
-    "description": "Crioaglutinina",
-    "confidence": "confirmada"
-  },
-  "CRIOGLOBULINAS": {
-    "code": "LAB.01.043",
-    "description": "Crioglobulinas",
-    "confidence": "confirmada"
-  },
-  "CORTISOL BASAL": {
-    "code": "LAB.03.053",
-    "description": "Cortisol basal (8 AM)",
-    "confidence": "confirmada"
-  },
-  "CORTISOL LIBRE PLASMÁTICO": {
-    "code": "LAB.03.054",
-    "description": "Cortisol libre plasmático",
-    "confidence": "confirmada"
-  },
-  "CORTISOL LIBRE URINARIO": {
-    "code": "LAB.03.055",
-    "description": "Cortisol libre urinario",
-    "confidence": "confirmada"
-  },
-  "CORTISOL VESPERTINO": {
-    "code": "LAB.03.057",
-    "description": "Cortisol vespertino (4 PM)",
-    "confidence": "confirmada"
-  },
-  "DENGUE PCR": {
-    "code": "LAB.08.018",
-    "description": "Dengue (PCR)",
-    "confidence": "confirmada"
-  },
-  "DENGUE IGG": {
-    "code": "LAB.05.162",
-    "description": "Dengue, Ac anti IgG",
-    "confidence": "confirmada"
-  },
-  "DENGUE IGM": {
-    "code": "LAB.05.163",
-    "description": "Dengue, Ac anti IgM",
-    "confidence": "confirmada"
-  },
-  "DÍMERO D": {
-    "code": "LAB.05.077",
-    "description": "Dímero D",
-    "confidence": "confirmada"
-  },
-  "DROGAS DE ABUSO EN ORINA": {
-    "code": "LAB.10.003",
-    "description": "Drogas de abuso en orina, por tiras reactivas",
-    "confidence": "confirmada"
-  },
-  "ERITROSEDIMENTACIÓN": {
-    "code": "LAB.01.051",
-    "description": "Eritrosedimentación",
-    "confidence": "confirmada"
-  },
-  "ESTRADIOL": {
-    "code": "LAB.04.096",
-    "description": "Estradiol plasmático",
-    "confidence": "confirmada"
-  },
-  "FERRITINA": {
-    "code": "LAB.03.078",
-    "description": "Ferritina",
-    "confidence": "confirmada"
-  },
-  "FERREMIA": {
-    "code": "LAB.01.060",
-    "description": "Ferremia (hierro en sangre) (Fe)",
-    "confidence": "confirmada"
-  },
-  "FIBRINÓGENO": {
-    "code": "LAB.01.061",
-    "description": "Fibrinógeno",
-    "confidence": "confirmada"
-  },
-  "FOSFATASA ALCALINA": {
-    "code": "LAB.01.065",
-    "description": "Fosfatasa alcalina",
-    "confidence": "confirmada"
-  },
-  "FOSFORO EN ORINA": {
-    "code": "LAB.01.066",
-    "description": "Fosforo en orina",
-    "confidence": "confirmada"
-  },
-  "FOSFORO EN PLASMA O SUERO": {
-    "code": "LAB.01.067",
-    "description": "Fosforo en plasma o suero",
-    "confidence": "confirmada"
-  },
-  "FRUCTOSAMINA": {
-    "code": "LAB.03.083",
-    "description": "Fructosamina",
-    "confidence": "confirmada"
-  },
-  "FSH": {
-    "code": "LAB.04.115",
-    "description": "FSH (hormona folículo estimulante)",
-    "confidence": "confirmada"
-  },
-  "GAMMA GT": {
-    "code": "LAB.01.071",
-    "description": "Gamma glutamil transpeptidasa (Gamma GT)",
-    "confidence": "confirmada"
-  },
-  "GASTRINA PLASMÁTICA": {
-    "code": "LAB.03.088",
-    "description": "Gastrina plasmatica",
-    "confidence": "confirmada"
-  },
-  "GLUCOSA": {
-    "code": "LAB.01.075",
-    "description": "Glucosa",
-    "confidence": "confirmada"
-  },
-  "GLUCOSA EN ORINA": {
-    "code": "LAB.01.076",
-    "description": "Glucosa en orina",
-    "confidence": "confirmada"
-  },
-  "GLUCOSA POST PRANDIAL": {
-    "code": "LAB.03.092",
-    "description": "Glucosa post prandial",
-    "confidence": "confirmada"
-  },
-  "HEPATOGRAMA": {
-    "code": "LAB.02.035",
-    "description": "Hepatograma",
-    "confidence": "confirmada"
-  },
-  "HEMATOCRITO": {
-    "code": "LAB.01.082",
-    "description": "Hematocrito",
-    "confidence": "confirmada"
-  },
-  "HEMATÍES": {
-    "code": "LAB.03.098",
-    "description": "Hematíes, recuento de (glóbulos rojos)",
-    "confidence": "confirmada"
-  },
-  "HEMOGLOBINA GLICOSILADA": {
-    "code": "LAB.03.103",
-    "description": "Hemoglobina Glicosilada (HB A1C)",
-    "confidence": "confirmada"
-  },
-  "HEMOGLOBINA A1C": {
-    "code": "LAB.03.103",
-    "description": "Hemoglobina Glicosilada (HB A1C)",
-    "confidence": "confirmada"
-  },
-  "HEPATITIS B ANTÍGENO DE SUPERFICIE": {
-    "code": "LAB.03.115",
-    "description": "Hepatitis B, antígeno de superficie (HBs Ag)",
-    "confidence": "confirmada"
-  },
-  "HEPATITIS B HBS AG": {
-    "code": "LAB.03.115",
-    "description": "Hepatitis B, antígeno de superficie (HBs Ag)",
-    "confidence": "confirmada"
-  },
-  "HEPATITIS C PCR": {
-    "code": "LAB.08.027",
-    "description": "Hepatitis C (PCR)",
-    "confidence": "confirmada"
-  },
-  "HIV PCR": {
-    "code": "LAB.08.033",
-    "description": "HIV (PCR)",
-    "confidence": "confirmada"
-  },
-  "HIV TEST RÁPIDO": {
-    "code": "LAB.05.107",
-    "description": "HIV test rápido",
-    "confidence": "confirmada"
-  },
-  "HIV ELISA": {
-    "code": "LAB.03.120",
-    "description": "HIV, Ac. anti (ELISA)",
-    "confidence": "confirmada"
-  },
-  "HOMA": {
-    "code": "LAB.03.121",
-    "description": "HOMA, índice evaluación modelo homeostático",
-    "confidence": "confirmada"
-  },
-  "HIERRO EN MÉDULA ÓSEA": {
-    "code": "LAB.03.119",
-    "description": "Hierro en medula ósea (reacción de Perls)",
-    "confidence": "confirmada"
-  },
-  "INMUNOGLOBULINA A": {
-    "code": "LAB.01.044",
-    "description": "Determinación de Inmunoglobulina A",
-    "confidence": "confirmada"
-  },
-  "INMUNOGLOBULINA G": {
-    "code": "LAB.01.045",
-    "description": "Determinación de Inmunoglobulina G",
-    "confidence": "confirmada"
-  },
-  "INMUNOGLOBULINA M": {
-    "code": "LAB.01.046",
-    "description": "Determinación de Inmunoglobulina M",
-    "confidence": "confirmada"
-  },
-  "POTASIO": {
-    "code": "LAB.01.130",
-    "description": "Potasio en sangre",
-    "confidence": "revisar"
-  },
-  "SODIO": {
-    "code": "LAB.01.137",
-    "description": "Sodio en sangre",
-    "confidence": "revisar"
-  },
-  "TRANSAMINASA GOT": {
-    "code": "LAB.01.152",
-    "description": "Transaminasa, glutámico oxalacética (GOT, AST)",
-    "confidence": "confirmada"
-  },
-  "AST": {
-    "code": "LAB.01.152",
-    "description": "Transaminasa, glutámico oxalacética (GOT, AST)",
-    "confidence": "confirmada"
-  },
-  "TRANSAMINASA GPT": {
-    "code": "LAB.01.153",
-    "description": "Transaminasa, glutámico pirúvica (GPT, AGT)",
-    "confidence": "confirmada"
-  },
-  "ALT": {
-    "code": "LAB.01.153",
-    "description": "Transaminasa, glutámico pirúvica (GPT, AGT)",
-    "confidence": "confirmada"
-  },
-  "TRIGLICERIDOS": {
-    "code": "LAB.01.154",
-
-};
+];
 
 
-/* =========================================================
+/* ============================================================
    ACTO BIOQUÍMICO
-   ========================================================= */
+============================================================ */
 
 const ACTO_BIOQUIMICO = {
+    code: "LAB.00.001",
+    description: "Acto Bioquímico"
+};
 
-    description:"Acto Bioquímico",
-    code:"LAB.00.001",
-    confidence:"REGLA"
+
+/* ============================================================
+   VARIABLES
+============================================================ */
+
+let sourceBytes = null;
+let sourceFile = null;
+let detectedPrestations = [];
+let outputPdfBytes = null;
+
+
+/* ============================================================
+   ELEMENTOS
+============================================================ */
+
+const pdfInput = document.getElementById("pdfInput");
+const analyzeBtn = document.getElementById("analyzeBtn");
+const clearBtn = document.getElementById("clearBtn");
+const pdfBtn = document.getElementById("pdfBtn");
+const statusBox = document.getElementById("status");
+const resultsList = document.getElementById("resultsList");
+const pdfPreview = document.getElementById("pdfPreview");
+
+
+/* ============================================================
+   NORMALIZACIÓN
+============================================================ */
+
+function normalizeText(text) {
+
+    return String(text || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[º°]/g, "")
+        .replace(/\s+/g, " ")
+        .trim()
+        .toUpperCase();
+
+}
+
+
+/* ============================================================
+   DETECTAR SI EL TEXTO ES MAYÚSCULA
+============================================================ */
+
+function isUpper(text) {
+
+    if (!text) return false;
+
+    const letters = text.match(/[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]/g);
+
+    if (!letters || letters.length < 2) return false;
+
+    const upper = text.match(/[A-ZÁÉÍÓÚÜÑ]/g);
+
+    return upper && upper.length === letters.length;
+
+}
+
+
+/* ============================================================
+   LIMPIAR TEXTO DEL PDF
+============================================================ */
+
+function cleanPdfText(text) {
+
+    return String(text || "")
+        .replace(/\r/g, " ")
+        .replace(/\n/g, " ")
+        .replace(/\t/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+
+}
+
+
+/* ============================================================
+   CREAR CATÁLOGO NORMALIZADO
+============================================================ */
+
+const normalizedCatalog = LAB_CATALOG.map(item => ({
+    code: item.code,
+    description: item.description,
+    normalized: normalizeText(item.description)
+}));
+
+
+/* ============================================================
+   ALIAS IMPORTANTES
+============================================================ */
+
+const aliases = {
+
+    "GLUCOSA EN SUERO": "GLUCEMIA",
+    "GLUCOSA SERICA": "GLUCEMIA",
+    "GLUCOSA SERICA": "GLUCEMIA",
+    "GLUCEMIA": "GLUCEMIA",
+
+    "HEMOGLOBINA GLICOSILADA": "HEMOGLOBINA GLICOSILADA (HB A1C)",
+    "HEMOGLOBINA GLICOSILADA (HB A1C)": "HEMOGLOBINA GLICOSILADA (HB A1C)",
+
+    "PCR": "PROTEINA C REACTIVA (PCR)"
 
 };
 
 
-/* =========================================================
-   VARIABLES
-   ========================================================= */
+/* ============================================================
+   BUSCAR PRESTACIÓN
+============================================================ */
 
-let sourceBytes = null;
+function findPrestacion(text) {
 
-let sourceName = "ESTUDIO.pdf";
+    const normalized = normalizeText(text);
 
-let detections = [];
+    if (!normalized) return null;
 
-let allText = [];
+    let alias = aliases[normalized];
 
-let pagesData = [];
+    if (alias) {
 
-let hayLaboratorio = false;
+        const foundAlias = normalizedCatalog.find(
+            item => item.normalized === normalizeText(alias)
+        );
 
-
-/* =========================================================
-   NORMALIZAR TEXTO
-   ========================================================= */
-
-function norm(s){
-
-    return String(s || "")
-
-        .normalize("NFD")
-
-        .replace(/[\u0300-\u036f]/g,"")
-
-        .toUpperCase()
-
-        .replace(/[^A-Z0-9Ñ .,/()\-]/g," ")
-
-        .replace(/\s+/g," ")
-
-        .trim();
-
-}
-
-
-/* =========================================================
-   NORMALIZACIÓN MÁS AGRESIVA
-   ========================================================= */
-
-function normStrong(s){
-
-    return norm(s)
-
-        .replace(/\bEN\b/g," ")
-
-        .replace(/\bDE\b/g," ")
-
-        .replace(/\bLA\b/g," ")
-
-        .replace(/\bEL\b/g," ")
-
-        .replace(/\bLOS\b/g," ")
-
-        .replace(/\bLAS\b/g," ")
-
-        .replace(/\s+/g," ")
-
-        .trim();
-
-}
-
-
-/* =========================================================
-   PALABRAS
-   ========================================================= */
-
-function words(s){
-
-    return normStrong(s)
-
-        .split(" ")
-
-        .filter(x => x.length >= 2);
-
-}
-
-
-/* =========================================================
-   SIMILITUD
-   ========================================================= */
-
-function sim(a,b){
-
-    const A = new Set(words(a));
-
-    const B = new Set(words(b));
-
-    if(!A.size || !B.size){
-
-        return 0;
-
-    }
-
-    let comunes = 0;
-
-    for(const x of A){
-
-        if(B.has(x)){
-
-            comunes++;
-
+        if (foundAlias) {
+            return foundAlias;
         }
 
     }
 
-    return comunes / Math.max(A.size,B.size);
+    const exact = normalizedCatalog.find(
+        item => item.normalized === normalized
+    );
 
-}
-
-
-/* =========================================================
-   COINCIDENCIA EXACTA
-   ========================================================= */
-
-function exact(s){
-
-    const n = norm(s);
-
-    if(EQUIV[n]){
-
-        return EQUIV[n];
-
-    }
-
-    if(!Array.isArray(LAB_CODES)){
-
-        return null;
-
-    }
-
-    for(const item of LAB_CODES){
-
-        if(norm(item.description) === n){
-
-            return {
-
-                description:item.description,
-
-                code:item.code,
-
-                confidence:"EXACTA"
-
-            };
-
-        }
-
-    }
+    if (exact) return exact;
 
     return null;
-
 }
 
 
-/* =========================================================
-   COINCIDENCIA PARCIAL
-   ========================================================= */
+/* ============================================================
+   OBTENER CANDIDATOS REALES DEL PDF
+============================================================ */
 
-function fuzzy(s){
+function extractCandidates(items) {
 
-    if(!Array.isArray(LAB_CODES)){
+    const candidates = [];
 
-        return null;
+    for (const item of items) {
 
-    }
+        const text = cleanPdfText(item.str);
 
-    let mejor = null;
-
-    let mejorScore = 0;
-
-    const texto = normStrong(s);
-
-    for(const item of LAB_CODES){
-
-        const descripcion = normStrong(item.description);
-
-        if(!descripcion){
-
-            continue;
-
-        }
-
-        let score = sim(texto,descripcion);
+        if (!text) continue;
 
         /*
-           Bonus si una descripción está contenida
+         SOLO CONSIDERAMOS TEXTOS QUE PARECEN SER
+         PRESTACIONES PRINCIPALES.
+
+         NO SE ANALIZAN:
+         - valores
+         - unidades
+         - resultados
+         - rangos de referencia
+         - frases médicas
+         - números
+         - comentarios
         */
 
-        if(
-            texto.length > 5 &&
-            descripcion.includes(texto)
-        ){
-
-            score += .20;
-
-        }
-
-        if(
-            descripcion.length > 5 &&
-            texto.includes(descripcion)
-        ){
-
-            score += .20;
-
-        }
-
-        if(score > mejorScore){
-
-            mejorScore = score;
-
-            mejor = item;
-
-        }
-
-    }
-
-    if(mejor && mejorScore >= .55){
-
-        return {
-
-            description:mejor.description,
-
-            code:mejor.code,
-
-            confidence:
-                mejorScore >= .80
-                ? "PROBABLE"
-                : "REVISAR"
-
-        };
-
-    }
-
-    return null;
-
-}
-
-
-/* =========================================================
-   BUSCAR PRESTACIÓN
-   ========================================================= */
-
-function buscarPrestacion(texto){
-
-    if(!texto){
-
-        return null;
-
-    }
-
-    const e = exact(texto);
-
-    if(e){
-
-        return e;
-
-    }
-
-    return fuzzy(texto);
-
-}
-
-
-/* =========================================================
-   OBTENER LÍNEAS DEL PDF
-   ========================================================= */
-
-function obtenerLineas(items){
-
-    const lineas = [];
-
-    for(const item of items){
-
-        if(
-            !item.str ||
-            !item.str.trim()
-        ){
-
+        if (!/[A-Za-zÁÉÍÓÚÜÑáéíóúüñ]/.test(text)) {
             continue;
-
         }
 
-        const x = item.transform[4];
-
-        const y = item.transform[5];
-
-        let linea = null;
-
-        for(const l of lineas){
-
-            if(Math.abs(l.y-y) < 4){
-
-                linea = l;
-
-                break;
-
-            }
-
+        if (text.length < 3 || text.length > 150) {
+            continue;
         }
 
-        if(!linea){
+        candidates.push({
+            text,
+            item
+        });
 
-            linea = {
+    }
 
-                y:y,
+    return candidates;
+}
 
-                items:[]
 
-            };
+/* ============================================================
+   DETECCIÓN DE PRESTACIONES
+============================================================ */
 
-            lineas.push(linea);
+function detectPrestations(candidates) {
 
+    const found = [];
+
+    const seen = new Set();
+
+    /*
+      PRIMERA PASADA:
+      coincidencia exacta.
+    */
+
+    for (const candidate of candidates) {
+
+        const text = candidate.text;
+
+        /*
+          IMPORTANTE:
+          SOLO SE ACEPTAN PRESTACIONES CUYO TEXTO DEL PDF
+          ESTÉ EN MAYÚSCULA.
+        */
+
+        if (!isUpper(text)) {
+            continue;
         }
 
-        linea.items.push({
+        const result = findPrestacion(text);
 
-            texto:item.str,
+        if (!result) {
+            continue;
+        }
 
-            x:x,
+        const key = result.code + "|" + result.normalized;
 
-            item:item
+        if (seen.has(key)) {
+            continue;
+        }
 
+        seen.add(key);
+
+        found.push({
+            code: result.code,
+            description: result.description,
+            pdfText: text,
+            item: candidate.item
         });
 
     }
 
 
-    return lineas
+    /*
+      SEGUNDA PASADA:
+      detectar prestaciones que el PDF pueda haber separado
+      en varias partes.
+    */
 
-        .map(l => {
+    for (let i = 0; i < candidates.length; i++) {
 
-            l.items.sort(
-                (a,b) => a.x-b.x
-            );
+        const candidate = candidates[i];
 
-            const texto =
-                l.items
-                    .map(x => x.texto)
-                    .join(" ")
-                    .replace(/\s+/g," ")
-                    .trim();
-
-            return {
-
-                text:texto,
-
-                x:l.items[0]
-                    ? l.items[0].x
-                    : 20,
-
-                y:l.y
-
-            };
-
-        })
-
-        .filter(x => x.text);
-
-}
-
-
-/* =========================================================
-   EVITAR DETECCIONES DUPLICADAS
-   ========================================================= */
-
-function eliminarDuplicados(){
-
-    const vistos = new Set();
-
-    detections = detections.filter(x => {
-
-        const clave =
-            x.page +
-            "|" +
-            norm(x.source) +
-            "|" +
-            x.code;
-
-        if(vistos.has(clave)){
-
-            return false;
-
+        if (!isUpper(candidate.text)) {
+            continue;
         }
 
-        vistos.add(clave);
-
-        return true;
-
-    });
-
-}
-
-
-/* =========================================================
-   ANALIZAR
-   ========================================================= */
-
-async function analizar(){
-
-    const input =
-        document.getElementById("pdf");
-
-    const status =
-        document.getElementById("status");
-
-    const progress =
-        document.getElementById("progressBar");
-
-    const file =
-        input.files[0];
-
-
-    if(!file){
-
-        status.textContent =
-            "Seleccioná un PDF.";
-
-        status.className =
-            "status warn";
-
-        return;
-
-    }
-
-
-    if(
-        file.type &&
-        file.type !== "application/pdf"
-    ){
-
-        status.textContent =
-            "El archivo seleccionado no parece ser un PDF.";
-
-        status.className =
-            "status err";
-
-        return;
-
-    }
-
-
-    try{
-
-        sourceName = file.name;
-
-        sourceBytes =
-            new Uint8Array(
-                await file.arrayBuffer()
-            );
-
-        detections = [];
-
-        allText = [];
-
-        pagesData = [];
-
-        hayLaboratorio = false;
-
-
-        progress.style.width = "0%";
-
-
-        status.textContent =
-            "Abriendo PDF…";
-
-        status.className =
-            "status";
-
-
-        /*
-           Verificación real del encabezado PDF.
-        */
-
-        const encabezado =
-            new TextDecoder()
-                .decode(
-                    sourceBytes.slice(0,20)
-                );
-
-
-        if(
-            !encabezado.startsWith("%PDF")
-        ){
-
-            throw new Error(
-                "El archivo seleccionado no contiene un encabezado PDF válido."
-            );
-
-        }
-
-
-        const pdf =
-            await pdfjsLib
-                .getDocument({
-                    data:sourceBytes
-                })
-                .promise;
-
-
-        status.textContent =
-            "Analizando " +
-            pdf.numPages +
-            " página(s)…";
-
-
-        for(
-            let numeroPagina=1;
-            numeroPagina<=pdf.numPages;
-            numeroPagina++
-        ){
-
-            const page =
-                await pdf.getPage(numeroPagina);
-
-
-            const tc =
-                await page.getTextContent();
-
-
-            const lineas =
-                obtenerLineas(tc.items);
-
-
-            pagesData.push({
-
-                page:numeroPagina,
-
-                lines:lineas
-
-            });
-
-
-            /*
-               Guardamos todo el texto.
-            */
-
-            for(const linea of lineas){
-
-                allText.push({
-
-                    page:numeroPagina,
-
-                    text:linea.text,
-
-                    x:linea.x,
-
-                    y:linea.y
-
+        const current = normalizeText(candidate.text);
+
+        for (const catalogItem of normalizedCatalog) {
+
+            if (
+                current.length >= 5 &&
+                (
+                    current.includes(catalogItem.normalized) ||
+                    catalogItem.normalized.includes(current)
+                )
+            ) {
+
+                const key =
+                    catalogItem.code +
+                    "|" +
+                    catalogItem.normalized;
+
+                if (seen.has(key)) {
+                    continue;
+                }
+
+                /*
+                  Evita detectar palabras aisladas como prestaciones.
+                */
+
+                if (
+                    catalogItem.normalized.length < 6 &&
+                    current.length > catalogItem.normalized.length
+                ) {
+                    continue;
+                }
+
+                seen.add(key);
+
+                found.push({
+                    code: catalogItem.code,
+                    description: catalogItem.description,
+                    pdfText: candidate.text,
+                    item: candidate.item
                 });
 
             }
 
-
-            /*
-               AHORA NO IMPORTA SI ESTÁ:
-
-               MAYÚSCULA
-               minúscula
-               negrita
-               normal
-               etc.
-            */
-
-            for(const linea of lineas){
-
-                const texto =
-                    linea.text.trim();
-
-
-                if(texto.length < 3){
-
-                    continue;
-
-                }
-
-
-                const resultado =
-                    buscarPrestacion(texto);
-
-
-                if(resultado){
-
-                    detections.push({
-
-                        page:numeroPagina,
-
-                        source:texto,
-
-                        description:
-                            resultado.description,
-
-                        code:
-                            resultado.code,
-
-                        confidence:
-                            resultado.confidence,
-
-                        x:linea.x,
-
-                        y:linea.y
-
-                    });
-
-
-                    if(
-                        String(resultado.code)
-                            .startsWith("LAB.")
-                    ){
-
-                        hayLaboratorio = true;
-
-                    }
-
-                }
-
-            }
-
-
-            progress.style.width =
-                Math.round(
-                    numeroPagina /
-                    pdf.numPages *
-                    100
-                ) + "%";
-
         }
-
-
-        /*
-           ELIMINAR DUPLICADOS
-        */
-
-        eliminarDuplicados();
-
-
-        /*
-           ACTO BIOQUÍMICO
-        */
-
-        if(
-            hayLaboratorio &&
-            !detections.some(
-                x => x.code === "LAB.00.001"
-            )
-        ){
-
-            detections.unshift({
-
-                page:1,
-
-                source:"ACTO BIOQUÍMICO",
-
-                description:
-                    "Acto Bioquímico",
-
-                code:"LAB.00.001",
-
-                confidence:"REGLA",
-
-                x:20,
-
-                y:30
-
-            });
-
-        }
-
-
-        status.textContent =
-            "Análisis terminado. " +
-            detections.length +
-            " prestación(es) detectada(s).";
-
-
-        status.className =
-            detections.length
-            ? "status ok"
-            : "status warn";
-
-
-        document
-            .getElementById("resultado")
-            .style.display="block";
-
-
-        render();
-
-
-    }catch(error){
-
-        console.error(error);
-
-
-        status.textContent =
-            "ERROR AL ANALIZAR PDF:\n" +
-            error.message;
-
-
-        status.className =
-            "status err";
-
-
-        document
-            .getElementById("resultado")
-            .style.display="block";
-
-
-        document
-            .getElementById("lista")
-            .innerHTML =
-                '<div class="status err">' +
-                '<b>No se pudo analizar el PDF.</b><br><br>' +
-                esc(error.message) +
-                '</div>';
 
     }
-
-}
-
-
-/* =========================================================
-   MOSTRAR RESULTADO
-   ========================================================= */
-
-function render(){
-
-    const aviso =
-        document.getElementById("aviso");
-
-    const lista =
-        document.getElementById("lista");
-
-    const generar =
-        document.getElementById("generar");
 
 
     /*
-       YA NO MOSTRAMOS:
-
-       "Prestaciones MAYÚSCULA + NEGRITA"
+      ORDENAR SEGÚN APARICIÓN EN EL PDF
     */
 
+    found.sort((a,b) => {
 
-    if(hayLaboratorio){
+        const ay = a.item.transform
+            ? a.item.transform[5]
+            : 0;
 
-        aviso.innerHTML =
+        const by = b.item.transform
+            ? b.item.transform[5]
+            : 0;
 
-            '<div class="acto">' +
+        return by - ay;
 
-            '<b>ACTO BIOQUÍMICO</b><br>' +
+    });
 
-            'Código: ' +
-
-            '<strong>LAB.00.001</strong>' +
-
-            '<br>' +
-
-            '<span class="small">' +
-
-            'Agregado automáticamente por tratarse de prestaciones de laboratorio.' +
-
-            '</span>' +
-
-            '</div>';
-
-    }else{
-
-        aviso.innerHTML = "";
-
-    }
+    return found;
+}
 
 
-    if(!detections.length){
+/* ============================================================
+   ANALIZAR PDF
+============================================================ */
 
-        lista.innerHTML =
+async function analyzePdf() {
 
-            '<div class="status warn">' +
+    try {
 
-            '<b>No se encontraron coincidencias automáticas.</b>' +
+        if (!sourceBytes) {
 
-            '<br><br>' +
+            showStatus(
+                "Seleccioná primero un archivo PDF.",
+                "warning"
+            );
 
-            'El PDF fue leído, pero ninguna línea coincidió suficientemente con el nomenclador cargado.' +
+            return;
+        }
 
-            '</div>';
+        showStatus(
+            "Analizando estudio...",
+            ""
+        );
 
-        generar.disabled = true;
+        detectedPrestations = [];
 
-        return;
+        const loadingTask =
+            pdfjsLib.getDocument({
+                data: new Uint8Array(sourceBytes)
+            });
 
-    }
+        const pdf = await loadingTask.promise;
 
+        const allCandidates = [];
 
-    lista.innerHTML = detections.map(x => {
+        for (
+            let pageNumber = 1;
+            pageNumber <= pdf.numPages;
+            pageNumber++
+        ) {
 
-        let clase = "";
+            const page = await pdf.getPage(pageNumber);
 
-        if(
-            x.confidence === "REVISAR"
-        ){
+            const textContent =
+                await page.getTextContent();
 
-            clase = "manual";
+            const candidates =
+                extractCandidates(textContent.items);
+
+            for (const candidate of candidates) {
+
+                candidate.page = pageNumber;
+
+                allCandidates.push(candidate);
+
+            }
 
         }
 
-
-        return (
-
-            '<div class="item ' +
-            clase +
-            '">' +
-
-            '<b>' +
-            esc(x.source) +
-            '</b>' +
-
-            '<br>' +
-
-            '→ ' +
-            esc(x.description) +
-
-            '<br>' +
-
-            '<span class="code">' +
-            esc(x.code) +
-            '</span>' +
-
-            '<br>' +
-
-            '<span class="small">' +
-
-            'Página ' +
-            x.page +
-
-            ' · ' +
-
-            '<span class="badge">' +
-            esc(x.confidence) +
-            '</span>' +
-
-            '</span>' +
-
-            '</div>'
-
-        );
-
-    }).join("");
-
-
-    generar.disabled =
-        detections.length === 0;
-
-}
-
-
-/* =========================================================
-   ESCAPAR HTML
-   ========================================================= */
-
-function esc(s){
-
-    return String(s)
-
-        .replace(
-            /[&<>"']/g,
-
-            m => ({
-
-                "&":"&amp;",
-                "<":"&lt;",
-                ">":"&gt;",
-                '"':"&quot;",
-                "'":"&#039;"
-
-            }[m])
-
-        );
-
-}
-
-
-/* =========================================================
-   GENERAR PDF
-   ========================================================= */
-
-async function generarPDF(){
-
-    const status =
-        document.getElementById("status");
-
-    const boton =
-        document.getElementById("generar");
-
-
-    if(!sourceBytes){
-
-        status.textContent =
-            "Primero seleccioná y analizá un PDF.";
-
-        status.className =
-            "status warn";
-
-        return;
-
-    }
-
-
-    try{
-
-        boton.disabled = true;
-
-        status.textContent =
-            "Generando PDF codificado…";
-
-        status.className =
-            "status";
+        detectedPrestations =
+            detectPrestations(allCandidates);
 
 
         /*
-           VERIFICACIÓN
+          ACTO BIOQUÍMICO:
+          Se agrega automáticamente si se encontró al menos
+          una prestación de laboratorio.
         */
 
-        const header =
-            new TextDecoder()
-                .decode(
-                    sourceBytes.slice(0,20)
+        if (detectedPrestations.length > 0) {
+
+            const alreadyActo =
+                detectedPrestations.some(
+                    p => p.code === ACTO_BIOQUIMICO.code
                 );
 
+            if (!alreadyActo) {
 
-        if(
-            !header.startsWith("%PDF")
-        ){
+                detectedPrestations.push({
+                    code: ACTO_BIOQUIMICO.code,
+                    description: ACTO_BIOQUIMICO.description,
+                    pdfText: "",
+                    item: null,
+                    automatic: true
+                });
 
-            throw new Error(
-                "El archivo original no contiene un encabezado PDF válido."
+            }
+
+        }
+
+        renderResults();
+
+        pdfBtn.disabled =
+            detectedPrestations.length === 0;
+
+        showStatus(
+            detectedPrestations.length > 0
+                ? "Análisis terminado. Prestaciones encontradas: " +
+                  detectedPrestations.length
+                : "No se encontró una prestación codificable con las reglas actuales.",
+            detectedPrestations.length > 0
+                ? "success"
+                : "warning"
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        showStatus(
+            "Error al analizar PDF: " +
+            (error.message || error),
+            "error"
+        );
+
+    }
+
+}
+
+
+/* ============================================================
+   MOSTRAR RESULTADOS
+============================================================ */
+
+function renderResults() {
+
+    if (!detectedPrestations.length) {
+
+        resultsList.innerHTML =
+            "No se encontró una prestación codificable con las reglas actuales.";
+
+        return;
+    }
+
+    resultsList.innerHTML = "";
+
+    for (const item of detectedPrestations) {
+
+        const row =
+            document.createElement("div");
+
+        row.className = "result";
+
+        const name =
+            document.createElement("div");
+
+        name.className = "result-name";
+
+        name.textContent =
+            item.description;
+
+        const code =
+            document.createElement("div");
+
+        code.className = "result-code";
+
+        code.textContent =
+            item.code;
+
+        row.appendChild(name);
+        row.appendChild(code);
+
+        resultsList.appendChild(row);
+
+    }
+
+}
+
+
+/* ============================================================
+   ESTADO
+============================================================ */
+
+function showStatus(message, type) {
+
+    statusBox.textContent = message;
+
+    statusBox.className =
+        "status " + (type || "");
+
+}
+
+
+/* ============================================================
+   CARGAR ARCHIVO
+============================================================ */
+
+pdfInput.addEventListener(
+    "change",
+    async function(event) {
+
+        const file =
+            event.target.files[0];
+
+        if (!file) {
+            return;
+        }
+
+        try {
+
+            if (file.type !== "application/pdf") {
+
+                showStatus(
+                    "El archivo seleccionado no es un PDF.",
+                    "error"
+                );
+
+                return;
+            }
+
+            sourceFile = file;
+
+            /*
+              IMPORTANTE:
+              sourceBytes se carga ANTES de cualquier intento
+              de leer o modificar el PDF.
+
+              Esto elimina el error:
+              "Cannot access 'sourceBytes' before initialization"
+            */
+
+            sourceBytes =
+                await file.arrayBuffer();
+
+            detectedPrestations = [];
+
+            outputPdfBytes = null;
+
+            pdfBtn.disabled = true;
+
+            renderResults();
+
+            showStatus(
+                "PDF cargado correctamente. Presioná ANALIZAR ESTUDIO.",
+                "success"
+            );
+
+            pdfPreview.style.display = "none";
+
+        } catch (error) {
+
+            sourceBytes = null;
+            sourceFile = null;
+
+            showStatus(
+                "Error al cargar PDF: " +
+                (error.message || error),
+                "error"
             );
 
         }
 
+    }
+);
 
-        /*
-           CARGAR PDF
-        */
 
-        const doc =
-            await PDFLib.PDFDocument.load(
-                sourceBytes,
-                {
-                    ignoreEncryption:false
-                }
+/* ============================================================
+   GENERAR PDF CODIFICADO
+============================================================ */
+
+async function generateCodedPdf() {
+
+    try {
+
+        if (!sourceBytes) {
+
+            showStatus(
+                "No hay un PDF cargado.",
+                "warning"
             );
 
+            return;
+        }
+
+        if (!detectedPrestations.length) {
+
+            showStatus(
+                "No hay prestaciones para codificar.",
+                "warning"
+            );
+
+            return;
+        }
+
+        showStatus(
+            "Generando PDF codificado...",
+            ""
+        );
 
         /*
-           FUENTE
+          IMPORTANTE:
+          Se utiliza la variable sourceBytes YA EXISTENTE.
+          No se vuelve a declarar dentro de esta función.
         */
 
+        const pdfDoc =
+            await PDFLib.PDFDocument.load(
+                new Uint8Array(sourceBytes)
+            );
+
+        const pages =
+            pdfDoc.getPages();
+
         const font =
-            await doc.embedFont(
+            await pdfDoc.embedFont(
                 PDFLib.StandardFonts.HelveticaBold
             );
 
-
         /*
-           COLOCAR CÓDIGOS
+          Volvemos a leer el PDF con PDF.js para obtener
+          posición de cada prestación.
         */
 
-        for(const x of detections){
+        const loadingTask =
+            pdfjsLib.getDocument({
+                data: new Uint8Array(sourceBytes)
+            });
 
-            /*
-               No dibujar dos veces el acto bioquímico
-               si hay varios laboratorios.
-            */
+        const pdf =
+            await loadingTask.promise;
+
+
+        for (
+            let pageIndex = 0;
+            pageIndex < pdf.numPages;
+            pageIndex++
+        ) {
 
             const page =
-                doc.getPage(
-                    x.page - 1
-                );
+                await pdf.getPage(pageIndex + 1);
 
+            const textContent =
+                await page.getTextContent();
 
-            const width =
-                page.getWidth();
+            const originalPage =
+                pages[pageIndex];
 
-            const height =
-                page.getHeight();
-
-
-            /*
-               PDF.js y PDF-lib utilizan sistemas
-               de coordenadas diferentes.
-
-               Ajustamos la posición.
-            */
-
-            let posX =
-                Number(x.x) || 20;
-
-
-            let posY =
-                height -
-                (Number(x.y) || 20);
+            const pageHeight =
+                originalPage.getHeight();
 
 
             /*
-               Evitar que el código salga de la página.
+              Buscar prestaciones nuevamente en esta página
+              para conocer su posición exacta.
             */
 
-            if(posX < 10){
+            for (const detected of detectedPrestations) {
 
-                posX = 10;
+                /*
+                  Acto Bioquímico no corresponde a una prestación
+                  escrita en el PDF, por lo que se coloca al final
+                  de la última página.
+                */
 
-            }
+                if (detected.automatic) {
+                    continue;
+                }
 
+                const target =
+                    normalizeText(detected.pdfText);
 
-            if(posY < 10){
+                if (!target) {
+                    continue;
+                }
 
-                posY = 10;
+                for (const item of textContent.items) {
 
-            }
+                    const itemText =
+                        normalizeText(
+                            cleanPdfText(item.str)
+                        );
 
+                    if (!itemText) {
+                        continue;
+                    }
 
-            if(posX > width - 130){
+                    if (itemText !== target) {
+                        continue;
+                    }
 
-                posX =
-                    width - 130;
+                    if (!isUpper(item.str)) {
+                        continue;
+                    }
 
-            }
+                    const transform =
+                        item.transform;
 
+                    const x =
+                        transform[4];
 
-            /*
-               Código.
-            */
+                    const y =
+                        transform[5];
 
-            page.drawText(
+                    const fontSize =
+                        Math.max(
+                            7,
+                            Math.abs(transform[3]) || 9
+                        );
 
-                " [" +
-                x.code +
-                "]",
+                    /*
+                      Colocamos el código a la derecha
+                      del nombre de la prestación.
+                    */
 
-                {
+                    const textWidth =
+                        item.width || 100;
 
-                    x:posX,
+                    const codeX =
+                        x + textWidth + 8;
 
-                    y:posY,
+                    const codeY =
+                        Math.max(
+                            5,
+                            y - 2
+                        );
 
-                    size:8,
+                    originalPage.drawText(
+                        detected.code,
+                        {
+                            x: codeX,
+                            y: codeY,
+                            size: Math.min(
+                                10,
+                                fontSize
+                            ),
+                            font,
+                            color:
+                                PDFLib.rgb(
+                                    0.05,
+                                    0.25,
+                                    0.75
+                                )
+                        }
+                    );
 
-                    font:font
+                    break;
 
                 }
 
+            }
+
+        }
+
+
+        /*
+          ACTO BIOQUÍMICO
+          Se agrega al final del documento.
+        */
+
+        if (
+            detectedPrestations.some(
+                p => p.code === ACTO_BIOQUIMICO.code
+            )
+        ) {
+
+            const lastPage =
+                pages[pages.length - 1];
+
+            const width =
+                lastPage.getWidth();
+
+            const height =
+                lastPage.getHeight();
+
+            lastPage.drawText(
+                "ACTO BIOQUÍMICO",
+                {
+                    x: 40,
+                    y: 35,
+                    size: 9,
+                    font,
+                    color:
+                        PDFLib.rgb(
+                            0.05,
+                            0.25,
+                            0.75
+                        )
+                }
+            );
+
+            lastPage.drawText(
+                ACTO_BIOQUIMICO.code,
+                {
+                    x: width - 100,
+                    y: 35,
+                    size: 9,
+                    font,
+                    color:
+                        PDFLib.rgb(
+                            0.05,
+                            0.25,
+                            0.75
+                        )
+                }
             );
 
         }
 
 
         /*
-           GUARDAR
+          GUARDAR
         */
 
-        const bytes =
-            await doc.save();
+        outputPdfBytes =
+            await pdfDoc.save();
 
 
         /*
-           CREAR BLOB
+          Crear Blob
         */
 
         const blob =
             new Blob(
-                [bytes],
+                [outputPdfBytes],
                 {
-                    type:"application/pdf"
+                    type: "application/pdf"
                 }
             );
-
 
         const url =
             URL.createObjectURL(blob);
 
 
-        const a =
+        /*
+          Vista previa
+        */
+
+        pdfPreview.src = url;
+
+        pdfPreview.style.display =
+            "block";
+
+
+        /*
+          Descarga automática
+        */
+
+        const downloadLink =
             document.createElement("a");
 
+        downloadLink.href =
+            url;
 
-        a.href = url;
+        const originalName =
+            sourceFile
+                ? sourceFile.name
+                    .replace(/\.pdf$/i, "")
+                : "estudio";
 
-
-        a.download =
-            sourceName
-                .replace(
-                    /\.pdf$/i,
-                    ""
-                ) +
+        downloadLink.download =
+            originalName +
             "_CODIFICADO.pdf";
 
-
-        document.body.appendChild(a);
-
-
-        a.click();
-
-
-        document.body.removeChild(a);
-
-
-        setTimeout(
-
-            () => {
-
-                URL.revokeObjectURL(url);
-
-            },
-
-            10000
-
+        document.body.appendChild(
+            downloadLink
         );
 
+        downloadLink.click();
 
-        status.textContent =
-            "PDF codificado generado correctamente.";
-
-        status.className =
-            "status ok";
+        downloadLink.remove();
 
 
-    }catch(error){
+        showStatus(
+            "PDF codificado correctamente.",
+            "success"
+        );
+
+    } catch (error) {
 
         console.error(error);
 
-
-        status.textContent =
-            "Error al generar PDF:\n" +
-            error.message;
-
-        status.className =
-            "status err";
-
-
-    }finally{
-
-        boton.disabled = false;
+        showStatus(
+            "Error al generar PDF: " +
+            (error.message || error),
+            "error"
+        );
 
     }
 
 }
 
 
-/* =========================================================
-   COMPROBACIÓN INICIAL
-   ========================================================= */
+/* ============================================================
+   BOTONES
+============================================================ */
 
-window.addEventListener(
-    "load",
-    () => {
+analyzeBtn.addEventListener(
+    "click",
+    analyzePdf
+);
 
-        if(
-            typeof pdfjsLib === "undefined"
-        ){
-
-            document.getElementById(
-                "status"
-            ).textContent =
-                "ERROR: PDF.js no pudo cargarse.";
-
-            document.getElementById(
-                "status"
-            ).className =
-                "status err";
-
-        }
+pdfBtn.addEventListener(
+    "click",
+    generateCodedPdf
+);
 
 
-        if(
-            typeof PDFLib === "undefined"
-        ){
+/* ============================================================
+   LIMPIAR
+============================================================ */
 
-            document.getElementById(
-                "status"
-            ).textContent =
-                "ERROR: PDF-lib no pudo cargarse.";
+clearBtn.addEventListener(
+    "click",
+    function() {
 
-            document.getElementById(
-                "status"
-            ).className =
-                "status err";
+        sourceBytes = null;
 
-        }
+        sourceFile = null;
+
+        detectedPrestations = [];
+
+        outputPdfBytes = null;
+
+        pdfInput.value = "";
+
+        pdfBtn.disabled = true;
+
+        pdfPreview.src = "";
+
+        pdfPreview.style.display =
+            "none";
+
+        resultsList.innerHTML =
+            "No se ha analizado ningún estudio.";
+
+        showStatus(
+            "Seleccioná el estudio médico en PDF.",
+            ""
+        );
 
     }
-
 );
 
 </script>
