@@ -1,770 +1,284 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+
+<meta name="theme-color" content="#111827">
+
+<title>Codificador de Prestaciones Mendoza</title>
+
+<style>
+
+*{
+    box-sizing:border-box
+}
+
+body{
+    margin:0;
+    background:#f3f4f6;
+    color:#111827;
+    font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Roboto,
+        Arial,
+        sans-serif;
+}
+
+main{
+    max-width:820px;
+    margin:auto;
+    padding:16px;
+}
+
+.card{
+    background:#fff;
+    border-radius:18px;
+    padding:18px;
+    margin:12px 0;
+    box-shadow:0 3px 15px #0001;
+}
+
+h1{
+    font-size:24px;
+    margin:0;
+}
+
+h2{
+    font-size:20px;
+}
+
+.muted{
+    color:#6b7280;
+}
+
+.small{
+    color:#6b7280;
+    font-size:13px;
+}
+
+input[type=file]{
+    width:100%;
+    padding:13px;
+    border:1px solid #d1d5db;
+    border-radius:12px;
+    background:#fff;
+    margin-top:10px;
+}
+
+button{
+    border:0;
+    border-radius:12px;
+    padding:13px 16px;
+    background:#111827;
+    color:white;
+    font-weight:750;
+    font-size:15px;
+    margin-top:10px;
+    width:100%;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:.92;
+}
+
+button:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+}
+
+button.secondary{
+    background:#e5e7eb;
+    color:#111827;
+}
+
+.status{
+    padding:12px;
+    border-radius:12px;
+    background:#f9fafb;
+    margin-top:12px;
+    white-space:pre-wrap;
+}
+
+.ok{
+    background:#ecfdf5;
+    color:#065f46;
+}
+
+.warn{
+    background:#fffbeb;
+    color:#92400e;
+}
+
+.err{
+    background:#fef2f2;
+    color:#991b1b;
+}
+
+.item{
+    padding:13px 0;
+    border-bottom:1px solid #e5e7eb;
+}
+
+.item:last-child{
+    border-bottom:0;
+}
+
+.code{
+    font-weight:900;
+}
+
+.badge{
+    display:inline-block;
+    padding:3px 8px;
+    border-radius:999px;
+    background:#eef2ff;
+    font-size:12px;
+    font-weight:800;
+}
+
+.info{
+    padding:12px;
+    background:#f3f4f6;
+    border-radius:12px;
+    margin-top:12px;
+    font-size:14px;
+    line-height:1.5;
+}
+
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+</head>
+
+<body>
+
+<main>
+
+<section class="card">
+
+<h1>Codificador de Prestaciones</h1>
+
+<div class="muted">
+Nomenclador Mendoza · Marzo 2026
+</div>
+
+</section>
+
+
+<section class="card">
+
+<b>Seleccioná el estudio médico en PDF</b>
+
+<input
+    id="pdf"
+    type="file"
+    accept="application/pdf"
+>
+
+<button onclick="analizar()">
+    ANALIZAR ESTUDIO
+</button>
+
+<button
+    class="secondary"
+    onclick="location.reload()"
+>
+    LIMPIAR
+</button>
+
+<div
+    id="status"
+    class="status"
+>
+    Esperando PDF…
+</div>
+
+</section>
+
+
+<section
+    id="resultado"
+    class="card"
+    style="display:none"
+>
+
+<h2 style="margin-top:0">
+    Resultado
+</h2>
+
+<div id="aviso"></div>
+
+<div id="lista"></div>
+
+<button
+    id="generar"
+    onclick="generarPDF()"
+    disabled
+>
+    GENERAR PDF CODIFICADO
+</button>
+
+</section>
+
+</main>
+
+
+<script>
+
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+
+/*
+=========================================================
+EQUIVALENCIAS CONFIRMADAS
+=========================================================
+*/
+
 const EQUIV = {
-    "GLUCOSA EN SUERO": {
-        description: "Glucemia (c/u)",
-        code: "LAB.01.073",
-        confidence: "CONFIRMADA"
+
+    "GLUCOSA EN SUERO":{
+        description:"Glucemia (c/u)",
+        code:"LAB.01.073",
+        confidence:"CONFIRMADA"
     },
 
-    "GLUCEMIA": {
-        description: "Glucemia (c/u)",
-        code: "LAB.01.073",
-        confidence: "CONFIRMADA"
+    "GLUCEMIA":{
+        description:"Glucemia (c/u)",
+        code:"LAB.01.073",
+        confidence:"CONFIRMADA"
     }
+
 };
 
-let sourceBytes = null;
-let sourceName = "ESTUDIO.pdf";
-let detections = [];
 
+/*
+=========================================================
+NOMENCLADOR
+=========================================================
 
-/* =========================================================
-   NORMALIZACIÓN
-   ========================================================= */
+IMPORTANTE:
 
-function norm(s) {
-    return (s || "")
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toUpperCase()
-        .replace(/[^A-Z0-9Ñ .,()\/\-]/g, " ")
-        .replace(/\s+/g, " ")
-        .trim();
-}
+A PARTIR DE ACÁ PEGÁ EXACTAMENTE TU BLOQUE
+const LAB_CODES = [...]
 
+que ya tenés.
 
-/* =========================================================
-   BÚSQUEDA EXACTA
-   ========================================================= */
+NO CAMBIES LOS CÓDIGOS.
 
-function exact(s) {
+=========================================================
+*/
 
-    const n = norm(s);
+const LAB_CODES = [
 
-    if (EQUIV[n]) {
-        return EQUIV[n];
-    }
-
-    const encontrado = LAB_CODES.find(
-        x => norm(x.description) === n
-    );
-
-    if (encontrado) {
-        return {
-            description: encontrado.description,
-            code: encontrado.code,
-            confidence: "EXACTA"
-        };
-    }
-
-    return null;
-}
-
-
-/* =========================================================
-   SIMILITUD
-   ========================================================= */
-
-function sim(a, b) {
-
-    const A = new Set(norm(a).split(" "));
-    const B = new Set(norm(b).split(" "));
-
-    let coincidencias = 0;
-
-    for (const palabra of A) {
-        if (B.has(palabra)) {
-            coincidencias++;
-        }
-    }
-
-    if (!A.size || !B.size) {
-        return 0;
-    }
-
-    return coincidencias / Math.max(A.size, B.size);
-}
-
-
-/* =========================================================
-   BÚSQUEDA PROBABLE
-   ========================================================= */
-
-function fuzzy(s) {
-
-    let mejor = null;
-    let mejorScore = 0;
-
-    for (const x of LAB_CODES) {
-
-        const score = sim(
-            s,
-            x.description
-        );
-
-        if (score > mejorScore) {
-            mejorScore = score;
-            mejor = x;
-        }
-    }
-
-    /*
-       IMPORTANTE:
-
-       No se acepta cualquier coincidencia.
-       Esto evita que una prestación sea codificada
-       solamente porque comparte una palabra.
-    */
-
-    if (
-        mejor &&
-        mejorScore >= 0.78
-    ) {
-
-        return {
-            description: mejor.description,
-            code: mejor.code,
-            confidence: "PROBABLE"
-        };
-    }
-
-    return null;
-}
-
-
-/* =========================================================
-   OBTENER FILAS DEL PDF
-   ========================================================= */
-
-function rowsFromText(items, styles) {
-
-    const rows = [];
-
-    for (const it of items) {
-
-        if (!it.str || !it.str.trim()) {
-            continue;
-        }
-
-        const x = it.transform[4];
-        const y = it.transform[5];
-
-        let row = rows.find(
-            r => Math.abs(r.y - y) < 3
-        );
-
-        if (!row) {
-
-            row = {
-                y: y,
-                items: []
-            };
-
-            rows.push(row);
-        }
-
-        row.items.push({
-            it,
-            x
-        });
-    }
-
-    return rows.map(row => {
-
-        row.items.sort(
-            (a, b) => a.x - b.x
-        );
-
-        const text = row.items
-            .map(z => z.it.str)
-            .join(" ")
-            .replace(/\s+/g, " ")
-            .trim();
-
-        return {
-            text: text,
-            x: row.items[0].x,
-            y: row.y
-        };
-    });
-}
-
-
-/* =========================================================
-   ANALIZAR PDF
-   ========================================================= */
-
-async function analizar() {
-
-    const file =
-        document.getElementById("pdf").files[0];
-
-    const status =
-        document.getElementById("status");
-
-    if (!file) {
-
-        status.textContent =
-            "Seleccioná un PDF.";
-
-        status.className =
-            "status warn";
-
-        return;
-    }
-
-
-    /*
-       Comprobamos que realmente sea PDF
-    */
-
-    if (
-        file.type !== "application/pdf" &&
-        !file.name.toLowerCase().endsWith(".pdf")
-    ) {
-
-        status.textContent =
-            "El archivo seleccionado no es un PDF.";
-
-        status.className =
-            "status err";
-
-        return;
-    }
-
-
-    sourceName = file.name;
-
-
-    try {
-
-        const buffer =
-            await file.arrayBuffer();
-
-        sourceBytes =
-            new Uint8Array(buffer);
-
-
-        /*
-           Comprobación del encabezado PDF
-        */
-
-        const header =
-            new TextDecoder()
-                .decode(
-                    sourceBytes.slice(0, 5)
-                );
-
-
-        if (header !== "%PDF-") {
-
-            status.textContent =
-                "El archivo seleccionado no contiene un PDF válido.";
-
-            status.className =
-                "status err";
-
-            return;
-        }
-
-
-        detections = [];
-
-
-        status.textContent =
-            "Leyendo PDF...";
-
-        status.className =
-            "status";
-
-
-        const pdf =
-            await pdfjsLib
-                .getDocument({
-                    data: sourceBytes
-                })
-                .promise;
-
-
-        for (
-            let pageNumber = 1;
-            pageNumber <= pdf.numPages;
-            pageNumber++
-        ) {
-
-            const page =
-                await pdf.getPage(
-                    pageNumber
-                );
-
-            const textContent =
-                await page.getTextContent();
-
-
-            const rows =
-                rowsFromText(
-                    textContent.items,
-                    textContent.styles
-                );
-
-
-            for (const row of rows) {
-
-                if (!row.text) {
-                    continue;
-                }
-
-
-                /*
-                   Primero buscamos coincidencia EXACTA.
-                   Si no existe, buscamos PROBABLE.
-                */
-
-                let resultado =
-                    exact(row.text);
-
-
-                if (!resultado) {
-
-                    resultado =
-                        fuzzy(row.text);
-                }
-
-
-                if (resultado) {
-
-                    detections.push({
-
-                        page: pageNumber,
-
-                        source: row.text,
-
-                        description:
-                            resultado.description,
-
-                        code:
-                            resultado.code,
-
-                        confidence:
-                            resultado.confidence,
-
-                        x: row.x,
-
-                        y: row.y
-
-                    });
-                }
-            }
-        }
-
-
-        /*
-           Eliminamos duplicados
-        */
-
-        const vistos =
-            new Set();
-
-        detections =
-            detections.filter(item => {
-
-                const clave =
-                    item.page +
-                    "|" +
-                    norm(item.source) +
-                    "|" +
-                    item.code;
-
-                if (vistos.has(clave)) {
-                    return false;
-                }
-
-                vistos.add(clave);
-
-                return true;
-            });
-
-
-        status.textContent =
-            `Análisis terminado. Prestaciones encontradas: ${detections.length}.`;
-
-        status.className =
-            detections.length
-                ? "status ok"
-                : "status warn";
-
-
-        document
-            .getElementById("resultado")
-            .style.display = "block";
-
-
-        render();
-
-
-    } catch (error) {
-
-        console.error(error);
-
-        status.textContent =
-            "No se pudo leer el PDF: " +
-            error.message;
-
-        status.className =
-            "status err";
-    }
-}
-
-
-/* =========================================================
-   MOSTRAR RESULTADOS
-   ========================================================= */
-
-function render() {
-
-    const aviso =
-        document.getElementById("aviso");
-
-    const lista =
-        document.getElementById("lista");
-
-    const generar =
-        document.getElementById("generar");
-
-
-    /*
-       Regla laboratorio
-    */
-
-    const hayLaboratorio =
-        detections.some(
-            x =>
-                x.code &&
-                x.code.startsWith("LAB.")
-        );
-
-
-    if (hayLaboratorio) {
-
-        aviso.innerHTML = `
-            <div class="status warn">
-                <b>LABORATORIO:</b>
-                verificar inclusión del ACTO BIOQUÍMICO
-                según las reglas de facturación.
-            </div>
-        `;
-
-    } else {
-
-        aviso.innerHTML = "";
-    }
-
-
-    if (!detections.length) {
-
-        lista.innerHTML = `
-            <div class="status warn">
-                No se encontró ninguna prestación
-                reconocida en el nomenclador.
-            </div>
-        `;
-
-        generar.disabled = true;
-
-        return;
-    }
-
-
-    lista.innerHTML =
-        detections
-            .map(item => `
-
-                <div class="item">
-
-                    <b>
-                        ${esc(item.source)}
-                    </b>
-
-                    <br>
-
-                    → ${esc(item.description)}
-
-                    <br>
-
-                    <span class="code">
-                        ${esc(item.code)}
-                    </span>
-
-                    <br>
-
-                    <span class="small">
-
-                        Página ${item.page}
-
-                        ·
-
-                        <span class="badge">
-                            ${item.confidence}
-                        </span>
-
-                    </span>
-
-                </div>
-
-            `)
-            .join("");
-
-
-    generar.disabled = false;
-}
-
-
-/* =========================================================
-   ESCAPAR TEXTO
-   ========================================================= */
-
-function esc(text) {
-
-    return String(text)
-        .replace(
-            /[&<>"']/g,
-            function (m) {
-
-                return {
-
-                    "&": "&amp;",
-                    "<": "&lt;",
-                    ">": "&gt;",
-                    '"': "&quot;",
-                    "'": "&#039;"
-
-                }[m];
-            }
-        );
-}
-
-
-/* =========================================================
-   GENERAR PDF
-   ========================================================= */
-
-async function generarPDF() {
-
-    const status =
-        document.getElementById("status");
-
-
-    /*
-       Comprobar que exista PDF
-    */
-
-    if (!sourceBytes) {
-
-        status.textContent =
-            "Primero tenés que cargar un PDF.";
-
-        status.className =
-            "status err";
-
-        return;
-    }
-
-
-    /*
-       Comprobar encabezado
-    */
-
-    const header =
-        new TextDecoder()
-            .decode(
-                sourceBytes.slice(0, 5)
-            );
-
-
-    if (header !== "%PDF-") {
-
-        status.textContent =
-            "El archivo original no es un PDF válido.";
-
-        status.className =
-            "status err";
-
-        return;
-    }
-
-
-    if (!detections.length) {
-
-        status.textContent =
-            "No hay prestaciones para codificar.";
-
-        status.className =
-            "status warn";
-
-        return;
-    }
-
-
-    status.textContent =
-        "Generando PDF codificado...";
-
-    status.className =
-        "status";
-
-
-    try {
-
-        /*
-           Cargamos el PDF original.
-        */
-
-        const pdfDoc =
-            await PDFLib.PDFDocument.load(
-                sourceBytes
-            );
-
-
-        const font =
-            await pdfDoc.embedFont(
-                PDFLib.StandardFonts.HelveticaBold
-            );
-
-
-        /*
-           Agregamos cada código
-           sobre la página correspondiente.
-        */
-
-        for (const item of detections) {
-
-            const page =
-                pdfDoc.getPage(
-                    item.page - 1
-                );
-
-
-            const pageHeight =
-                page.getHeight();
-
-
-            /*
-               Convertimos coordenadas
-               de PDF.js a PDF-Lib.
-            */
-
-            const posX =
-                Math.min(
-                    item.x + 180,
-                    page.getWidth() - 145
-                );
-
-
-            const posY =
-                Math.max(
-                    18,
-                    pageHeight -
-                    item.y -
-                    3
-                );
-
-
-            page.drawText(
-                " [" + item.code + "]",
-                {
-
-                    x: posX,
-
-                    y: posY,
-
-                    size: 8,
-
-                    font: font
-                }
-            );
-        }
-
-
-        /*
-           Guardar PDF
-        */
-
-        const bytes =
-            await pdfDoc.save();
-
-
-        const blob =
-            new Blob(
-                [bytes],
-                {
-                    type:
-                        "application/pdf"
-                }
-            );
-
-
-        const url =
-            URL.createObjectURL(
-                blob
-            );
-
-
-        const link =
-            document.createElement("a");
-
-
-        link.href = url;
-
-
-        link.download =
-            sourceName
-                .replace(
-                    /\.pdf$/i,
-                    ""
-                ) +
-            "_CODIFICADO.pdf";
-
-
-        document.body.appendChild(
-            link
-        );
-
-
-        link.click();
-
-
-        document.body.removeChild(
-            link
-        );
-
-
-        setTimeout(
-            () => {
-                URL.revokeObjectURL(url);
-            },
-            5000
-        );
-
-
-        status.textContent =
-            "PDF codificado generado correctamente.";
-
-        status.className =
-            "status ok";
-
-
-    } catch (error) {
-
-        console.error(
-            "ERROR PDF:",
-            error
-        );
-
-
-        status.textContent =
-            "Error al generar PDF: " +
-            error.message;
-
-        status.className =
-            "status err";
-    }
-}
 
