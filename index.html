@@ -7,7 +7,6 @@
 <title>Codificador de Prestaciones Médicas - Mendoza</title>
 
 <style>
-
 *{
   box-sizing:border-box;
   margin:0;
@@ -334,6 +333,23 @@ tr:hover td{
   line-height:1.5;
 }
 
+.debug{
+  display:none;
+  margin-top:15px;
+  padding:12px;
+  background:#0f172a;
+  color:#e2e8f0;
+  border-radius:8px;
+  font-family:monospace;
+  font-size:12px;
+  white-space:pre-wrap;
+  overflow:auto;
+}
+
+.debug.show{
+  display:block;
+}
+
 footer{
   text-align:center;
   color:#64748b;
@@ -387,7 +403,8 @@ footer{
   .search-box,
   footer,
   .base-grid,
-  .note{
+  .note,
+  .debug{
     display:none !important;
   }
 
@@ -406,7 +423,6 @@ footer{
   }
 
 }
-
 </style>
 </head>
 
@@ -478,6 +494,11 @@ Limpiar
 <div
   id="status"
   class="status"
+></div>
+
+<div
+  id="debug"
+  class="debug"
 ></div>
 
 </section>
@@ -593,7 +614,6 @@ Todavía no se procesó ningún estudio.
 <div class="note">
 
 <strong>PDF codificado:</strong>
-
 el sistema conserva el PDF original y agrega el código LAB
 junto a cada prestación localizada en el documento.
 
@@ -688,22 +708,6 @@ let equivalencias = {};
 
 let archivoPDF = null;
 
-/*
- * PDF ORIGINAL.
- *
- * Nunca se modifica.
- *
- * PDF-LIB utiliza estos bytes.
- */
-let bytesPDFOriginal = null;
-
-/*
- * COPIA DE TRABAJO.
- *
- * PDF.js utiliza estos bytes.
- */
-let bytesPDFTrabajo = null;
-
 let paginasPDF = [];
 
 let resultados = [];
@@ -712,11 +716,13 @@ let indicePrestaciones = [];
 
 
 /* =====================================================
-   FUNCIONES AUXILIARES
+   AUXILIARES
 ===================================================== */
 
 function $(id){
+
   return document.getElementById(id);
+
 }
 
 
@@ -755,6 +761,31 @@ function mostrarEstado(texto,tipo){
 
   estado.textContent =
     texto;
+
+}
+
+
+function mostrarDebug(texto){
+
+  const caja =
+    $("debug");
+
+  caja.classList.add("show");
+
+  caja.textContent =
+    texto;
+
+}
+
+
+function ocultarDebug(){
+
+  $("debug")
+    .classList
+    .remove("show");
+
+  $("debug")
+    .textContent = "";
 
 }
 
@@ -834,17 +865,6 @@ function construirIndiceNomenclador(data){
   const indice = {};
 
 
-  /*
-   * FORMATO ACTUAL:
-   *
-   * {
-   *   "LAB.01.092":{
-   *      "descripcion":"Howel, tiempo de",
-   *      "valor":4
-   *   }
-   * }
-   */
-
   if(
     data &&
     typeof data === "object" &&
@@ -895,10 +915,6 @@ function construirIndiceNomenclador(data){
 
   }
 
-
-  /*
-   * También soporta arrays.
-   */
 
   if(Array.isArray(data)){
 
@@ -957,7 +973,7 @@ function construirIndiceNomenclador(data){
 
 
 /* =====================================================
-   CONSTRUIR ÍNDICE DE BÚSQUEDA
+   ÍNDICE
 ===================================================== */
 
 function construirIndice(){
@@ -965,15 +981,9 @@ function construirIndice(){
   indicePrestaciones = [];
 
 
-  /*
-   * PRESTACIONES DEL NOMENCLADOR
-   */
-
   for(
     const datos
-    of Object.values(
-      nomenclador
-    )
+    of Object.values(nomenclador)
   ){
 
     indicePrestaciones.push({
@@ -1003,60 +1013,50 @@ function construirIndice(){
   }
 
 
-  /*
-   * EQUIVALENCIAS
-   *
-   * Formato:
-   *
-   * "GLUCOSA EN SUERO":
-   * "LAB.01.073"
-   */
-
   for(
     const [
       nombre,
-      codigo
+      dato
     ]
     of Object.entries(
       equivalencias
     )
   ){
 
-    let codigoTexto = "";
+    let codigo = "";
 
 
     if(
-      typeof codigo === "string"
+      typeof dato === "string"
     ){
 
-      codigoTexto =
-        codigo.trim();
+      codigo =
+        dato.trim();
 
     }
-
     else if(
-      codigo &&
-      typeof codigo === "object"
+      dato &&
+      typeof dato === "object"
     ){
 
-      codigoTexto =
+      codigo =
         String(
-          codigo.codigo ??
-          codigo.code ??
+          dato.codigo ??
+          dato.code ??
           ""
         ).trim();
 
     }
 
 
-    if(!codigoTexto){
+    if(!codigo){
       continue;
     }
 
 
     const oficial =
       nomenclador[
-        codigoTexto
+        codigo
       ];
 
 
@@ -1064,8 +1064,7 @@ function construirIndice(){
 
       nombre,
 
-      codigo:
-        codigoTexto,
+      codigo,
 
       descripcion:
         oficial
@@ -1090,10 +1089,6 @@ function construirIndice(){
   }
 
 
-  /*
-   * Frases largas primero.
-   */
-
   indicePrestaciones.sort(
     (a,b) =>
       b.texto.length -
@@ -1104,23 +1099,10 @@ function construirIndice(){
 
 
 /* =====================================================
-   EXTRAER PDF CON PDF.JS
+   EXTRAER PDF
 ===================================================== */
 
 async function extraerPDF(datos){
-
-  if(!datos){
-
-    throw new Error(
-      "No se recibieron datos del PDF."
-    );
-
-  }
-
-
-  /*
-   * PDF.js recibe una COPIA.
-   */
 
   const datosPDF =
     new Uint8Array(
@@ -1208,10 +1190,6 @@ async function extraerPDF(datos){
     }
 
 
-    /*
-     * AGRUPAR TEXTO POR LÍNEA
-     */
-
     const lineas = [];
 
 
@@ -1220,24 +1198,24 @@ async function extraerPDF(datos){
       of items
     ){
 
-      let lineaEncontrada =
+      let linea =
         null;
 
 
       for(
-        const linea
+        const existente
         of lineas
       ){
 
         if(
           Math.abs(
-            linea.y -
+            existente.y -
             item.y
           ) <= 4
         ){
 
-          lineaEncontrada =
-            linea;
+          linea =
+            existente;
 
           break;
 
@@ -1246,9 +1224,9 @@ async function extraerPDF(datos){
       }
 
 
-      if(!lineaEncontrada){
+      if(!linea){
 
-        lineaEncontrada = {
+        linea = {
 
           y:
             item.y,
@@ -1260,22 +1238,18 @@ async function extraerPDF(datos){
 
 
         lineas.push(
-          lineaEncontrada
+          linea
         );
 
       }
 
 
-      lineaEncontrada.items.push(
+      linea.items.push(
         item
       );
 
     }
 
-
-    /*
-     * ORDENAR CADA LÍNEA
-     */
 
     for(
       const linea
@@ -1350,7 +1324,7 @@ async function extraerPDF(datos){
 
 
 /* =====================================================
-   BÚSQUEDA DE PRESTACIONES
+   BUSCAR PRESTACIONES
 ===================================================== */
 
 function buscarPrestaciones(){
@@ -1393,10 +1367,6 @@ function buscarPrestaciones(){
           continue;
         }
 
-
-        /*
-         * COINCIDENCIA EXACTA
-         */
 
         if(
           texto.includes(
@@ -1486,16 +1456,9 @@ function buscarPrestaciones(){
   }
 
 
-  /*
-   * Eliminar duplicados lógicos.
-   *
-   * Se mantiene la primera aparición
-   * de cada prestación por página.
-   */
-
   const finales = [];
 
-  const clavesFinales =
+  const claves =
     new Set();
 
 
@@ -1515,17 +1478,16 @@ function buscarPrestaciones(){
 
 
     if(
-      clavesFinales.has(
-        clave
-      )
+      claves.has(clave)
     ){
       continue;
     }
 
 
-    clavesFinales.add(
+    claves.add(
       clave
     );
+
 
     finales.push(
       resultado
@@ -1722,7 +1684,105 @@ function actualizarEstadisticas(){
 
 
 /* =====================================================
-   PROCESAR PDF
+   SELECCIONAR PDF
+===================================================== */
+
+function seleccionarPDF(
+  archivo
+){
+
+  if(!archivo){
+    return;
+  }
+
+
+  if(
+    archivo.type !==
+      "application/pdf" &&
+    !archivo.name
+      .toLowerCase()
+      .endsWith(".pdf")
+  ){
+
+    mostrarEstado(
+      "El archivo seleccionado no es un PDF.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  archivoPDF =
+    archivo;
+
+
+  paginasPDF = [];
+
+  resultados = [];
+
+
+  ocultarDebug();
+
+
+  $("fileInfo")
+    .style.display =
+      "block";
+
+
+  $("fileInfo")
+    .innerHTML = `
+
+      <strong>Archivo:</strong>
+      ${escapeHTML(
+        archivo.name
+      )}
+
+      <br>
+
+      <strong>Tamaño:</strong>
+      ${bytesTexto(
+        archivo.size
+      )}
+
+      <br>
+
+      <strong>Tipo:</strong>
+      ${escapeHTML(
+        archivo.type ||
+        "application/pdf"
+      )}
+
+    `;
+
+
+  $("btnProcesar")
+    .disabled = false;
+
+
+  $("btnPDF")
+    .disabled = true;
+
+
+  $("btnJSON")
+    .disabled = true;
+
+
+  $("btnImprimir")
+    .disabled = true;
+
+
+  mostrarEstado(
+    "PDF cargado correctamente. Presioná «Procesar estudio».",
+    "success"
+  );
+
+}
+
+
+/* =====================================================
+   PROCESAR
 ===================================================== */
 
 async function procesarPDF(){
@@ -1742,18 +1802,24 @@ async function procesarPDF(){
   $("btnProcesar")
     .disabled = true;
 
+
   $("btnPDF")
     .disabled = true;
 
+
   $("btnJSON")
     .disabled = true;
+
 
   $("btnImprimir")
     .disabled = true;
 
 
+  ocultarDebug();
+
+
   mostrarEstado(
-    "Procesando PDF. Esperá unos segundos...",
+    "Procesando PDF...",
     "info"
   );
 
@@ -1761,115 +1827,96 @@ async function procesarPDF(){
   try{
 
     /*
-     * =================================================
-     * GUARDAR PDF ORIGINAL
-     * =================================================
+     * Leer directamente el File.
      */
 
-    bytesPDFOriginal =
+    const buffer =
       await archivoPDF.arrayBuffer();
 
 
-    /*
-     * VALIDAR CABECERA
-     */
-
-    const encabezado =
+    const datos =
       new Uint8Array(
-        bytesPDFOriginal.slice(
-          0,
-          5
-        )
+        buffer
       );
 
 
-    const encabezadoTexto =
-      new TextDecoder()
-        .decode(
-          encabezado
-        );
+    /*
+     * Verificar cabecera.
+     */
+
+    const cabecera =
+      String.fromCharCode(
+        datos[0],
+        datos[1],
+        datos[2],
+        datos[3],
+        datos[4]
+      );
 
 
     if(
-      encabezadoTexto !==
-      "%PDF-"
+      cabecera !== "%PDF-"
     ){
 
       throw new Error(
-        "El archivo seleccionado no contiene una cabecera PDF válida."
+        "El archivo no tiene una cabecera PDF válida. Se detectó: [" +
+        cabecera +
+        "]"
       );
 
     }
 
 
     /*
-     * =================================================
-     * CREAR COPIA PARA PDF.JS
-     * =================================================
+     * PDF.js recibe una copia.
      */
 
-    bytesPDFTrabajo =
+    const copia =
       new Uint8Array(
-        bytesPDFOriginal.slice(0)
+        datos.slice()
       );
 
 
-    /*
-     * =================================================
-     * EXTRAER TEXTO
-     * =================================================
-     */
-
     await extraerPDF(
-      bytesPDFTrabajo
+      copia
     );
 
-
-    /*
-     * =================================================
-     * BUSCAR PRESTACIONES
-     * =================================================
-     */
 
     resultados =
       buscarPrestaciones();
 
 
-    /*
-     * =================================================
-     * MOSTRAR
-     * =================================================
-     */
-
     mostrarResultados();
 
 
-    const hayResultados =
+    const hay =
       resultados.length > 0;
-
-
-    $("btnJSON")
-      .disabled =
-        !hayResultados;
-
-
-    $("btnImprimir")
-      .disabled =
-        !hayResultados;
 
 
     $("btnPDF")
       .disabled =
-        !hayResultados;
+        !hay;
 
 
-    if(!hayResultados){
+    $("btnJSON")
+      .disabled =
+        !hay;
+
+
+    $("btnImprimir")
+      .disabled =
+        !hay;
+
+
+    if(hay){
 
       mostrarEstado(
 
-        "El PDF fue leído correctamente, pero no se encontraron prestaciones reconocibles.",
+        "PDF procesado correctamente. " +
+        resultados.length +
+        " prestación(es) detectada(s).",
 
-        "warning"
+        "success"
 
       );
 
@@ -1878,41 +1925,36 @@ async function procesarPDF(){
 
       mostrarEstado(
 
-        "PDF procesado correctamente. " +
-        resultados.length +
-        " prestación(es) detectada(s). " +
-        "Podés descargar ahora el PDF codificado.",
+        "El PDF se leyó correctamente, pero no se detectaron prestaciones.",
 
-        "success"
+        "warning"
 
       );
 
     }
 
-
   }
   catch(error){
 
     console.error(
-      "ERROR PROCESANDO PDF:",
       error
+    );
+
+
+    mostrarDebug(
+      "ERROR AL PROCESAR\n\n" +
+      error.message
     );
 
 
     mostrarEstado(
 
-      "ERROR AL PROCESAR EL PDF: " +
+      "❌ Error al procesar el PDF: " +
       error.message,
 
       "error"
 
     );
-
-
-    $("estadoMotor")
-      .textContent =
-      "❌ " +
-      error.message;
 
   }
   finally{
@@ -1943,48 +1985,13 @@ async function descargarPDFCodificado(){
   }
 
 
-  if(!bytesPDFOriginal){
-
-    mostrarEstado(
-
-      "No existe una copia válida del PDF original. Volvé a procesar el estudio.",
-
-      "error"
-
-    );
-
-    return;
-
-  }
-
-
   if(
     resultados.length === 0
   ){
 
     mostrarEstado(
-
       "No hay prestaciones detectadas para codificar.",
-
       "warning"
-
-    );
-
-    return;
-
-  }
-
-
-  if(
-    !window.PDFLib
-  ){
-
-    mostrarEstado(
-
-      "PDF-LIB no está disponible. Recargá la página e intentá nuevamente.",
-
-      "error"
-
     );
 
     return;
@@ -1994,6 +2001,9 @@ async function descargarPDFCodificado(){
 
   $("btnPDF")
     .disabled = true;
+
+
+  ocultarDebug();
 
 
   mostrarEstado(
@@ -2006,34 +2016,83 @@ async function descargarPDFCodificado(){
 
     /*
      * =================================================
-     * VALIDAR PDF ORIGINAL
+     * PASO 1
+     *
+     * VOLVER A LEER DIRECTAMENTE EL FILE ORIGINAL
+     *
+     * No usamos PDF.js.
+     * No usamos la copia de trabajo.
+     * No usamos ningún ArrayBuffer anterior.
      * =================================================
      */
 
-    const cabecera =
-      new Uint8Array(
-        bytesPDFOriginal.slice(
-          0,
-          5
-        )
-      );
-
-
-    const textoCabecera =
-      new TextDecoder()
-        .decode(
-          cabecera
-        );
+    const bufferOriginal =
+      await archivoPDF.arrayBuffer();
 
 
     if(
-      textoCabecera !==
-      "%PDF-"
+      !bufferOriginal
+    ){
+
+      throw new Error(
+        "No fue posible leer nuevamente el archivo PDF original."
+      );
+
+    }
+
+
+    const datosOriginales =
+      new Uint8Array(
+        bufferOriginal
+      );
+
+
+    /*
+     * =================================================
+     * PASO 2
+     *
+     * COMPROBAR CABECERA
+     * =================================================
+     */
+
+    if(
+      datosOriginales.length < 5
+    ){
+
+      throw new Error(
+        "El archivo seleccionado está vacío o es demasiado pequeño."
+      );
+
+    }
+
+
+    const cabecera =
+      String.fromCharCode(
+        datosOriginales[0],
+        datosOriginales[1],
+        datosOriginales[2],
+        datosOriginales[3],
+        datosOriginales[4]
+      );
+
+
+    console.log(
+      "PDF ORIGINAL:",
+      cabecera,
+      datosOriginales.length
+    );
+
+
+    if(
+      cabecera !== "%PDF-"
     ){
 
       throw new Error(
 
-        "El PDF original no tiene una cabecera PDF válida."
+        "El archivo original no comienza con %PDF-. " +
+        "Cabecera encontrada: [" +
+        cabecera +
+        "]"
 
       );
 
@@ -2042,47 +2101,95 @@ async function descargarPDFCodificado(){
 
     /*
      * =================================================
-     * PDF-LIB
+     * PASO 3
+     *
+     * COMPROBAR PDF-LIB
      * =================================================
      */
 
-    const {
-      PDFDocument,
-      rgb,
-      StandardFonts
-    } =
-      window.PDFLib;
+    if(
+      !window.PDFLib
+    ){
+
+      throw new Error(
+        "PDF-LIB no está cargado."
+      );
+
+    }
+
+
+    const PDFDocument =
+      window.PDFLib.PDFDocument;
+
+    const rgb =
+      window.PDFLib.rgb;
+
+    const StandardFonts =
+      window.PDFLib.StandardFonts;
+
+
+    if(
+      !PDFDocument ||
+      !StandardFonts
+    ){
+
+      throw new Error(
+        "La biblioteca PDF-LIB no se cargó correctamente."
+      );
+
+    }
 
 
     /*
-     * MUY IMPORTANTE:
+     * =================================================
+     * PASO 4
      *
-     * Se carga el PDF ORIGINAL.
+     * ABRIR PDF ORIGINAL
+     * =================================================
      */
 
     const pdf =
       await PDFDocument.load(
-        bytesPDFOriginal,
-        {
-          ignoreEncryption:false
-        }
+        datosOriginales
       );
 
+
+    console.log(
+      "PDF-LIB: PDF cargado correctamente."
+    );
+
+
+    /*
+     * =================================================
+     * PASO 5
+     *
+     * OBTENER PÁGINAS
+     * =================================================
+     */
 
     const paginas =
       pdf.getPages();
 
 
     if(
+      !paginas ||
       paginas.length === 0
     ){
 
       throw new Error(
-        "El PDF no contiene páginas."
+        "PDF-LIB no encontró páginas en el PDF."
       );
 
     }
 
+
+    /*
+     * =================================================
+     * PASO 6
+     *
+     * FUENTE
+     * =================================================
+     */
 
     const fuente =
       await pdf.embedFont(
@@ -2095,7 +2202,9 @@ async function descargarPDFCodificado(){
 
     /*
      * =================================================
-     * COLOCAR CÓDIGOS
+     * PASO 7
+     *
+     * ESCRIBIR CÓDIGOS
      * =================================================
      */
 
@@ -2105,19 +2214,37 @@ async function descargarPDFCodificado(){
     ){
 
       if(
-        !resultado.codigo ||
-        !resultado.ubicada ||
-        !resultado.pagina
+        !resultado.codigo
       ){
-
         continue;
+      }
 
+
+      if(
+        !resultado.ubicada
+      ){
+        continue;
+      }
+
+
+      const paginaNumero =
+        Number(
+          resultado.pagina
+        );
+
+
+      if(
+        !Number.isInteger(
+          paginaNumero
+        )
+      ){
+        continue;
       }
 
 
       const pagina =
         paginas[
-          resultado.pagina - 1
+          paginaNumero - 1
         ];
 
 
@@ -2131,7 +2258,7 @@ async function descargarPDFCodificado(){
 
 
       /*
-       * Tamaño de fuente.
+       * Tamaño.
        */
 
       let tamañoFuente =
@@ -2161,7 +2288,11 @@ async function descargarPDFCodificado(){
         );
 
 
-      const ancho =
+      /*
+       * Ancho.
+       */
+
+      const anchoCodigo =
         fuente.widthOfTextAtSize(
           resultado.codigo,
           tamañoFuente
@@ -2169,48 +2300,58 @@ async function descargarPDFCodificado(){
 
 
       /*
-       * POSICIÓN X
+       * X.
        */
 
       let x =
         Number(
           resultado.x
-        ) + 8;
+        );
+
+
+      if(
+        !Number.isFinite(x)
+      ){
+
+        x = 20;
+
+      }
+
+
+      x += 8;
 
 
       /*
        * Si no entra a la derecha,
-       * colocar a la izquierda.
+       * poner código a la izquierda.
        */
 
       if(
         x +
-        ancho +
+        anchoCodigo +
         10 >
         tamaño.width
       ){
 
         x =
-          Math.max(
-            5,
-            Number(
-              resultado.xInicial
-            ) -
-            ancho -
-            8
-          );
+          Number(
+            resultado.xInicial
+          ) -
+          anchoCodigo -
+          8;
 
       }
 
 
+      x =
+        Math.max(
+          5,
+          x
+        );
+
+
       /*
-       * POSICIÓN Y
-       *
-       * PDF.js:
-       * origen arriba.
-       *
-       * PDF-LIB:
-       * origen abajo.
+       * Y.
        */
 
       let y =
@@ -2222,9 +2363,7 @@ async function descargarPDFCodificado(){
 
 
       if(
-        !Number.isFinite(
-          y
-        )
+        !Number.isFinite(y)
       ){
 
         y = 10;
@@ -2235,17 +2374,21 @@ async function descargarPDFCodificado(){
       y =
         Math.max(
           3,
-          Math.min(
-            y,
-            tamaño.height -
-            tamañoFuente -
-            3
-          )
+          y
+        );
+
+
+      y =
+        Math.min(
+          y,
+          tamaño.height -
+          tamañoFuente -
+          3
         );
 
 
       /*
-       * FONDO BLANCO
+       * Fondo blanco.
        */
 
       pagina.drawRectangle({
@@ -2257,7 +2400,7 @@ async function descargarPDFCodificado(){
           y - 2,
 
         width:
-          ancho + 5,
+          anchoCodigo + 5,
 
         height:
           tamañoFuente + 5,
@@ -2270,13 +2413,13 @@ async function descargarPDFCodificado(){
           ),
 
         opacity:
-          0.90
+          0.92
 
       });
 
 
       /*
-       * CÓDIGO LAB
+       * Código.
        */
 
       pagina.drawText(
@@ -2311,9 +2454,17 @@ async function descargarPDFCodificado(){
 
     /*
      * =================================================
+     * PASO 8
+     *
      * GUARDAR
      * =================================================
      */
+
+    mostrarEstado(
+      "Preparando descarga del PDF...",
+      "info"
+    );
+
 
     const pdfBytes =
       await pdf.save();
@@ -2321,38 +2472,51 @@ async function descargarPDFCodificado(){
 
     if(
       !pdfBytes ||
-      pdfBytes.length === 0
+      pdfBytes.length < 5
     ){
 
       throw new Error(
-        "PDF-LIB no produjo ningún archivo."
+        "PDF-LIB no generó un PDF válido."
       );
 
     }
 
 
     /*
-     * VALIDAR PDF GENERADO
+     * =================================================
+     * PASO 9
+     *
+     * COMPROBAR PDF GENERADO
+     * =================================================
      */
 
     const cabeceraFinal =
-      new TextDecoder()
-        .decode(
-          pdfBytes.slice(
-            0,
-            5
-          )
-        );
+      String.fromCharCode(
+        pdfBytes[0],
+        pdfBytes[1],
+        pdfBytes[2],
+        pdfBytes[3],
+        pdfBytes[4]
+      );
+
+
+    console.log(
+      "PDF GENERADO:",
+      cabeceraFinal,
+      pdfBytes.length
+    );
 
 
     if(
-      cabeceraFinal !==
-      "%PDF-"
+      cabeceraFinal !== "%PDF-"
     ){
 
       throw new Error(
 
-        "El archivo generado no contiene una cabecera PDF válida."
+        "El archivo generado no comienza con %PDF-. " +
+        "Cabecera: [" +
+        cabeceraFinal +
+        "]"
 
       );
 
@@ -2361,19 +2525,31 @@ async function descargarPDFCodificado(){
 
     /*
      * =================================================
-     * DESCARGA
+     * PASO 10
+     *
+     * BLOB
      * =================================================
      */
 
     const blob =
       new Blob(
-        [pdfBytes],
+        [
+          pdfBytes
+        ],
         {
           type:
             "application/pdf"
         }
       );
 
+
+    /*
+     * =================================================
+     * PASO 11
+     *
+     * DESCARGAR
+     * =================================================
+     */
 
     const url =
       URL.createObjectURL(
@@ -2390,10 +2566,8 @@ async function descargarPDFCodificado(){
     enlace.href =
       url;
 
-
     enlace.download =
       "estudio_codificado.pdf";
-
 
     enlace.style.display =
       "none";
@@ -2407,11 +2581,10 @@ async function descargarPDFCodificado(){
     enlace.click();
 
 
-    enlace.remove();
-
-
     setTimeout(
       function(){
+
+        enlace.remove();
 
         URL.revokeObjectURL(
           url
@@ -2422,22 +2595,63 @@ async function descargarPDFCodificado(){
     );
 
 
+    /*
+     * =================================================
+     * FINAL
+     * =================================================
+     */
+
     mostrarEstado(
 
-      "✅ PDF codificado generado correctamente. " +
+      "✅ PDF codificado descargado correctamente. " +
       escritos +
-      " código(s) fueron colocados en el documento.",
+      " código(s) colocados.",
 
       "success"
 
     );
 
+
   }
   catch(error){
 
     console.error(
-      "ERROR GENERANDO PDF CODIFICADO:",
+      "ERROR PDF-LIB:",
       error
+    );
+
+
+    mostrarDebug(
+
+      "ERROR GENERANDO PDF CODIFICADO\n\n" +
+
+      "Mensaje:\n" +
+      error.message +
+
+      "\n\n" +
+
+      "Archivo:\n" +
+      (
+        archivoPDF
+          ? archivoPDF.name
+          : "sin archivo"
+      ) +
+
+      "\n\n" +
+
+      "Tamaño del archivo:\n" +
+      (
+        archivoPDF
+          ? archivoPDF.size +
+            " bytes"
+          : "N/D"
+      ) +
+
+      "\n\n" +
+
+      "Prestaciones detectadas:\n" +
+      resultados.length
+
     );
 
 
@@ -2577,110 +2791,7 @@ function exportarJSON(){
 
 
 /* =====================================================
-   SELECCIONAR PDF
-===================================================== */
-
-function seleccionarPDF(
-  archivo
-){
-
-  if(!archivo){
-    return;
-  }
-
-
-  if(
-    archivo.type !==
-      "application/pdf" &&
-    !archivo.name
-      .toLowerCase()
-      .endsWith(".pdf")
-  ){
-
-    mostrarEstado(
-      "El archivo seleccionado no es un PDF.",
-      "error"
-    );
-
-    return;
-
-  }
-
-
-  archivoPDF =
-    archivo;
-
-
-  /*
-   * IMPORTANTE:
-   *
-   * Cada PDF nuevo elimina
-   * la copia anterior.
-   */
-
-  bytesPDFOriginal =
-    null;
-
-  bytesPDFTrabajo =
-    null;
-
-  paginasPDF = [];
-
-  resultados = [];
-
-
-  $("fileInfo")
-    .style.display =
-      "block";
-
-
-  $("fileInfo")
-    .innerHTML = `
-
-      <strong>Archivo:</strong>
-      ${escapeHTML(
-        archivo.name
-      )}
-
-      <br>
-
-      <strong>Tamaño:</strong>
-      ${bytesTexto(
-        archivo.size
-      )}
-
-    `;
-
-
-  $("btnProcesar")
-    .disabled = false;
-
-
-  $("btnPDF")
-    .disabled = true;
-
-
-  $("btnJSON")
-    .disabled = true;
-
-
-  $("btnImprimir")
-    .disabled = true;
-
-
-  mostrarEstado(
-
-    "PDF cargado correctamente. Presioná «Procesar estudio».",
-
-    "success"
-
-  );
-
-}
-
-
-/* =====================================================
-   INPUT
+   EVENTOS
 ===================================================== */
 
 $("pdfInput")
@@ -2696,10 +2807,6 @@ $("pdfInput")
 );
 
 
-/* =====================================================
-   ÁREA DE CARGA
-===================================================== */
-
 $("uploadArea")
 .addEventListener(
   "click",
@@ -2710,10 +2817,6 @@ $("uploadArea")
   }
 );
 
-
-/* =====================================================
-   DRAG & DROP
-===================================================== */
 
 $("uploadArea")
 .addEventListener(
@@ -2756,27 +2859,13 @@ $("uploadArea")
       .remove("dragover");
 
 
-    const archivo =
-      event
-        .dataTransfer
-        .files[0];
-
-
-    if(archivo){
-
-      seleccionarPDF(
-        archivo
-      );
-
-    }
+    seleccionarPDF(
+      event.dataTransfer.files[0]
+    );
 
   }
 );
 
-
-/* =====================================================
-   BOTONES
-===================================================== */
 
 $("btnProcesar")
 .addEventListener(
@@ -2810,63 +2899,12 @@ $("btnImprimir")
 );
 
 
-/* =====================================================
-   BUSCADOR
-===================================================== */
-
-$("buscadorResultados")
-.addEventListener(
-  "input",
-  function(){
-
-    const filtro =
-      normalizar(
-        this.value
-      );
-
-
-    document
-      .querySelectorAll(
-        "#resultadosBody tr"
-      )
-      .forEach(
-        function(fila){
-
-          const texto =
-            normalizar(
-              fila.textContent
-            );
-
-
-          fila.style.display =
-            !filtro ||
-            texto.includes(
-              filtro
-            )
-              ? ""
-              : "none";
-
-        }
-      );
-
-  }
-);
-
-
-/* =====================================================
-   LIMPIAR
-===================================================== */
-
 $("btnLimpiar")
 .addEventListener(
   "click",
   function(){
 
     archivoPDF = null;
-
-    bytesPDFOriginal = null;
-
-    bytesPDFTrabajo = null;
 
     paginasPDF = [];
 
@@ -2921,6 +2959,8 @@ $("btnLimpiar")
 
     actualizarEstadisticas();
 
+    ocultarDebug();
+
 
     mostrarEstado(
       "Listo para cargar otro estudio.",
@@ -2931,37 +2971,75 @@ $("btnLimpiar")
 );
 
 
+$("buscadorResultados")
+.addEventListener(
+  "input",
+  function(){
+
+    const filtro =
+      normalizar(
+        this.value
+      );
+
+
+    document
+      .querySelectorAll(
+        "#resultadosBody tr"
+      )
+      .forEach(
+        function(fila){
+
+          const texto =
+            normalizar(
+              fila.textContent
+            );
+
+
+          fila.style.display =
+            !filtro ||
+            texto.includes(
+              filtro
+            )
+              ? ""
+              : "none";
+
+        }
+      );
+
+  }
+);
+
+
 /* =====================================================
-   INICIAR
+   INICIO
 ===================================================== */
 
 async function iniciar(){
 
   try{
 
-    /*
-     * Verificar PDF.js
-     */
-
     $("estadoMotor")
       .textContent =
-      "Cargando PDF.js...";
+      "Cargando PDF.js y PDF-LIB...";
 
+
+    /*
+     * Verificar PDF-LIB.
+     */
 
     if(
-      !pdfjsLib ||
-      !pdfjsLib.getDocument
+      !window.PDFLib
     ){
 
       throw new Error(
-        "PDF.js no está disponible."
+        "PDF-LIB no está disponible."
       );
 
     }
 
 
     /*
-     * NOMENCLADOR
+     * Nomenclador.
      */
 
     $("estadoNomenclador")
@@ -2996,7 +3074,7 @@ async function iniciar(){
 
 
     /*
-     * EQUIVALENCIAS
+     * Equivalencias.
      */
 
     $("estadoEquivalencias")
@@ -3011,13 +3089,7 @@ async function iniciar(){
 
 
     equivalencias =
-      (
-        datosEquivalencias &&
-        typeof datosEquivalencias ===
-        "object"
-      )
-        ? datosEquivalencias
-        : {};
+      datosEquivalencias || {};
 
 
     $("estadoEquivalencias")
@@ -3035,19 +3107,18 @@ async function iniciar(){
 
 
     /*
-     * CONSTRUIR ÍNDICE
+     * Construir índice.
      */
 
     construirIndice();
 
 
     /*
-     * MOTOR LISTO
+     * Motor.
      */
 
     $("estadoMotor")
       .textContent =
-
       "✓ Sistema listo. " +
       Object.keys(
         nomenclador
@@ -3068,7 +3139,7 @@ async function iniciar(){
   catch(error){
 
     console.error(
-      "ERROR DE INICIALIZACIÓN:",
+      "ERROR INICIALIZANDO:",
       error
     );
 
