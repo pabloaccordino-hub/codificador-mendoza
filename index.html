@@ -6,6 +6,9 @@
 
 <title>Codificador de Prestaciones - Mendoza</title>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+
 <style>
 * {
     box-sizing: border-box;
@@ -84,6 +87,10 @@ button:disabled {
     color: white;
 }
 
+.btn-primary:hover {
+    background: #0e2846;
+}
+
 .btn-success {
     background: #198754;
     color: white;
@@ -94,6 +101,11 @@ button:disabled {
     color: white;
 }
 
+.btn-danger {
+    background: #dc3545;
+    color: white;
+}
+
 .estado {
     margin-top: 15px;
     padding: 12px;
@@ -101,14 +113,28 @@ button:disabled {
     background: #eef3f8;
 }
 
-.estado.error {
+.error {
     background: #f8d7da;
     color: #842029;
 }
 
-.estado.ok {
+.exito {
     background: #d1e7dd;
     color: #0f5132;
+}
+
+.info {
+    background: #cff4fc;
+    color: #055160;
+    padding: 15px;
+    border-radius: 7px;
+}
+
+.warning {
+    background: #fff3cd;
+    color: #664d03;
+    padding: 15px;
+    border-radius: 7px;
 }
 
 .progress {
@@ -144,7 +170,7 @@ th {
 }
 
 td {
-    padding: 10px;
+    padding: 11px;
     border-bottom: 1px solid #ddd;
     vertical-align: top;
 }
@@ -159,18 +185,7 @@ tr:hover {
     white-space: nowrap;
 }
 
-.ok-text {
-    color: #198754;
-    font-weight: bold;
-}
-
-.error-text {
-    color: #b02a37;
-    font-weight: bold;
-}
-
-.warning-text {
-    color: #856404;
+.detectada {
     font-weight: bold;
 }
 
@@ -218,19 +233,23 @@ tr:hover {
 
 textarea {
     width: 100%;
-    min-height: 250px;
+    min-height: 280px;
     resize: vertical;
     padding: 12px;
     border: 1px solid #ccc;
     border-radius: 7px;
     font-family: monospace;
+    font-size: 13px;
 }
 
-.info {
-    background: #cff4fc;
-    color: #055160;
+pre {
+    white-space: pre-wrap;
+    word-break: break-word;
+    background: #f5f5f5;
     padding: 15px;
     border-radius: 7px;
+    max-height: 500px;
+    overflow: auto;
 }
 
 .oculto {
@@ -242,16 +261,22 @@ textarea {
     color: #666;
 }
 
-.debug {
-    font-family: monospace;
-    font-size: 12px;
-    white-space: pre-wrap;
-    background: #111827;
-    color: #e5e7eb;
+.configuracion {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 15px;
+}
+
+.config-box {
     padding: 15px;
+    background: #f5f7fa;
     border-radius: 8px;
-    max-height: 450px;
-    overflow: auto;
+}
+
+.config-box strong {
+    display: block;
+    color: #17365d;
+    margin-bottom: 6px;
 }
 
 footer {
@@ -283,32 +308,74 @@ footer {
     }
 }
 </style>
-
-<!-- PDF.JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-
-<!-- PDF-LIB -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
-
 </head>
 
 <body>
 
 <header>
     <h1>Codificador de Prestaciones de Laboratorio</h1>
-    <p>Nomenclador de Prestaciones de Salud de Mendoza - Marzo 2026</p>
+    <p>Nomenclador de Prestaciones de Salud de Mendoza · Marzo 2026</p>
 </header>
 
 <div class="container">
 
-    <!-- ARCHIVOS -->
+    <!-- =====================================================
+         CONFIGURACIÓN
+    ====================================================== -->
+
     <div class="card">
 
-        <h2>1. Estudio médico</h2>
+        <h2>Configuración</h2>
+
+        <div class="configuracion">
+
+            <div class="config-box">
+                <strong>Nomenclador</strong>
+                <span id="estadoNomenclador">
+                    Cargando nomenclador...
+                </span>
+            </div>
+
+            <div class="config-box">
+                <strong>Equivalencias</strong>
+                <span id="estadoEquivalencias">
+                    Cargando equivalencias...
+                </span>
+            </div>
+
+            <div class="config-box">
+                <strong>Modo de detección</strong>
+                <span>
+                    Coincidencia exacta por título
+                </span>
+            </div>
+
+        </div>
+
+        <br>
+
+        <div class="info">
+            El sistema NO realiza coincidencias por palabras sueltas.
+            Busca títulos completos de prestaciones dentro del texto
+            estructurado del informe médico.
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ARCHIVOS
+    ====================================================== -->
+
+    <div class="card">
+
+        <h2>1. Seleccionar estudio médico</h2>
 
         <div class="file-area">
 
-            <strong>Seleccioná el PDF del estudio médico</strong>
+            <strong>
+                Seleccioná el PDF del estudio médico
+            </strong>
 
             <br>
 
@@ -327,56 +394,117 @@ footer {
         <div class="controles">
 
             <button
-                id="btnProcesar"
                 class="btn-primary"
+                id="btnProcesar"
                 disabled>
+
                 Procesar estudio
+
             </button>
 
             <button
-                id="btnLimpiar"
-                class="btn-secondary">
+                class="btn-secondary"
+                id="btnLimpiar">
+
                 Limpiar
+
             </button>
 
         </div>
 
-        <div id="estado" class="estado">
-            Cargando nomenclador...
+        <div
+            id="estado"
+            class="estado">
+
+            Esperando archivo...
+
         </div>
 
         <div class="progress">
-            <div id="progressBar" class="progress-bar"></div>
+
+            <div
+                id="progressBar"
+                class="progress-bar">
+            </div>
+
         </div>
 
     </div>
 
 
-    <!-- RESUMEN -->
-    <div id="cardResumen" class="card oculto">
+    <!-- =====================================================
+         CARGA MANUAL JSON
+    ====================================================== -->
 
-        <h2>Resumen</h2>
+    <div class="card">
+
+        <h2>Carga manual del nomenclador</h2>
+
+        <p class="small">
+            Esta opción sirve como respaldo si GitHub Pages bloquea
+            la carga automática de nomenclador_lab.json.
+        </p>
+
+        <input
+            type="file"
+            id="archivoNomenclador"
+            accept=".json,application/json">
+
+        <br>
+
+        <button
+            class="btn-secondary"
+            id="btnCargarJSON">
+
+            Cargar nomenclador manualmente
+
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         RESUMEN
+    ====================================================== -->
+
+    <div
+        id="cardResumen"
+        class="card oculto">
+
+        <h2>2. Resumen</h2>
 
         <div class="resumen">
 
             <div class="resumen-box">
-                <div id="totalPrestaciones" class="resumen-numero">0</div>
+                <div
+                    id="totalDetectadas"
+                    class="resumen-numero">
+                    0
+                </div>
                 <div class="resumen-titulo">
                     Prestaciones detectadas
                 </div>
             </div>
 
             <div class="resumen-box">
-                <div id="totalCodificadas" class="resumen-numero">0</div>
+                <div
+                    id="totalCodificadas"
+                    class="resumen-numero">
+                    0
+                </div>
                 <div class="resumen-titulo">
                     Codificadas
                 </div>
             </div>
 
             <div class="resumen-box">
-                <div id="totalNoCodificadas" class="resumen-numero">0</div>
+                <div
+                    id="totalNoCodificadas"
+                    class="resumen-numero">
+                    0
+                </div>
                 <div class="resumen-titulo">
-                    No codificadas
+                    Sin código
                 </div>
             </div>
 
@@ -385,28 +513,44 @@ footer {
     </div>
 
 
-    <!-- RESULTADOS -->
-    <div id="cardResultados" class="card oculto">
+    <!-- =====================================================
+         RESULTADOS
+    ====================================================== -->
 
-        <h2>2. Prestaciones detectadas</h2>
+    <div
+        id="cardResultados"
+        class="card oculto">
 
-        <p class="small">
-            La detección se realiza sobre el título de la prestación.
-            No se codifican los resultados individuales del análisis.
-        </p>
+        <h2>3. Prestaciones detectadas</h2>
 
         <div class="tabla-container">
 
             <table>
 
                 <thead>
+
                     <tr>
-                        <th>Título detectado en el PDF</th>
-                        <th>Prestación asociada</th>
-                        <th>Código</th>
-                        <th>Valor</th>
-                        <th>Estado</th>
+                        <th>
+                            Título detectado en el PDF
+                        </th>
+
+                        <th>
+                            Descripción del nomenclador
+                        </th>
+
+                        <th>
+                            Código
+                        </th>
+
+                        <th>
+                            Valor
+                        </th>
+
+                        <th>
+                            Estado
+                        </th>
                     </tr>
+
                 </thead>
 
                 <tbody id="tablaResultados"></tbody>
@@ -418,40 +562,67 @@ footer {
     </div>
 
 
-    <!-- TEXTO -->
-    <div id="cardTexto" class="card oculto">
+    <!-- =====================================================
+         TEXTO EXTRAÍDO
+    ====================================================== -->
 
-        <h2>3. Texto detectado</h2>
+    <div
+        id="cardTexto"
+        class="card oculto">
 
-        <textarea id="textoExtraido" readonly></textarea>
+        <h2>4. Texto estructurado extraído del PDF</h2>
+
+        <div class="warning">
+            Este apartado sirve para comprobar exactamente qué texto
+            está leyendo el sistema desde el PDF.
+        </div>
+
+        <br>
+
+        <textarea
+            id="textoExtraido"
+            readonly>
+        </textarea>
 
     </div>
 
 
-    <!-- DIAGNÓSTICO -->
-    <div id="cardDebug" class="card oculto">
+    <!-- =====================================================
+         ELEMENTOS DETECTADOS
+    ====================================================== -->
 
-        <h2>4. Diagnóstico de detección</h2>
+    <div
+        id="cardElementos"
+        class="card oculto">
+
+        <h2>5. Elementos de texto detectados</h2>
 
         <p class="small">
-            Esta sección muestra cómo PDF.js está interpretando el texto,
-            su tamaño y su posición dentro del documento.
+            Se muestran los elementos individuales que PDF.js encontró
+            en el documento. Esto permite verificar títulos como
+            HEMOGRAMA, GLUCOSA EN SUERO, etc.
         </p>
 
-        <div id="debugTexto" class="debug"></div>
+        <pre id="elementosPDF"></pre>
 
     </div>
 
 
-    <!-- GENERAR -->
-    <div id="cardSalida" class="card oculto">
+    <!-- =====================================================
+         GENERAR PDF
+    ====================================================== -->
 
-        <h2>5. Generar PDF codificado</h2>
+    <div
+        id="cardSalida"
+        class="card oculto">
+
+        <h2>6. Generar PDF codificado</h2>
 
         <div class="info">
 
-            El código será colocado junto al título de cada prestación
-            detectada dentro del PDF original.
+            El PDF original no se modifica en su contenido.
+            Se agrega una página final con la tabla de prestaciones
+            detectadas y sus códigos.
 
         </div>
 
@@ -460,24 +631,25 @@ footer {
         <button
             id="btnGenerar"
             class="btn-success">
+
             Generar PDF codificado
+
         </button>
 
     </div>
 
 </div>
 
-
 <footer>
-    Codificador de Prestaciones de Laboratorio
+    Codificador de Prestaciones de Laboratorio · Mendoza
 </footer>
 
 
 <script>
 
 /* ============================================================
-   CONFIGURACIÓN
-   ============================================================ */
+   PDF.JS
+============================================================ */
 
 pdfjsLib.GlobalWorkerOptions.workerSrc =
     "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
@@ -485,26 +657,25 @@ pdfjsLib.GlobalWorkerOptions.workerSrc =
 
 /* ============================================================
    VARIABLES
-   ============================================================ */
+============================================================ */
 
-let nomenclador = {};
+let nomenclador = [];
 let equivalencias = {};
-
 let archivoSeleccionado = null;
-
 let resultados = [];
-
-let paginasPDF = [];
-
-let documentoPDF = null;
+let textoPDF = "";
+let elementosPDF = [];
 
 
 /* ============================================================
-   ELEMENTOS
-   ============================================================ */
+   REFERENCIAS DOM
+============================================================ */
 
 const archivoPDF =
     document.getElementById("archivoPDF");
+
+const archivoNomenclador =
+    document.getElementById("archivoNomenclador");
 
 const btnProcesar =
     document.getElementById("btnProcesar");
@@ -512,52 +683,128 @@ const btnProcesar =
 const btnLimpiar =
     document.getElementById("btnLimpiar");
 
+const btnCargarJSON =
+    document.getElementById("btnCargarJSON");
+
 const btnGenerar =
     document.getElementById("btnGenerar");
 
 
 /* ============================================================
    NORMALIZACIÓN
-   ============================================================ */
+   IMPORTANTE:
+   No elimina palabras.
+   No busca fragmentos.
+   Solamente normaliza diferencias de PDF:
+   - mayúsculas/minúsculas
+   - acentos
+   - espacios
+   - signos exteriores
+============================================================ */
 
-function normalizarTexto(texto) {
+function normalizarExacto(texto) {
 
     if (texto === null || texto === undefined) {
         return "";
     }
 
     return String(texto)
+        .replace(/\u00A0/g, " ")
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
-        .replace(/\u00a0/g, " ")
-        .replace(/[“”"']/g, "")
+        .toUpperCase()
+        .replace(/[‐-‒–—]/g, "-")
         .replace(/\s+/g, " ")
-        .trim()
-        .toUpperCase();
+        .trim();
+
+}
+
+
+/* ============================================================
+   NORMALIZAR PARA COMPARACIÓN DE TÍTULOS
+============================================================ */
+
+function limpiarTitulo(texto) {
+
+    let resultado =
+        normalizarExacto(texto);
+
+    resultado =
+        resultado
+        .replace(/^[\s:;,.|•\-]+/, "")
+        .replace(/[\s:;,.|•\-]+$/, "")
+        .trim();
+
+    return resultado;
+
+}
+
+
+/* ============================================================
+   ESTADO
+============================================================ */
+
+function cambiarEstado(
+    mensaje,
+    tipo = ""
+) {
+
+    const elemento =
+        document.getElementById("estado");
+
+    elemento.textContent = mensaje;
+
+    elemento.className = "estado";
+
+    if (tipo === "error") {
+        elemento.classList.add("error");
+    }
+
+    if (tipo === "exito") {
+        elemento.classList.add("exito");
+    }
+
+}
+
+
+/* ============================================================
+   PROGRESO
+============================================================ */
+
+function establecerProgreso(valor) {
+
+    document
+        .getElementById("progressBar")
+        .style
+        .width =
+        Math.min(100, Math.max(0, valor)) + "%";
 
 }
 
 
 /* ============================================================
    CARGAR NOMENCLADOR
-   ============================================================ */
+============================================================ */
 
-async function cargarNomenclador() {
+async function cargarNomencladorAutomatico() {
 
     try {
 
-        cambiarEstado("Cargando nomenclador...");
+        document
+            .getElementById("estadoNomenclador")
+            .textContent =
+            "Intentando cargar nomenclador_lab.json...";
 
         const respuesta =
             await fetch(
-                "nomenclador_lab.json?v=" +
+                "./nomenclador_lab.json?cache=" +
                 Date.now()
             );
 
         if (!respuesta.ok) {
 
             throw new Error(
-                "No se pudo cargar nomenclador_lab.json"
+                "HTTP " + respuesta.status
             );
 
         }
@@ -565,132 +812,37 @@ async function cargarNomenclador() {
         const datos =
             await respuesta.json();
 
+        convertirNomenclador(datos);
 
-        /*
-         * FORMATO PRINCIPAL:
-         *
-         * {
-         *   "LAB.01.092": {
-         *      "descripcion": "...",
-         *      "valor": 4
-         *   }
-         * }
-         */
-
-        if (
-            datos &&
-            typeof datos === "object" &&
-            !Array.isArray(datos)
-        ) {
-
-            Object.keys(datos).forEach(codigo => {
-
-                const item = datos[codigo];
-
-                if (!item) {
-                    return;
-                }
-
-                const descripcion =
-                    item.descripcion ||
-                    item.nombre ||
-                    item.prestacion ||
-                    "";
-
-                nomenclador[codigo] = {
-
-                    codigo: codigo,
-
-                    descripcion: String(
-                        descripcion
-                    ).trim(),
-
-                    valor:
-                        item.valor ??
-                        item.puntos ??
-                        item.arancel ??
-                        ""
-
-                };
-
-            });
-
-        }
-
-
-        /*
-         * FORMATO ARRAY
-         */
-
-        else if (Array.isArray(datos)) {
-
-            datos.forEach(item => {
-
-                const codigo =
-                    item.codigo ||
-                    item.code ||
-                    item.codigo_prestacion;
-
-                const descripcion =
-                    item.descripcion ||
-                    item.nombre ||
-                    item.prestacion;
-
-                if (!codigo || !descripcion) {
-                    return;
-                }
-
-                nomenclador[codigo] = {
-
-                    codigo: String(codigo),
-
-                    descripcion:
-                        String(descripcion).trim(),
-
-                    valor:
-                        item.valor ??
-                        item.puntos ??
-                        item.arancel ??
-                        ""
-
-                };
-
-            });
-
-        }
-
-
-        const cantidad =
-            Object.keys(nomenclador).length;
-
-
-        if (cantidad === 0) {
-
-            throw new Error(
-                "El nomenclador está vacío o tiene un formato no reconocido."
-            );
-
-        }
-
+        document
+            .getElementById("estadoNomenclador")
+            .textContent =
+            "✓ " +
+            nomenclador.length +
+            " prestaciones cargadas automáticamente.";
 
         cambiarEstado(
-            "Nomenclador cargado correctamente: " +
-            cantidad +
-            " prestaciones."
+            "Nomenclador cargado correctamente.",
+            "exito"
         );
 
-
-        await cargarEquivalencias();
-
     }
+    catch (error) {
 
-    catch(error) {
+        console.error(
+            "Error cargando nomenclador:",
+            error
+        );
 
-        console.error(error);
+        document
+            .getElementById("estadoNomenclador")
+            .textContent =
+            "No se pudo cargar automáticamente.";
 
         cambiarEstado(
-            "ERROR: " + error.message,
-            true
+            "No se pudo cargar automáticamente el nomenclador. " +
+            "Podés seleccionarlo mediante la carga manual.",
+            "error"
         );
 
     }
@@ -699,8 +851,173 @@ async function cargarNomenclador() {
 
 
 /* ============================================================
+   CONVERTIR NOMENCLADOR
+   ACEPTA:
+
+   1)
+   {
+      "LAB.01.001": {
+         "descripcion": "...",
+         "valor": 4
+      }
+   }
+
+   2)
+   [
+      {
+         "codigo": "...",
+         "nombre": "...",
+         "valor": 4
+      }
+   ]
+
+   3)
+   {
+      "prestaciones": [...]
+   }
+============================================================ */
+
+function convertirNomenclador(datos) {
+
+    const salida = [];
+
+    if (Array.isArray(datos)) {
+
+        datos.forEach(item => {
+
+            if (!item) {
+                return;
+            }
+
+            const codigo =
+                item.codigo ||
+                item.code ||
+                item.codigo_prestacion ||
+                "";
+
+            const descripcion =
+                item.descripcion ||
+                item.nombre ||
+                item.prestacion ||
+                "";
+
+            if (codigo && descripcion) {
+
+                salida.push({
+                    codigo: String(codigo).trim(),
+                    descripcion: String(descripcion).trim(),
+                    valor:
+                        item.valor ??
+                        item.puntos ??
+                        item.arancel ??
+                        ""
+                });
+
+            }
+
+        });
+
+    }
+
+    else if (
+        datos &&
+        Array.isArray(datos.prestaciones)
+    ) {
+
+        return convertirNomenclador(
+            datos.prestaciones
+        );
+
+    }
+
+    else if (
+        datos &&
+        typeof datos === "object"
+    ) {
+
+        Object.keys(datos).forEach(codigo => {
+
+            const item = datos[codigo];
+
+            if (
+                !item ||
+                typeof item !== "object"
+            ) {
+                return;
+            }
+
+            const descripcion =
+                item.descripcion ||
+                item.nombre ||
+                item.prestacion ||
+                "";
+
+            if (!descripcion) {
+                return;
+            }
+
+            salida.push({
+
+                codigo: String(codigo).trim(),
+
+                descripcion:
+                    String(descripcion).trim(),
+
+                valor:
+                    item.valor ??
+                    item.puntos ??
+                    item.arancel ??
+                    ""
+
+            });
+
+        });
+
+    }
+
+    nomenclador = salida;
+
+    construirIndiceNomenclador();
+
+}
+
+
+/* ============================================================
+   ÍNDICE
+============================================================ */
+
+let indiceNomenclador = new Map();
+
+
+function construirIndiceNomenclador() {
+
+    indiceNomenclador =
+        new Map();
+
+    nomenclador.forEach(item => {
+
+        const clave =
+            limpiarTitulo(
+                item.descripcion
+            );
+
+        if (!clave) {
+            return;
+        }
+
+        indiceNomenclador.set(
+            clave,
+            item
+        );
+
+    });
+
+}
+
+
+/* ============================================================
    CARGAR EQUIVALENCIAS
-   ============================================================ */
+============================================================ */
 
 async function cargarEquivalencias() {
 
@@ -708,219 +1025,133 @@ async function cargarEquivalencias() {
 
         const respuesta =
             await fetch(
-                "equivalencias.json?v=" +
+                "./equivalencias.json?cache=" +
                 Date.now()
             );
 
         if (!respuesta.ok) {
-
-            console.warn(
-                "No se encontró equivalencias.json"
+            throw new Error(
+                "No existe equivalencias.json"
             );
-
-            equivalencias = {};
-
-            return;
-
         }
 
         const datos =
             await respuesta.json();
 
-        equivalencias = datos || {};
+        equivalencias =
+            datos || {};
 
-        console.log(
-            "Equivalencias cargadas:",
-            equivalencias
-        );
+        document
+            .getElementById(
+                "estadoEquivalencias"
+            )
+            .textContent =
+            "✓ Equivalencias cargadas.";
 
     }
 
-    catch(error) {
+    catch (error) {
 
         console.warn(
-            "No se pudo cargar equivalencias.json",
+            "No se cargaron equivalencias:",
             error
         );
 
         equivalencias = {};
 
+        document
+            .getElementById(
+                "estadoEquivalencias"
+            )
+            .textContent =
+            "No disponible. Se utilizará coincidencia exacta.";
+
     }
 
 }
 
 
 /* ============================================================
-   BUSCAR CÓDIGO EXACTO
-   ============================================================ */
+   CARGA MANUAL DEL NOMENCLADOR
+============================================================ */
 
-function buscarCodigoExacto(titulo) {
+btnCargarJSON.addEventListener(
+    "click",
+    async function() {
 
-    const tituloNormalizado =
-        normalizarTexto(titulo);
+        const archivo =
+            archivoNomenclador.files[0];
 
+        if (!archivo) {
 
-    if (!tituloNormalizado) {
-        return null;
-    }
+            alert(
+                "Seleccioná nomenclador_lab.json."
+            );
 
-
-    /*
-     * 1. BUSCAR EN EQUIVALENCIAS
-     */
-
-    for (
-        const clave in equivalencias
-    ) {
-
-        const valor =
-            equivalencias[clave];
-
-
-        /*
-         * FORMATO:
-         *
-         * {
-         *   "HEMOGRAMA": "LAB.01.xxx"
-         * }
-         */
-
-        if (
-            typeof valor === "string"
-        ) {
-
-            if (
-                normalizarTexto(clave) ===
-                tituloNormalizado
-            ) {
-
-                if (
-                    nomenclador[valor]
-                ) {
-
-                    return {
-                        codigo: valor,
-                        prestacion:
-                            nomenclador[valor]
-                            .descripcion,
-                        valor:
-                            nomenclador[valor]
-                            .valor
-                    };
-
-                }
-
-            }
+            return;
 
         }
 
+        try {
 
-        /*
-         * FORMATO:
-         *
-         * {
-         *   "HEMOGRAMA": {
-         *       "codigo": "LAB..."
-         *   }
-         * }
-         */
+            const texto =
+                await archivo.text();
 
-        if (
-            valor &&
-            typeof valor === "object"
-        ) {
+            const datos =
+                JSON.parse(texto);
 
-            const codigo =
-                valor.codigo ||
-                valor.code ||
-                valor.codigo_prestacion;
+            convertirNomenclador(datos);
 
-            if (
-                codigo &&
-                normalizarTexto(clave) ===
-                tituloNormalizado
-            ) {
+            document
+                .getElementById(
+                    "estadoNomenclador"
+                )
+                .textContent =
+                "✓ " +
+                nomenclador.length +
+                " prestaciones cargadas manualmente.";
 
-                if (
-                    nomenclador[codigo]
-                ) {
+            cambiarEstado(
+                "Nomenclador cargado correctamente.",
+                "exito"
+            );
 
-                    return {
-                        codigo: codigo,
-                        prestacion:
-                            nomenclador[codigo]
-                            .descripcion,
-                        valor:
-                            nomenclador[codigo]
-                            .valor
-                    };
+        }
 
-                }
+        catch (error) {
 
-            }
+            console.error(error);
+
+            cambiarEstado(
+                "ERROR en nomenclador_lab.json: " +
+                error.message,
+                "error"
+            );
 
         }
 
     }
-
-
-    /*
-     * 2. BUSCAR DIRECTAMENTE EN EL NOMENCLADOR
-     */
-
-    for (
-        const codigo in nomenclador
-    ) {
-
-        const item =
-            nomenclador[codigo];
-
-
-        if (
-            normalizarTexto(
-                item.descripcion
-            ) === tituloNormalizado
-        ) {
-
-            return {
-
-                codigo: codigo,
-
-                prestacion:
-                    item.descripcion,
-
-                valor:
-                    item.valor
-
-            };
-
-        }
-
-    }
-
-
-    return null;
-
-}
+);
 
 
 /* ============================================================
-   EVENTO PDF
-   ============================================================ */
+   SELECCIÓN PDF
+============================================================ */
 
 archivoPDF.addEventListener(
     "change",
-    function() {
+    function(event) {
 
         archivoSeleccionado =
-            this.files[0] || null;
-
+            event.target.files[0];
 
         if (!archivoSeleccionado) {
 
-            document.getElementById(
-                "nombreArchivo"
-            ).textContent =
+            document
+                .getElementById(
+                    "nombreArchivo"
+                )
+                .textContent =
                 "Ningún archivo seleccionado";
 
             btnProcesar.disabled = true;
@@ -929,15 +1160,14 @@ archivoPDF.addEventListener(
 
         }
 
-
-        document.getElementById(
-            "nombreArchivo"
-        ).textContent =
+        document
+            .getElementById(
+                "nombreArchivo"
+            )
+            .textContent =
             archivoSeleccionado.name;
 
-
         btnProcesar.disabled = false;
-
 
         cambiarEstado(
             "PDF seleccionado. Listo para procesar."
@@ -948,8 +1178,8 @@ archivoPDF.addEventListener(
 
 
 /* ============================================================
-   PROCESAR
-   ============================================================ */
+   PROCESAR PDF
+============================================================ */
 
 btnProcesar.addEventListener(
     "click",
@@ -962,16 +1192,16 @@ async function procesarPDF() {
     if (!archivoSeleccionado) {
 
         alert(
-            "Seleccioná un PDF."
+            "Seleccioná primero un PDF."
         );
 
         return;
 
     }
 
-
     if (
-        Object.keys(nomenclador).length === 0
+        !nomenclador ||
+        nomenclador.length === 0
     ) {
 
         alert(
@@ -982,101 +1212,78 @@ async function procesarPDF() {
 
     }
 
-
     try {
 
         cambiarEstado(
-            "Analizando estructura del PDF..."
+            "Leyendo estructura del PDF..."
         );
 
         establecerProgreso(5);
 
-
         const buffer =
             await archivoSeleccionado.arrayBuffer();
 
-
-        documentoPDF =
+        const pdf =
             await pdfjsLib
-            .getDocument({
-                data: buffer
-            })
-            .promise;
+                .getDocument({
+                    data: buffer
+                })
+                .promise;
 
+        textoPDF = "";
+        elementosPDF = [];
 
-        paginasPDF = [];
-
-        let textoCompleto = "";
-
-
-        /*
-         * RECORRER PÁGINAS
-         */
+        const lineasTodas = [];
 
         for (
             let numeroPagina = 1;
-            numeroPagina <=
-            documentoPDF.numPages;
+            numeroPagina <= pdf.numPages;
             numeroPagina++
         ) {
 
             const pagina =
-                await documentoPDF.getPage(
+                await pdf.getPage(
                     numeroPagina
                 );
 
-
             const contenido =
-                await pagina.getTextContent({
-                    includeMarkedContent: true
-                });
-
+                await pagina.getTextContent();
 
             const items =
                 contenido.items
                 .filter(
                     item =>
-                    item &&
-                    typeof item.str === "string" &&
-                    item.str.trim() !== ""
+                    item.str &&
+                    item.str.trim()
                 );
 
-
-            const viewport =
-                pagina.getViewport({
-                    scale: 1
-                });
-
-
-            /*
-             * AGRUPAR ELEMENTOS POR LÍNEA
-             */
-
-            const elementos =
+            const elementosPagina =
                 items.map(item => {
 
                     const transform =
-                        item.transform || [1,0,0,1,0,0];
-
+                        item.transform || [];
 
                     const x =
-                        transform[4];
-
-
-                    const y =
-                        transform[5];
-
-
-                    const fontSize =
-                        Math.sqrt(
-                            transform[0] *
-                            transform[0] +
-                            transform[1] *
-                            transform[1]
+                        Number(
+                            transform[4] || 0
                         );
 
+                    const y =
+                        Number(
+                            transform[5] || 0
+                        );
+
+                    const fontSize =
+                        Math.abs(
+                            Number(
+                                transform[0] || 0
+                            )
+                        ) || 0;
 
                     return {
+
+                        pagina:
+                            numeroPagina,
 
                         texto:
                             item.str.trim(),
@@ -1085,142 +1292,102 @@ async function procesarPDF() {
 
                         y: y,
 
-                        width:
-                            item.width || 0,
-
-                        height:
-                            item.height ||
-                            fontSize,
-
                         fontSize:
                             fontSize,
 
-                        pageWidth:
-                            viewport.width,
-
-                        pageHeight:
-                            viewport.height
+                        fontName:
+                            item.fontName || ""
 
                     };
 
                 });
 
-
-            const lineas =
-                agruparLineas(
-                    elementos
-                );
-
-
-            paginasPDF.push({
-
-                numero:
-                    numeroPagina,
-
-                width:
-                    viewport.width,
-
-                height:
-                    viewport.height,
-
-                elementos:
-                    elementos,
-
-                lineas:
-                    lineas
-
-            });
-
-
-            lineas.forEach(
-                linea => {
-
-                    textoCompleto +=
-                        linea.texto +
-                        "\n";
-
-                }
+            elementosPDF.push(
+                ...elementosPagina
             );
 
+            const lineas =
+                reconstruirLineas(
+                    elementosPagina
+                );
+
+            lineasTodas.push(
+                ...lineas
+            );
+
+            textoPDF +=
+                lineas
+                .map(linea => linea.texto)
+                .join("\n");
+
+            textoPDF += "\n";
 
             establecerProgreso(
-                5 +
+                10 +
                 (
                     numeroPagina /
-                    documentoPDF.numPages
-                ) * 45
+                    pdf.numPages
+                ) * 50
             );
 
         }
 
+        document
+            .getElementById(
+                "textoExtraido"
+            )
+            .value =
+            textoPDF;
 
-        document.getElementById(
-            "textoExtraido"
-        ).value =
-            textoCompleto;
-
+        mostrarElementosPDF();
 
         cambiarEstado(
-            "Estructura analizada. Detectando títulos exactos..."
+            "PDF leído. Analizando títulos de prestaciones..."
         );
 
+        establecerProgreso(70);
 
         resultados =
-            detectarPrestaciones();
-
+            detectarPrestacionesExactas(
+                lineasTodas
+            );
 
         mostrarResultados(
             resultados
         );
 
-
-        mostrarDiagnostico();
-
-
-        document.getElementById(
-            "cardResumen"
-        ).classList.remove("oculto");
-
-
-        document.getElementById(
-            "cardResultados"
-        ).classList.remove("oculto");
-
-
-        document.getElementById(
-            "cardTexto"
-        ).classList.remove("oculto");
-
-
-        document.getElementById(
-            "cardDebug"
-        ).classList.remove("oculto");
-
-
-        document.getElementById(
-            "cardSalida"
-        ).classList.remove("oculto");
-
+        mostrarCards();
 
         establecerProgreso(100);
 
+        if (resultados.length > 0) {
 
-        cambiarEstado(
-            "Procesamiento terminado.",
-            false,
-            true
-        );
+            cambiarEstado(
+                "Proceso terminado. Se detectaron " +
+                resultados.length +
+                " prestación(es).",
+                "exito"
+            );
+
+        }
+        else {
+
+            cambiarEstado(
+                "No se encontraron títulos exactos de prestaciones.",
+                "error"
+            );
+
+        }
 
     }
-
     catch(error) {
 
         console.error(error);
 
         cambiarEstado(
-            "ERROR AL PROCESAR PDF: " +
+            "Error al procesar el PDF: " +
             error.message,
-            true
+            "error"
         );
 
     }
@@ -1229,25 +1396,50 @@ async function procesarPDF() {
 
 
 /* ============================================================
-   AGRUPAR TEXTO EN LÍNEAS
-   ============================================================ */
+   RECONSTRUIR LÍNEAS DEL PDF
 
-function agruparLineas(elementos) {
+   Agrupa elementos que tienen aproximadamente la misma
+   coordenada Y.
 
-    const tolerancia = 4;
+   Esto es importante porque un PDF puede almacenar:
 
-    const lineas = [];
+   "HEMO"
+   "GRAMA"
 
+   como dos elementos diferentes aunque visualmente aparezca:
 
-    elementos
-    .slice()
-    .sort(
-        (a,b) => {
+   HEMOGRAMA
+============================================================ */
+
+function reconstruirLineas(items) {
+
+    if (!items.length) {
+        return [];
+    }
+
+    const toleranciaY = 3;
+
+    const grupos = [];
+
+    const ordenados =
+        [...items].sort((a, b) => {
+
+            if (
+                a.pagina !==
+                b.pagina
+            ) {
+
+                return (
+                    a.pagina -
+                    b.pagina
+                );
+
+            }
 
             if (
                 Math.abs(
                     a.y - b.y
-                ) > tolerancia
+                ) > toleranciaY
             ) {
 
                 return b.y - a.y;
@@ -1256,26 +1448,26 @@ function agruparLineas(elementos) {
 
             return a.x - b.x;
 
-        }
-    )
-    .forEach(elemento => {
+        });
 
-        let lineaEncontrada = null;
+    ordenados.forEach(item => {
 
+        let grupoEncontrado = null;
 
         for (
-            const linea of lineas
+            const grupo of grupos
         ) {
 
             if (
+                grupo.pagina === item.pagina &&
                 Math.abs(
-                    linea.y -
-                    elemento.y
-                ) <= tolerancia
+                    grupo.y -
+                    item.y
+                ) <= toleranciaY
             ) {
 
-                lineaEncontrada =
-                    linea;
+                grupoEncontrado =
+                    grupo;
 
                 break;
 
@@ -1283,198 +1475,395 @@ function agruparLineas(elementos) {
 
         }
 
+        if (!grupoEncontrado) {
 
-        if (!lineaEncontrada) {
+            grupoEncontrado = {
 
-            lineaEncontrada = {
+                pagina:
+                    item.pagina,
 
                 y:
-                    elemento.y,
+                    item.y,
 
-                elementos: [],
-
-                texto: "",
-
-                fontSize:
-                    elemento.fontSize,
-
-                x:
-                    elemento.x
+                items: []
 
             };
 
-
-            lineas.push(
-                lineaEncontrada
+            grupos.push(
+                grupoEncontrado
             );
 
         }
 
-
-        lineaEncontrada
-        .elementos
-        .push(elemento);
-
-    });
-
-
-    lineas.forEach(linea => {
-
-        linea.elementos.sort(
-            (a,b) =>
-                a.x - b.x
+        grupoEncontrado.items.push(
+            item
         );
 
-
-        linea.texto =
-            linea.elementos
-            .map(
-                elemento =>
-                    elemento.texto
-            )
-            .join(" ")
-            .replace(
-                /\s+/g,
-                " "
-            )
-            .trim();
-
-
-        /*
-         * TAMAÑO DE FUENTE DOMINANTE
-         */
-
-        if (
-            linea.elementos.length > 0
-        ) {
-
-            const suma =
-                linea.elementos
-                .reduce(
-                    (
-                        total,
-                        elemento
-                    ) =>
-                        total +
-                        elemento.fontSize,
-                    0
-                );
-
-
-            linea.fontSize =
-                suma /
-                linea.elementos.length;
-
-        }
-
     });
 
 
-    return lineas;
+    return grupos
+        .sort((a, b) => {
+
+            if (
+                a.pagina !==
+                b.pagina
+            ) {
+
+                return (
+                    a.pagina -
+                    b.pagina
+                );
+
+            }
+
+            return b.y - a.y;
+
+        })
+        .map(grupo => {
+
+            grupo.items.sort(
+                (a, b) =>
+                a.x - b.x
+            );
+
+            let texto = "";
+
+            let ultimoX = null;
+
+            grupo.items.forEach(
+                item => {
+
+                    if (
+                        ultimoX !== null &&
+                        item.x -
+                        ultimoX > 5
+                    ) {
+
+                        texto += " ";
+
+                    }
+
+                    texto +=
+                        item.texto;
+
+                    ultimoX =
+                        item.x +
+                        estimarAncho(
+                            item
+                        );
+
+                }
+            );
+
+            const tamanos =
+                grupo.items
+                .map(
+                    item =>
+                    item.fontSize
+                )
+                .filter(
+                    n =>
+                    Number.isFinite(n) &&
+                    n > 0
+                );
+
+            const fontSize =
+                tamanos.length
+                ? Math.max(...tamanos)
+                : 0;
+
+            return {
+
+                pagina:
+                    grupo.pagina,
+
+                y:
+                    grupo.y,
+
+                texto:
+                    texto
+                    .replace(
+                        /\s+/g,
+                        " "
+                    )
+                    .trim(),
+
+                fontSize:
+                    fontSize,
+
+                items:
+                    grupo.items
+
+            };
+
+        })
+        .filter(
+            linea =>
+            linea.texto.length > 0
+        );
 
 }
 
 
 /* ============================================================
-   DETECTAR PRESTACIONES
-   ============================================================ */
+   ESTIMAR ANCHO
+============================================================ */
 
-function detectarPrestaciones() {
+function estimarAncho(item) {
+
+    const texto =
+        item.texto || "";
+
+    const tam =
+        item.fontSize || 8;
+
+    return (
+        texto.length *
+        tam *
+        0.5
+    );
+
+}
+
+
+/* ============================================================
+   DETECCIÓN EXACTA
+
+   NO SE HACE:
+
+       includes("glucosa")
+
+   NO SE HACE:
+
+       porcentaje de palabras
+
+   NO SE HACE:
+
+       coincidencia aproximada
+
+   Se compara:
+
+       TÍTULO COMPLETO
+
+   contra:
+
+       DESCRIPCIÓN COMPLETA
+============================================================ */
+
+function detectarPrestacionesExactas(
+    lineas
+) {
 
     const encontrados = [];
 
-
-    paginasPDF.forEach(
-        pagina => {
-
-            pagina.lineas.forEach(
-                (linea, indice) => {
-
-                    const titulo =
-                        linea.texto;
+    const vistos =
+        new Set();
 
 
-                    /*
-                     * IMPORTANTE:
-                     *
-                     * SOLAMENTE SE HACE
-                     * COINCIDENCIA EXACTA.
-                     */
+    /* --------------------------------------------------------
+       PREPARAR DESCRIPCIONES
+    -------------------------------------------------------- */
 
-                    const coincidencia =
-                        buscarCodigoExacto(
-                            titulo
-                        );
+    const candidatos =
+        nomenclador
+        .map(item => {
 
+            const descripcion =
+                limpiarTitulo(
+                    item.descripcion
+                );
 
-                    if (!coincidencia) {
-                        return;
-                    }
+            return {
 
+                ...item,
 
-                    /*
-                     * EVITAR DUPLICADOS
-                     */
+                clave:
+                    descripcion
 
-                    const yaExiste =
-                        encontrados.some(
-                            item =>
-                                item.pagina ===
-                                pagina.numero &&
-                                item.codigo ===
-                                coincidencia.codigo &&
-                                Math.abs(
-                                    item.y -
-                                    linea.y
-                                ) < 3
-                        );
+            };
+
+        })
+        .filter(
+            item =>
+            item.clave
+        );
 
 
-                    if (yaExiste) {
-                        return;
-                    }
+    /* --------------------------------------------------------
+       ORDENAR POR LONGITUD DESCENDENTE
+
+       Esto evita que una descripción corta se interponga
+       delante de una más larga.
+    -------------------------------------------------------- */
+
+    candidatos.sort(
+        (a, b) =>
+        b.clave.length -
+        a.clave.length
+    );
 
 
-                    /*
-                     * GUARDAR POSICIÓN
-                     */
+    /* --------------------------------------------------------
+       RECORRER CADA LÍNEA
+    -------------------------------------------------------- */
+
+    lineas.forEach(linea => {
+
+        const textoLinea =
+            limpiarTitulo(
+                linea.texto
+            );
+
+        if (!textoLinea) {
+            return;
+        }
+
+
+        /* ----------------------------------------------------
+           1. COINCIDENCIA EXACTA DEL TÍTULO COMPLETO
+        ---------------------------------------------------- */
+
+        for (
+            const prestacion of candidatos
+        ) {
+
+            if (
+                textoLinea ===
+                prestacion.clave
+            ) {
+
+                const claveUnica =
+                    prestacion.codigo +
+                    "|" +
+                    linea.pagina +
+                    "|" +
+                    Math.round(
+                        linea.y
+                    );
+
+                if (
+                    !vistos.has(
+                        claveUnica
+                    )
+                ) {
+
+                    vistos.add(
+                        claveUnica
+                    );
 
                     encontrados.push({
 
                         pagina:
-                            pagina.numero,
-
-                        tituloPDF:
-                            titulo,
-
-                        prestacion:
-                            coincidencia.prestacion,
-
-                        codigo:
-                            coincidencia.codigo,
-
-                        valor:
-                            coincidencia.valor,
-
-                        x:
-                            linea.x,
+                            linea.pagina,
 
                         y:
                             linea.y,
 
-                        fontSize:
-                            linea.fontSize,
+                        tituloPDF:
+                            linea.texto,
 
-                        indiceLinea:
-                            indice
+                        codigo:
+                            prestacion.codigo,
+
+                        descripcion:
+                            prestacion.descripcion,
+
+                        valor:
+                            prestacion.valor,
+
+                        tipo:
+                            "Coincidencia exacta"
 
                     });
 
                 }
-            );
+
+                return;
+
+            }
 
         }
-    );
+
+
+        /* ----------------------------------------------------
+           2. EQUIVALENCIAS
+
+           Solamente si equivalencias.json define explícitamente
+           una equivalencia.
+
+           NO se generan equivalencias automáticamente.
+        ---------------------------------------------------- */
+
+        const equivalente =
+            buscarEquivalenciaExacta(
+                textoLinea
+            );
+
+        if (
+            equivalente
+        ) {
+
+            const prestacion =
+                indiceNomenclador.get(
+                    limpiarTitulo(
+                        equivalente
+                    )
+                );
+
+            if (prestacion) {
+
+                const claveUnica =
+                    prestacion.codigo +
+                    "|" +
+                    linea.pagina +
+                    "|" +
+                    Math.round(
+                        linea.y
+                    );
+
+                if (
+                    !vistos.has(
+                        claveUnica
+                    )
+                ) {
+
+                    vistos.add(
+                        claveUnica
+                    );
+
+                    encontrados.push({
+
+                        pagina:
+                            linea.pagina,
+
+                        y:
+                            linea.y,
+
+                        tituloPDF:
+                            linea.texto,
+
+                        codigo:
+                            prestacion.codigo,
+
+                        descripcion:
+                            prestacion.descripcion,
+
+                        valor:
+                            prestacion.valor,
+
+                        tipo:
+                            "Equivalencia autorizada"
+
+                    });
+
+                }
+
+            }
+
+        }
+
+    });
 
 
     return encontrados;
@@ -1483,8 +1872,88 @@ function detectarPrestaciones() {
 
 
 /* ============================================================
+   BUSCAR EQUIVALENCIA EXACTA
+============================================================ */
+
+function buscarEquivalenciaExacta(
+    texto
+) {
+
+    const clave =
+        limpiarTitulo(texto);
+
+
+    if (!clave) {
+        return null;
+    }
+
+
+    /* --------------------------------------------------------
+       FORMATO POSIBLE:
+
+       {
+         "GLUCOSA EN SUERO": "GLUCEMIA"
+       }
+    -------------------------------------------------------- */
+
+    if (
+        equivalencias &&
+        typeof equivalencias === "object"
+    ) {
+
+        for (
+            const origen of Object.keys(
+                equivalencias
+            )
+        ) {
+
+            if (
+                limpiarTitulo(origen) ===
+                clave
+            ) {
+
+                const destino =
+                    equivalencias[
+                        origen
+                    ];
+
+                if (
+                    typeof destino ===
+                    "string"
+                ) {
+
+                    return destino;
+
+                }
+
+                if (
+                    destino &&
+                    typeof destino ===
+                    "object"
+                ) {
+
+                    return (
+                        destino.descripcion ||
+                        destino.nombre ||
+                        null
+                    );
+
+                }
+
+            }
+
+        }
+
+    }
+
+    return null;
+
+}
+
+
+/* ============================================================
    MOSTRAR RESULTADOS
-   ============================================================ */
+============================================================ */
 
 function mostrarResultados(lista) {
 
@@ -1493,22 +1962,23 @@ function mostrarResultados(lista) {
             "tablaResultados"
         );
 
-
     tabla.innerHTML = "";
 
 
-    if (
-        lista.length === 0
-    ) {
+    if (!lista.length) {
 
         tabla.innerHTML = `
             <tr>
                 <td colspan="5"
                     style="text-align:center;padding:30px">
 
-                    No se encontraron títulos
-                    que coincidan exactamente
-                    con una prestación del nomenclador.
+                    No se encontraron coincidencias exactas.
+
+                    <br><br>
+
+                    <span class="small">
+                    El sistema no realiza coincidencias parciales.
+                    </span>
 
                 </td>
             </tr>
@@ -1525,17 +1995,15 @@ function mostrarResultados(lista) {
 
         fila.innerHTML = `
 
-            <td>
-                <strong>
-                    ${escapeHTML(
-                        item.tituloPDF
-                    )}
-                </strong>
+            <td class="detectada">
+                ${escapeHTML(
+                    item.tituloPDF
+                )}
             </td>
 
             <td>
                 ${escapeHTML(
-                    item.prestacion
+                    item.descripcion
                 )}
             </td>
 
@@ -1555,589 +2023,111 @@ function mostrarResultados(lista) {
 
             <td>
                 <span class="badge">
-                    CODIFICADA
+                    ${escapeHTML(
+                        item.tipo
+                    )}
                 </span>
             </td>
 
         `;
-
 
         tabla.appendChild(fila);
 
     });
 
 
-    const total =
+    document
+        .getElementById(
+            "totalDetectadas"
+        )
+        .textContent =
         lista.length;
 
-
-    const codificadas =
+    document
+        .getElementById(
+            "totalCodificadas"
+        )
+        .textContent =
         lista.filter(
             item =>
-                item.codigo
+            item.codigo
         ).length;
 
-
-    document.getElementById(
-        "totalPrestaciones"
-    ).textContent =
-        total;
-
-
-    document.getElementById(
-        "totalCodificadas"
-    ).textContent =
-        codificadas;
-
-
-    document.getElementById(
-        "totalNoCodificadas"
-    ).textContent =
-        0;
+    document
+        .getElementById(
+            "totalNoCodificadas"
+        )
+        .textContent =
+        lista.filter(
+            item =>
+            !item.codigo
+        ).length;
 
 }
 
 
 /* ============================================================
-   DIAGNÓSTICO
-   ============================================================ */
+   MOSTRAR ELEMENTOS PDF
+============================================================ */
 
-function mostrarDiagnostico() {
+function mostrarElementosPDF() {
 
-    let salida = "";
+    const salida =
+        elementosPDF
+        .map(item => {
 
-
-    paginasPDF.forEach(
-        pagina => {
-
-            salida +=
-                "\n====================================\n";
-
-            salida +=
+            return (
                 "PÁGINA " +
-                pagina.numero +
-                "\n";
-
-            salida +=
-                "====================================\n\n";
-
-
-            pagina.lineas.forEach(
-                (linea, indice) => {
-
-                    const coincidencia =
-                        buscarCodigoExacto(
-                            linea.texto
-                        );
-
-
-                    salida +=
-                        "[" +
-                        indice +
-                        "] ";
-
-
-                    salida +=
-                        "Y=" +
-                        linea.y.toFixed(1) +
-                        " ";
-
-
-                    salida +=
-                        "FONT=" +
-                        linea.fontSize.toFixed(1) +
-                        " ";
-
-
-                    if (coincidencia) {
-
-                        salida +=
-                            ">>> PRESTACIÓN <<< ";
-
-                    }
-
-
-                    salida +=
-                        linea.texto;
-
-
-                    if (coincidencia) {
-
-                        salida +=
-                            "  =>  " +
-                            coincidencia.codigo;
-
-                    }
-
-
-                    salida += "\n";
-
-                }
+                item.pagina +
+                " | Y=" +
+                item.y.toFixed(1) +
+                " | FONT=" +
+                item.fontSize.toFixed(1) +
+                " | " +
+                item.texto
             );
 
-        }
-    );
+        })
+        .join("\n");
 
-
-    document.getElementById(
-        "debugTexto"
-    ).textContent =
+    document
+        .getElementById(
+            "elementosPDF"
+        )
+        .textContent =
         salida;
 
 }
 
 
 /* ============================================================
-   GENERAR PDF
-   ============================================================ */
+   MOSTRAR CARDS
+============================================================ */
 
-btnGenerar.addEventListener(
-    "click",
-    generarPDF
-);
+function mostrarCards() {
 
+    [
+        "cardResumen",
+        "cardResultados",
+        "cardTexto",
+        "cardElementos",
+        "cardSalida"
 
-async function generarPDF() {
+    ].forEach(id => {
 
-    if (!archivoSeleccionado) {
+        document
+            .getElementById(id)
+            .classList
+            .remove("oculto");
 
-        alert(
-            "No hay un PDF seleccionado."
-        );
-
-        return;
-
-    }
-
-
-    if (
-        resultados.length === 0
-    ) {
-
-        alert(
-            "No hay prestaciones codificadas."
-        );
-
-        return;
-
-    }
-
-
-    try {
-
-        cambiarEstado(
-            "Generando PDF codificado..."
-        );
-
-
-        const buffer =
-            await archivoSeleccionado
-            .arrayBuffer();
-
-
-        const pdfDoc =
-            await PDFLib.PDFDocument
-            .load(buffer);
-
-
-        const paginas =
-            pdfDoc.getPages();
-
-
-        const fuente =
-            await pdfDoc.embedFont(
-                PDFLib.StandardFonts.HelveticaBold
-            );
-
-
-        /*
-         * AGRUPAR RESULTADOS POR PÁGINA
-         */
-
-        resultados.forEach(
-            item => {
-
-                const pagina =
-                    paginas[
-                        item.pagina - 1
-                    ];
-
-
-                if (!pagina) {
-                    return;
-                }
-
-
-                const anchoPagina =
-                    pagina.getWidth();
-
-
-                const altoPagina =
-                    pagina.getHeight();
-
-
-                /*
-                 * PDF.JS:
-                 *
-                 * Y = desde abajo
-                 *
-                 * PDF-LIB:
-                 *
-                 * Y = desde abajo
-                 *
-                 * Por lo tanto utilizamos
-                 * directamente la coordenada.
-                 */
-
-
-                const textoCodigo =
-                    "[" +
-                    item.codigo +
-                    "]";
-
-
-                /*
-                 * Tamaño proporcional
-                 * al título.
-                 */
-
-                const tamano =
-                    Math.max(
-                        7,
-                        Math.min(
-                            11,
-                            item.fontSize * 0.80
-                        )
-                    );
-
-
-                /*
-                 * Ubicación:
-                 *
-                 * al lado derecho
-                 * del título.
-                 */
-
-                const tituloWidth =
-                    fuente.widthOfTextAtSize(
-                        item.tituloPDF,
-                        tamano
-                    );
-
-
-                let x =
-                    item.x +
-                    tituloWidth +
-                    12;
-
-
-                /*
-                 * Evitar que salga
-                 * de la página.
-                 */
-
-                const anchoCodigo =
-                    fuente.widthOfTextAtSize(
-                        textoCodigo,
-                        tamano
-                    );
-
-
-                if (
-                    x + anchoCodigo >
-                    anchoPagina - 10
-                ) {
-
-                    x =
-                        Math.max(
-                            10,
-                            anchoPagina -
-                            anchoCodigo -
-                            10
-                        );
-
-                }
-
-
-                let y =
-                    item.y -
-                    tamano;
-
-
-                if (
-                    y < 5
-                ) {
-
-                    y = 5;
-
-                }
-
-
-                /*
-                 * Fondo blanco pequeño
-                 * detrás del código para
-                 * facilitar su lectura.
-                 */
-
-                pagina.drawRectangle({
-
-                    x:
-                        x - 3,
-
-                    y:
-                        y - 2,
-
-                    width:
-                        anchoCodigo + 6,
-
-                    height:
-                        tamano + 5,
-
-                    color:
-                        PDFLib.rgb(
-                            1,
-                            1,
-                            1
-                        )
-
-                });
-
-
-                pagina.drawText(
-                    textoCodigo,
-                    {
-
-                        x:
-                            x,
-
-                        y:
-                            y,
-
-                        size:
-                            tamano,
-
-                        font:
-                            fuente,
-
-                        color:
-                            PDFLib.rgb(
-                                0.05,
-                                0.20,
-                                0.40
-                            )
-
-                    }
-                );
-
-            }
-        );
-
-
-        /*
-         * PÁGINA RESUMEN
-         */
-
-        const paginaResumen =
-            pdfDoc.addPage();
-
-
-        const ancho =
-            paginaResumen.getWidth();
-
-
-        const alto =
-            paginaResumen.getHeight();
-
-
-        const titulo =
-            "CODIFICACIÓN DE PRESTACIONES";
-
-
-        paginaResumen.drawText(
-            titulo,
-            {
-
-                x: 40,
-
-                y:
-                    alto - 50,
-
-                size: 18,
-
-                font: fuente
-
-            }
-        );
-
-
-        let y =
-            alto - 85;
-
-
-        resultados.forEach(
-            item => {
-
-                const linea =
-                    item.codigo +
-                    "  |  " +
-                    item.tituloPDF;
-
-
-                paginaResumen.drawText(
-                    linea.substring(
-                        0,
-                        115
-                    ),
-                    {
-
-                        x: 40,
-
-                        y: y,
-
-                        size: 9,
-
-                        font: fuente
-
-                    }
-                );
-
-
-                y -= 18;
-
-
-                if (
-                    y < 50
-                ) {
-
-                    return;
-
-                }
-
-            }
-        );
-
-
-        /*
-         * GUARDAR
-         */
-
-        const pdfFinal =
-            await pdfDoc.save();
-
-
-        const blob =
-            new Blob(
-                [pdfFinal],
-                {
-                    type:
-                        "application/pdf"
-                }
-            );
-
-
-        const url =
-            URL.createObjectURL(
-                blob
-            );
-
-
-        const enlace =
-            document.createElement(
-                "a"
-            );
-
-
-        enlace.href =
-            url;
-
-
-        enlace.download =
-            obtenerNombreSalida(
-                archivoSeleccionado.name
-            );
-
-
-        document.body.appendChild(
-            enlace
-        );
-
-
-        enlace.click();
-
-
-        enlace.remove();
-
-
-        setTimeout(
-            () =>
-                URL.revokeObjectURL(
-                    url
-                ),
-            1000
-        );
-
-
-        cambiarEstado(
-            "PDF codificado generado correctamente.",
-            false,
-            true
-        );
-
-    }
-
-    catch(error) {
-
-        console.error(error);
-
-        cambiarEstado(
-            "ERROR AL GENERAR PDF: " +
-            error.message,
-            true
-        );
-
-    }
+    });
 
 }
 
 
 /* ============================================================
-   NOMBRE SALIDA
-   ============================================================ */
-
-function obtenerNombreSalida(
-    nombre
-) {
-
-    const punto =
-        nombre.lastIndexOf(".");
-
-
-    if (
-        punto === -1
-    ) {
-
-        return (
-            nombre +
-            "_codificado.pdf"
-        );
-
-    }
-
-
-    return (
-        nombre.substring(
-            0,
-            punto
-        ) +
-        "_codificado.pdf"
-    );
-
-}
-
-
-/* ============================================================
-   ESCAPE HTML
-   ============================================================ */
+   ESCAPAR HTML
+============================================================ */
 
 function escapeHTML(texto) {
 
@@ -2172,40 +2162,225 @@ function escapeHTML(texto) {
 
 
 /* ============================================================
-   ESTADO
-   ============================================================ */
+   GENERAR PDF
+============================================================ */
 
-function cambiarEstado(
-    mensaje,
-    esError = false,
-    esCorrecto = false
-) {
+btnGenerar.addEventListener(
+    "click",
+    generarPDF
+);
 
-    const estado =
-        document.getElementById(
-            "estado"
+
+async function generarPDF() {
+
+    if (!archivoSeleccionado) {
+
+        alert(
+            "No hay PDF seleccionado."
+        );
+
+        return;
+
+    }
+
+    if (!resultados.length) {
+
+        alert(
+            "No hay prestaciones codificadas."
+        );
+
+        return;
+
+    }
+
+    try {
+
+        cambiarEstado(
+            "Generando PDF codificado..."
+        );
+
+        const buffer =
+            await archivoSeleccionado
+            .arrayBuffer();
+
+        const pdfDoc =
+            await PDFLib
+            .PDFDocument
+            .load(buffer);
+
+        const fuente =
+            await pdfDoc.embedFont(
+                PDFLib
+                .StandardFonts
+                .Helvetica
+            );
+
+
+        /* ====================================================
+           AGREGAR UNA PÁGINA FINAL
+
+           NO SE TAPA NI SE MODIFICA EL PDF ORIGINAL.
+        ==================================================== */
+
+        let pagina =
+            pdfDoc.addPage();
+
+        let ancho =
+            pagina.getWidth();
+
+        let alto =
+            pagina.getHeight();
+
+        let y =
+            alto - 50;
+
+
+        pagina.drawText(
+            "CODIFICACION DE PRESTACIONES",
+            {
+                x: 40,
+                y: y,
+                size: 17,
+                font: fuente
+            }
+        );
+
+        y -= 35;
+
+
+        pagina.drawText(
+            "Nomenclador de Prestaciones de Salud de Mendoza - Marzo 2026",
+            {
+                x: 40,
+                y: y,
+                size: 9,
+                font: fuente
+            }
+        );
+
+        y -= 30;
+
+
+        resultados.forEach(
+            item => {
+
+                const linea =
+                    item.codigo +
+                    " | " +
+                    item.descripcion;
+
+
+                const lineas =
+                    dividirTexto(
+                        linea,
+                        95
+                    );
+
+
+                lineas.forEach(
+                    texto => {
+
+                        if (
+                            y < 50
+                        ) {
+
+                            pagina =
+                                pdfDoc.addPage();
+
+                            ancho =
+                                pagina.getWidth();
+
+                            alto =
+                                pagina.getHeight();
+
+                            y =
+                                alto - 50;
+
+                        }
+
+
+                        pagina.drawText(
+                            texto,
+                            {
+                                x: 40,
+                                y: y,
+                                size: 9,
+                                font: fuente
+                            }
+                        );
+
+                        y -= 16;
+
+                    }
+                );
+
+            }
         );
 
 
-    estado.textContent =
-        mensaje;
+        /* ====================================================
+           GUARDAR
+        ==================================================== */
+
+        const pdfFinal =
+            await pdfDoc.save();
+
+        const blob =
+            new Blob(
+                [pdfFinal],
+                {
+                    type:
+                        "application/pdf"
+                }
+            );
+
+        const url =
+            URL.createObjectURL(
+                blob
+            );
+
+        const enlace =
+            document.createElement(
+                "a"
+            );
+
+        enlace.href = url;
+
+        enlace.download =
+            obtenerNombreSalida(
+                archivoSeleccionado.name
+            );
+
+        document
+            .body
+            .appendChild(
+                enlace
+            );
+
+        enlace.click();
+
+        enlace.remove();
+
+        URL.revokeObjectURL(
+            url
+        );
 
 
-    estado.className =
-        "estado";
-
-
-    if (esError) {
-
-        estado.classList.add(
-            "error"
+        cambiarEstado(
+            "PDF codificado generado correctamente.",
+            "exito"
         );
 
     }
-    else if (esCorrecto) {
 
-        estado.classList.add(
-            "ok"
+    catch(error) {
+
+        console.error(error);
+
+        cambiarEstado(
+            "Error al generar PDF: " +
+            error.message,
+            "error"
         );
 
     }
@@ -2214,30 +2389,101 @@ function cambiarEstado(
 
 
 /* ============================================================
-   PROGRESO
-   ============================================================ */
+   DIVIDIR TEXTO
+============================================================ */
 
-function establecerProgreso(
-    porcentaje
+function dividirTexto(
+    texto,
+    maxCaracteres
 ) {
 
-    document.getElementById(
-        "progressBar"
-    ).style.width =
-        Math.min(
-            100,
-            Math.max(
-                0,
-                porcentaje
-            )
-        ) + "%";
+    const palabras =
+        texto.split(" ");
+
+    const resultado = [];
+
+    let actual = "";
+
+    palabras.forEach(
+        palabra => {
+
+            const posible =
+                actual
+                ? actual + " " + palabra
+                : palabra;
+
+            if (
+                posible.length >
+                maxCaracteres
+            ) {
+
+                if (actual) {
+                    resultado.push(
+                        actual
+                    );
+                }
+
+                actual =
+                    palabra;
+
+            }
+            else {
+
+                actual =
+                    posible;
+
+            }
+
+        }
+    );
+
+    if (actual) {
+        resultado.push(
+            actual
+        );
+    }
+
+    return resultado;
+
+}
+
+
+/* ============================================================
+   NOMBRE DE SALIDA
+============================================================ */
+
+function obtenerNombreSalida(
+    nombre
+) {
+
+    const punto =
+        nombre.lastIndexOf(".");
+
+
+    if (punto === -1) {
+
+        return (
+            nombre +
+            "_codificado.pdf"
+        );
+
+    }
+
+
+    return (
+        nombre.substring(
+            0,
+            punto
+        ) +
+        "_codificado.pdf"
+    );
 
 }
 
 
 /* ============================================================
    LIMPIAR
-   ============================================================ */
+============================================================ */
 
 btnLimpiar.addEventListener(
     "click",
@@ -2252,18 +2498,19 @@ function limpiarTodo() {
 
     resultados = [];
 
-    paginasPDF = [];
+    textoPDF = "";
 
-    documentoPDF = null;
-
-
-    archivoPDF.value =
-        "";
+    elementosPDF = [];
 
 
-    document.getElementById(
-        "nombreArchivo"
-    ).textContent =
+    archivoPDF.value = "";
+
+
+    document
+        .getElementById(
+            "nombreArchivo"
+        )
+        .textContent =
         "Ningún archivo seleccionado";
 
 
@@ -2271,21 +2518,27 @@ function limpiarTodo() {
         true;
 
 
-    document.getElementById(
-        "tablaResultados"
-    ).innerHTML =
+    document
+        .getElementById(
+            "tablaResultados"
+        )
+        .innerHTML =
         "";
 
 
-    document.getElementById(
-        "textoExtraido"
-    ).value =
+    document
+        .getElementById(
+            "textoExtraido"
+        )
+        .value =
         "";
 
 
-    document.getElementById(
-        "debugTexto"
-    ).textContent =
+    document
+        .getElementById(
+            "elementosPDF"
+        )
+        .textContent =
         "";
 
 
@@ -2293,22 +2546,20 @@ function limpiarTodo() {
         "cardResumen",
         "cardResultados",
         "cardTexto",
-        "cardDebug",
+        "cardElementos",
         "cardSalida"
-    ]
-    .forEach(id => {
 
-        document.getElementById(
-            id
-        ).classList.add(
-            "oculto"
-        );
+    ].forEach(id => {
+
+        document
+            .getElementById(id)
+            .classList
+            .add("oculto");
 
     });
 
 
     establecerProgreso(0);
-
 
     cambiarEstado(
         "Esperando archivo..."
@@ -2318,17 +2569,16 @@ function limpiarTodo() {
 
 
 /* ============================================================
-   INICIO
-   ============================================================ */
+   INICIALIZACIÓN
+============================================================ */
 
-window.addEventListener(
-    "DOMContentLoaded",
-    () => {
+(async function iniciar() {
 
-        cargarNomenclador();
+    await cargarNomencladorAutomatico();
 
-    }
-);
+    await cargarEquivalencias();
+
+})();
 
 </script>
 
