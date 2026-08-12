@@ -1,156 +1,4 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Codificador de Prestaciones</title>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-
-<style>
-* { box-sizing: border-box; }
-body { margin: 0; padding: 30px; font-family: Arial, sans-serif; background: #f3f4f6; color: #111827; }
-.container { max-width: 1100px; margin: auto; background: white; padding: 30px; border-radius: 14px; box-shadow: 0 5px 25px rgba(0,0,0,.08); }
-h1 { margin: 0 0 5px; font-size: 28px; }
-.subtitle { color: #6b7280; margin-bottom: 25px; }
-.controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 20px; }
-input[type="file"] { padding: 10px; border: 1px solid #d1d5db; border-radius: 8px; background: white; }
-button { border: 0; border-radius: 8px; padding: 11px 18px; font-weight: bold; cursor: pointer; }
-#analyzeBtn { background: #111827; color: white; }
-#clearBtn { background: #e5e7eb; color: #111827; }
-#pdfBtn { background: #2563eb; color: white; }
-button:disabled { opacity: .5; cursor: not-allowed; }
-.status { padding: 14px; border-radius: 8px; background: #f3f4f6; margin-bottom: 20px; font-weight: bold; }
-.results { border-top: 1px solid #e5e7eb; padding-top: 20px; }
-.result { display: flex; justify-content: space-between; gap: 15px; padding: 12px 0; border-bottom: 1px solid #e5e7eb; }
-.result-name { font-weight: bold; }
-.result-code { font-family: monospace; font-weight: bold; color: #2563eb; white-space: nowrap; }
-#pdfPreview { width: 100%; min-height: 700px; border: 1px solid #d1d5db; border-radius: 8px; margin-top: 25px; display: none; }
-</style>
-</head>
-
-<body>
-
-<div class="container">
-    <h1>Codificador de Prestaciones</h1>
-    <div class="subtitle">Nomenclador Mendoza</div>
-
-    <div class="controls">
-        <input type="file" id="pdfInput" accept="application/pdf">
-        <button id="analyzeBtn">ANALIZAR ESTUDIO</button>
-        <button id="clearBtn">LIMPIAR</button>
-        <button id="pdfBtn" disabled>GENERAR PDF CODIFICADO</button>
-    </div>
-
-    <div id="status" class="status">Seleccioná el estudio médico en PDF.</div>
-
-    <div class="results">
-        <h2>Resultado</h2>
-        <div id="resultsList">No se ha analizado ningún estudio.</div>
-    </div>
-
-    <iframe id="pdfPreview"></iframe>
-</div>
-
-<script>
-pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
-
-const LAB_CATALOG = [
-    {code:"LAB.00.001", description:"ACTO BIOQUIMICO"},
-    {code:"LAB.01.012", description:"Bilirrubina directa"},
-    {code:"LAB.01.013", description:"Bilirrubina en orina"},
-    {code:"LAB.01.014", description:"Bilirrubina total"},
-    {code:"LAB.01.040", description:"Creatinina en plasma o suero"},
-    {code:"LAB.01.060", description:"Ferremia (hierro en sangre) (Fe)"},
-    {code:"LAB.01.065", description:"Fosfatasa alcalina"},
-    {code:"LAB.01.073", description:"Glucemia"},
-    {code:"LAB.01.082", description:"Hematocrito"},
-    {code:"LAB.01.129", description:"Plaquetas, recuento de"},
-    {code:"LAB.01.133", description:"Proteína C reactiva (PCR)"},
-    {code:"LAB.01.135", description:"Proteínas totales en plasma o suero"},
-    {code:"LAB.01.142", description:"Protrombina, tiempo de (TP)"},
-    {code:"LAB.02.035", description:"Hepatograma"},
-    {code:"LAB.02.054", description:"Nucleares, Ac. anti (ANA, FAN)"},
-    {code:"LAB.03.059", description:"CPK total (creatina fosfoquinasa)"},
-    {code:"LAB.03.078", description:"Ferritina"},
-    {code:"LAB.03.103", description:"Hemoglobina Glicosilada (HB A1C)"},
-    {code:"LAB.03.120", description:"HIV, Ac. anti (ELISA)"},
-    {code:"LAB.03.181", description:"Prolactina"}
-];
-
-let pdfFile = null;
-let detectedCodes = [];
-
-document.getElementById('analyzeBtn').addEventListener('click', async () => {
-    const fileInput = document.getElementById('pdfInput');
-    const status = document.getElementById('status');
-    const resultsList = document.getElementById('resultsList');
-    
-    if (!fileInput.files.length) {
-        status.textContent = 'Por favor, seleccioná un archivo PDF primero.';
-        return;
-    }
-
-    status.textContent = 'Analizando documento...';
-    pdfFile = fileInput.files[0];
-
-    try {
-        // Se extrae una copia del buffer específica para la lectura con PDF.js
-        const bufferForAnalysis = await pdfFile.arrayBuffer();
-        const pdf = await pdfjsLib.getDocument({ data: bufferForAnalysis }).promise;
-        let fullText = '';
-
-        for (let i = 1; i <= pdf.numPages; i++) {
-            const page = await pdf.getPage(i);
-            const textContent = await page.getTextContent();
-            const pageText = textContent.items.map(item => item.str).join(' ');
-            fullText += ' ' + pageText;
-        }
-
-        const cleanText = fullText.toLowerCase();
-        detectedCodes = [LAB_CATALOG[0]]; // Siempre incluye Acto Bioquímico
-
-        LAB_CATALOG.slice(1).forEach(item => {
-            const descMatch = item.description.toLowerCase();
-            if (cleanText.includes(descMatch)) {
-                detectedCodes.push(item);
-            }
-        });
-
-        resultsList.innerHTML = '';
-        detectedCodes.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'result';
-            div.innerHTML = `<span class="result-name">${item.description}</span><span class="result-code">${item.code}</span>`;
-            resultsList.appendChild(div);
-        });
-
-        status.textContent = `Análisis completado. Se detectaron ${detectedCodes.length} prestaciones.`;
-        document.getElementById('pdfBtn').disabled = false;
-    } catch (err) {
-        status.textContent = 'Error al analizar el PDF.';
-        console.error(err);
-    }
-});
-
-document.getElementById('pdfBtn').addEventListener('click', async () => {
-    if (!pdfFile || !detectedCodes.length) return;
-
-    try {
-        // Se genera un buffer completamente nuevo desde el archivo original para PDF-Lib
-        const freshBuffer = await pdfFile.arrayBuffer();
-        const pdfDoc = await PDFLib.PDFDocument.load(freshBuffer);
-        
-        const page = pdfDoc.addPage([600, 400]);
-        const font = await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
-
-        page.drawText('RESUMEN DE CODIFICACIÓN', { x: 50, y: 350, size: 16, font });
-        
-        let y = 320;
-        detectedCodes.forEach(item => {
-            page.drawText(`${item.code} - ${item.description}`, { x: 50, y, size: 10 });
-            y -= 20;
+            y -= 25;
         });
 
         const pdfBytes = await pdfDoc.save();
@@ -160,19 +8,22 @@ document.getElementById('pdfBtn').addEventListener('click', async () => {
         const iframe = document.getElementById('pdfPreview');
         iframe.src = url;
         iframe.style.display = 'block';
+        
+        status.textContent = '✅ PDF generado e insertado más abajo.';
+
     } catch (err) {
-        alert('Error al generar el PDF codificado.');
         console.error(err);
+        status.textContent = '❌ Error al modificar y generar el archivo PDF.';
     }
 });
 
 document.getElementById('clearBtn').addEventListener('click', () => {
     document.getElementById('pdfInput').value = '';
-    document.getElementById('resultsList').innerHTML = 'No se ha analizado ningún estudio.';
-    document.getElementById('status').textContent = 'Seleccioná el estudio médico en PDF.';
+    document.getElementById('resultsList').innerHTML = 'No se ha analizado ningún estudio aún.';
+    document.getElementById('status').textContent = 'Seleccioná un archivo PDF para comenzar.';
     document.getElementById('pdfPreview').style.display = 'none';
     document.getElementById('pdfBtn').disabled = true;
-    pdfFile = null;
+    globalPdfFile = null;
     detectedCodes = [];
 });
 </script>
