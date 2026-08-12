@@ -171,11 +171,31 @@
       if (d.codigo === "01.001") return; // El acto bioquímico va directo al anexo
 
       const page = pdfDoc.getPage(d.pagina - 1);
-      // Escribir el código en color azul al lado derecho del texto hallado
-      page.drawText(`[Código: ${d.codigo}]`, {
-        x: Math.min(d.x + 180, 450), // Coloca el código desplazado a la derecha
-        y: d.y,
-        size: 8,
+      const etiqueta = `[${d.codigo}]`;
+      const fontSize = 9;
+
+      // Columna fija en X para alineación limpia en el margen derecho
+      const xPos = 430;
+      const yPos = d.y - 1; 
+
+      const textWidth = fontBold.widthOfTextAtSize(etiqueta, fontSize);
+
+      // Recuadro contenedor con fondo suave
+      page.drawRectangle({
+        x: xPos - 2,
+        y: yPos - 2,
+        width: textWidth + 4,
+        height: fontSize + 3,
+        color: rgb(0.92, 0.95, 1.0),
+        borderColor: rgb(0.1, 0.3, 0.8),
+        borderWidth: 0.5,
+      });
+
+      // Texto del código estampado
+      page.drawText(etiqueta, {
+        x: xPos,
+        y: yPos,
+        size: fontSize,
         font: fontBold,
         color: rgb(0.1, 0.3, 0.8)
       });
