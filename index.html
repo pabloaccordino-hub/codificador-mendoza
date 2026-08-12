@@ -1,359 +1,1521 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Codificador de Prestaciones Bioquímicas - Mendoza</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#111827">
 
-<!-- Tesseract.js para OCR en PDFs escaneados / fotos -->
-<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-<!-- PDF.js para lectura de PDFs digitales y renderizado de páginas para OCR -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-<!-- PDF-Lib para modificar y generar PDFs -->
-<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<title>Codificador de Prestaciones</title>
 
 <style>
-* { box-sizing: border-box; }
-body { margin: 0; padding: 25px; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #0f172a; color: #f8fafc; }
-.container { max-width: 950px; margin: auto; background: #1e293b; padding: 32px; border-radius: 16px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.5); border: 1px solid #334155; }
-h1 { margin: 0 0 6px; font-size: 26px; font-weight: 700; color: #f8fafc; }
-.subtitle { color: #94a3b8; margin-bottom: 24px; font-size: 14px; }
-.controls { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 20px; }
-input[type="file"] { padding: 10px 14px; border: 1px solid #475569; border-radius: 8px; background: #0f172a; color: #f8fafc; font-size: 14px; cursor: pointer; flex: 1; }
-button { border: 0; border-radius: 8px; padding: 12px 20px; font-weight: 700; font-size: 14px; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
-#analyzeBtn { background: #3b82f6; color: white; }
-#analyzeBtn:hover { background: #2563eb; }
-#clearBtn { background: #334155; color: #cbd5e1; }
-#clearBtn:hover { background: #475569; }
-#downloadBtn { background: #10b981; color: white; }
-#downloadBtn:hover { background: #059669; }
-button:disabled { opacity: 0.4; cursor: not-allowed; }
-.status { padding: 14px 18px; border-radius: 8px; background: #0f172a; border: 1px solid #334155; margin-bottom: 20px; font-weight: 500; font-size: 14px; color: #38bdf8; min-height: 48px; display: flex; align-items: center; }
-.ocr-notice { background: #7c2d12; border: 1px solid #ea580c; color: #ffedd5; padding: 10px 14px; border-radius: 8px; margin-bottom: 15px; font-size: 13px; display: none; }
-.results { border-top: 1px solid #334155; padding-top: 20px; }
-.results h2 { font-size: 18px; margin-bottom: 14px; color: #f8fafc; display: flex; justify-content: space-between; align-items: center; }
-.result-list { display: flex; flex-direction: column; gap: 8px; max-height: 250px; overflow-y: auto; padding-right: 5px; }
-.result-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; background: #0f172a; border: 1px solid #334155; border-radius: 8px; font-size: 14px; }
-.result-name { font-weight: 500; color: #e2e8f0; }
-.result-code { font-family: monospace; font-weight: 700; color: #38bdf8; background: #1e293b; padding: 4px 10px; border-radius: 6px; border: 1px solid #0284c7; }
-#pdfPreview { width: 100%; height: 600px; border: 1px solid #475569; border-radius: 8px; margin-top: 24px; display: none; background: #ffffff; }
-.progress-bar { width: 100%; height: 6px; background: #334155; border-radius: 3px; overflow: hidden; margin-top: 8px; display: none; }
-.progress-fill { width: 0%; height: 100%; background: #38bdf8; transition: width 0.3s; }
+*{
+    box-sizing:border-box
+}
+
+body{
+    margin:0;
+    background:#f3f4f6;
+    color:#111827;
+    font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif
+}
+
+main{
+    max-width:900px;
+    margin:auto;
+    padding:16px
+}
+
+.card{
+    background:#fff;
+    border-radius:18px;
+    padding:18px;
+    margin:12px 0;
+    box-shadow:0 3px 15px #0001
+}
+
+h1{
+    font-size:24px;
+    margin:0
+}
+
+h2{
+    margin-top:0
+}
+
+.muted,
+.small{
+    color:#6b7280
+}
+
+.small{
+    font-size:13px
+}
+
+input[type=file]{
+    width:100%;
+    padding:13px;
+    border:1px solid #d1d5db;
+    border-radius:12px;
+    background:#fff
+}
+
+button{
+    border:0;
+    border-radius:12px;
+    padding:13px 16px;
+    background:#111827;
+    color:white;
+    font-weight:750;
+    font-size:15px;
+    margin-top:10px;
+    width:100%;
+    cursor:pointer
+}
+
+button.secondary{
+    background:#e5e7eb;
+    color:#111827
+}
+
+button:disabled{
+    opacity:.5;
+    cursor:not-allowed
+}
+
+.status{
+    padding:12px;
+    border-radius:12px;
+    background:#f9fafb;
+    margin-top:12px;
+    white-space:pre-wrap
+}
+
+.ok{
+    background:#ecfdf5;
+    color:#065f46
+}
+
+.warn{
+    background:#fffbeb;
+    color:#92400e
+}
+
+.err{
+    background:#fef2f2;
+    color:#991b1b
+}
+
+.item{
+    padding:14px 0;
+    border-bottom:1px solid #e5e7eb
+}
+
+.item:last-child{
+    border-bottom:0
+}
+
+.code{
+    font-weight:900;
+    font-size:17px
+}
+
+.badge{
+    display:inline-block;
+    padding:3px 8px;
+    border-radius:999px;
+    background:#eef2ff;
+    font-size:12px;
+    font-weight:800
+}
+
+.manual{
+    background:#fff7ed;
+    border:1px solid #fed7aa;
+    padding:12px;
+    border-radius:12px;
+    margin-top:8px
+}
+
+.acto{
+    background:#ecfdf5;
+    border:1px solid #a7f3d0;
+    padding:12px;
+    border-radius:12px;
+    margin:12px 0
+}
+
+.progress{
+    height:8px;
+    background:#e5e7eb;
+    border-radius:999px;
+    overflow:hidden;
+    margin-top:10px
+}
+
+.progress div{
+    height:100%;
+    width:0%;
+    background:#111827;
+    transition:.2s
+}
 </style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
 </head>
 
 <body>
 
-<div class="container">
-    <h1>Codificador de Prestaciones Bioquímicas</h1>
-    <div class="subtitle">Nomenclador Mendoza · Motor Híbrido Texto + OCR Automático</div>
+<main>
 
-    <div class="controls">
-        <input type="file" id="pdfInput" accept="application/pdf">
-        <button id="analyzeBtn">🔍 ANALIZAR Y CODIFICAR</button>
-        <button id="downloadBtn" disabled>💾 DESCARGAR PDF MODIFICADO</button>
-        <button id="clearBtn">LIMPIAR</button>
-    </div>
+<section class="card">
 
-    <div id="status" class="status">Seleccioná un archivo PDF para comenzar.</div>
-    <div id="progressBar" class="progress-bar"><div id="progressFill" class="progress-fill"></div></div>
-    <div id="ocrNotice" class="ocr-notice">⚠️ Documento escaneado detectado. Se ejecutó el lector OCR óptico para extraer las prestaciones.</div>
+<h1>Codificador de Prestaciones</h1>
 
-    <div class="results">
-        <h2>
-            <span>Prestaciones Detectadas</span>
-            <span id="counterBadge" style="font-size: 13px; font-weight: normal; color: #94a3b8;"></span>
-        </h2>
-        <div id="resultsList" class="result-list">Esperando análisis...</div>
-    </div>
-
-    <iframe id="pdfPreview"></iframe>
+<div class="muted">
+Nomenclador Mendoza · Marzo 2026
 </div>
 
+</section>
+
+
+<section class="card">
+
+<b>Seleccioná el estudio médico en PDF</b>
+
+<input
+    id="pdf"
+    type="file"
+    accept="application/pdf"
+    style="margin-top:10px"
+>
+
+<button onclick="analizar()">
+ANALIZAR ESTUDIO
+</button>
+
+<button
+    class="secondary"
+    onclick="location.reload()"
+>
+LIMPIAR
+</button>
+
+<div
+    id="status"
+    class="status"
+>
+Esperando PDF…
+</div>
+
+<div class="progress">
+    <div id="progressBar"></div>
+</div>
+
+</section>
+
+
+<section
+    id="resultado"
+    class="card"
+    style="display:none"
+>
+
+<h2>Resultado</h2>
+
+<div id="aviso"></div>
+
+<div id="lista"></div>
+
+<button
+    id="generar"
+    onclick="generarPDF()"
+>
+GENERAR PDF CODIFICADO
+</button>
+
+</section>
+
+</main>
+
+
 <script>
-pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js";
 
-// Catálogo del Nomenclador con keywords ampliadas
-const LAB_CATALOG = [
-    {code:"LAB.00.001", description:"ACTO BIOQUIMICO", keywords: ["acto", "bioquimico", "laboratorio"]},
-    {code:"LAB.01.012", description:"Bilirrubina directa", keywords: ["bilirrubina directa", "directa"]},
-    {code:"LAB.01.013", description:"Bilirrubina en orina", keywords: ["bilirrubina en orina"]},
-    {code:"LAB.01.014", description:"Bilirrubina total", keywords: ["bilirrubina total", "bilirrubina", "bilirrubinemia"]},
-    {code:"LAB.01.040", description:"Creatinina en plasma o suero", keywords: ["creatinina", "creatininemia", "creat"]},
-    {code:"LAB.01.060", description:"Ferremia (hierro en sangre) (Fe)", keywords: ["ferremia", "hierro", "fe serico"]},
-    {code:"LAB.01.065", description:"Fosfatasa alcalina", keywords: ["fosfatasa alcalina", "fal", "alp"]},
-    {code:"LAB.01.073", description:"Glucemia", keywords: ["glucemia", "glucosa", "glycemia"]},
-    {code:"LAB.01.082", description:"Hematocrito", keywords: ["hematocrito", "hto"]},
-    {code:"LAB.01.129", description:"Plaquetas, recuento de", keywords: ["plaquetas", "recuento de plaquetas", "plt"]},
-    {code:"LAB.01.133", description:"Proteína C reactiva (PCR)", keywords: ["proteina c reactiva", "pcr", "crp"]},
-    {code:"LAB.01.135", description:"Proteínas totales en plasma o suero", keywords: ["proteinas totales", "proteinemia"]},
-    {code:"LAB.01.142", description:"Protrombina, tiempo de (TP)", keywords: ["protrombina", "tiempo de protrombina", "tp", "quick"]},
-    {code:"LAB.02.035", description:"Hepatograma", keywords: ["hepatograma"]},
-    {code:"LAB.02.054", description:"Nucleares, Ac. anti (ANA, FAN)", keywords: ["ana", "fan", "antinucleares"]},
-    {code:"LAB.03.059", description:"CPK total (creatina fosfoquinasa)", keywords: ["cpk", "creatinfosfoquinasa", "ck"]},
-    {code:"LAB.03.078", description:"Ferritina", keywords: ["ferritina"]},
-    {code:"LAB.03.103", description:"Hemoglobina Glicosilada (HB A1C)", keywords: ["hemoglobina glicosilada", "hba1c", "hb a1c", "glicosilada"]},
-    {code:"LAB.03.120", description:"HIV, Ac. anti (ELISA)", keywords: ["hiv", "sida", "vih"]},
-    {code:"LAB.03.181", description:"Prolactina", keywords: ["prolactina", "prl"]}
-];
+/* =========================================================
+   CONFIGURACIÓN PDF.JS
+   ========================================================= */
 
-let globalPdfFile = null;
-let detectedCodes = [];
-let modifiedPdfBlobUrl = null;
-let modifiedPdfBytes = null;
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
 
-function normalizeText(str) {
-    return str.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
-}
 
-function updateProgress(percent) {
-    const pBar = document.getElementById('progressBar');
-    const pFill = document.getElementById('progressFill');
-    if (percent >= 0 && percent <= 100) {
-        pBar.style.display = 'block';
-        pFill.style.width = percent + '%';
-    } else {
-        pBar.style.display = 'none';
-    }
-}
+/* =========================================================
+   DATOS PRINCIPALES
+   =========================================================
 
-// Convertir página PDF a Canvas/Imagen para OCR
-async function renderPageToCanvas(pdfPage) {
-    const viewport = pdfPage.getViewport({ scale: 2.0 }); // Escala 2x para mejor nitidez en OCR
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-    canvas.height = viewport.height;
-    canvas.width = viewport.width;
+   IMPORTANTE:
 
-    await pdfPage.render({ canvasContext: context, viewport: viewport }).promise;
-    return canvas;
-}
+   ACÁ TENÉS QUE DEJAR TU LISTA COMPLETA:
 
-document.getElementById('analyzeBtn').addEventListener('click', async () => {
-    const fileInput = document.getElementById('pdfInput');
-    const status = document.getElementById('status');
-    const ocrNotice = document.getElementById('ocrNotice');
-    const resultsList = document.getElementById('resultsList');
-    const counterBadge = document.getElementById('counterBadge');
+   const LAB_CODES = [
+       ...
+   ];
 
-    ocrNotice.style.display = 'none';
-    document.getElementById('pdfPreview').style.display = 'none';
-    document.getElementById('downloadBtn').disabled = true;
+   NO LA BORRES.
 
-    if (!fileInput.files || !fileInput.files.length) {
-        status.textContent = '⚠️ Por favor, seleccioná un archivo PDF primero.';
-        return;
+   Es la lista de códigos que ya tenés cargada.
+   ========================================================= */
+
+
+/*
+   SI TU LISTA YA ESTÁ ARRIBA DE ESTE BLOQUE:
+
+   const LAB_CODES = [...]
+
+   NO LA VUELVAS A DECLARAR.
+
+   El programa utilizará automáticamente esa lista.
+*/
+
+
+/* =========================================================
+   EQUIVALENCIAS IMPORTANTES
+   ========================================================= */
+
+const EQUIV = {
+
+    "GLUCOSA EN SUERO":{
+        description:"Glucemia (c/u)",
+        code:"LAB.01.073",
+        confidence:"CONFIRMADA"
+    },
+
+    "GLUCOSA SERICA":{
+        description:"Glucemia (c/u)",
+        code:"LAB.01.073",
+        confidence:"CONFIRMADA"
+    },
+
+    "GLUCEMIA":{
+        description:"Glucemia (c/u)",
+        code:"LAB.01.073",
+        confidence:"CONFIRMADA"
     }
 
-    globalPdfFile = fileInput.files[0];
-    status.textContent = '⏳ Cargando y leyendo documento...';
-    updateProgress(10);
+};
 
-    try {
-        const arrayBuffer = await globalPdfFile.arrayBuffer();
-        const typedArray = new Uint8Array(arrayBuffer);
-        const pdf = await pdfjsLib.getDocument({ data: typedArray }).promise;
 
-        let fullText = '';
+/* =========================================================
+   ACTO BIOQUÍMICO
+   ========================================================= */
 
-        // 1. Intentar extracción directa de texto
-        for (let i = 1; i <= pdf.numPages; i++) {
-            const page = await pdf.getPage(i);
-            const textContent = await page.getTextContent();
-            const pageText = textContent.items.map(item => item.str).join(' ');
-            fullText += ' ' + pageText;
+const ACTO_BIOQUIMICO = {
+
+    description:"Acto Bioquímico",
+    code:"LAB.00.001",
+    confidence:"REGLA"
+
+};
+
+
+/* =========================================================
+   VARIABLES
+   ========================================================= */
+
+let sourceBytes = null;
+
+let sourceName = "ESTUDIO.pdf";
+
+let detections = [];
+
+let allText = [];
+
+let pagesData = [];
+
+let hayLaboratorio = false;
+
+
+/* =========================================================
+   NORMALIZAR TEXTO
+   ========================================================= */
+
+function norm(s){
+
+    return String(s || "")
+
+        .normalize("NFD")
+
+        .replace(/[\u0300-\u036f]/g,"")
+
+        .toUpperCase()
+
+        .replace(/[^A-Z0-9Ñ .,/()\-]/g," ")
+
+        .replace(/\s+/g," ")
+
+        .trim();
+
+}
+
+
+/* =========================================================
+   NORMALIZACIÓN MÁS AGRESIVA
+   ========================================================= */
+
+function normStrong(s){
+
+    return norm(s)
+
+        .replace(/\bEN\b/g," ")
+
+        .replace(/\bDE\b/g," ")
+
+        .replace(/\bLA\b/g," ")
+
+        .replace(/\bEL\b/g," ")
+
+        .replace(/\bLOS\b/g," ")
+
+        .replace(/\bLAS\b/g," ")
+
+        .replace(/\s+/g," ")
+
+        .trim();
+
+}
+
+
+/* =========================================================
+   PALABRAS
+   ========================================================= */
+
+function words(s){
+
+    return normStrong(s)
+
+        .split(" ")
+
+        .filter(x => x.length >= 2);
+
+}
+
+
+/* =========================================================
+   SIMILITUD
+   ========================================================= */
+
+function sim(a,b){
+
+    const A = new Set(words(a));
+
+    const B = new Set(words(b));
+
+    if(!A.size || !B.size){
+
+        return 0;
+
+    }
+
+    let comunes = 0;
+
+    for(const x of A){
+
+        if(B.has(x)){
+
+            comunes++;
+
         }
 
-        let cleanText = normalizeText(fullText).trim();
+    }
 
-        // 2. Si no hay suficiente texto, ejecutar OCR con Tesseract
-        if (cleanText.length < 15) {
-            status.textContent = '🔍 No se detectó texto digital. Ejecutando motor OCR sobre la imagen...';
-            ocrNotice.style.display = 'block';
-            fullText = '';
+    return comunes / Math.max(A.size,B.size);
 
-            const worker = await Tesseract.createWorker('spa');
+}
 
-            for (let i = 1; i <= pdf.numPages; i++) {
-                status.textContent = `👁️ Escaneando página ${i} de ${pdf.numPages} con OCR...`;
-                updateProgress(20 + Math.floor((i / pdf.numPages) * 60));
 
-                const page = await pdf.getPage(i);
-                const canvas = await renderPageToCanvas(page);
-                const { data: { text } } = await worker.recognize(canvas);
-                fullText += ' ' + text;
-            }
+/* =========================================================
+   COINCIDENCIA EXACTA
+   ========================================================= */
 
-            await worker.terminate();
-            cleanText = normalizeText(fullText).trim();
+function exact(s){
+
+    const n = norm(s);
+
+    if(EQUIV[n]){
+
+        return EQUIV[n];
+
+    }
+
+    if(!Array.isArray(LAB_CODES)){
+
+        return null;
+
+    }
+
+    for(const item of LAB_CODES){
+
+        if(norm(item.description) === n){
+
+            return {
+
+                description:item.description,
+
+                code:item.code,
+
+                confidence:"EXACTA"
+
+            };
+
         }
 
-        updateProgress(85);
-        status.textContent = '⚙️ Identificando códigos de nomenclador...';
+    }
 
-        // 3. Emparejamiento con el Nomenclador
-        detectedCodes = [];
-        // Siempre incluye Acto Bioquímico
-        detectedCodes.push(LAB_CATALOG[0]);
+    return null;
 
-        LAB_CATALOG.slice(1).forEach(item => {
-            const match = item.keywords.some(kw => cleanText.includes(normalizeText(kw)));
-            if (match) {
-                detectedCodes.push(item);
+}
+
+
+/* =========================================================
+   COINCIDENCIA PARCIAL
+   ========================================================= */
+
+function fuzzy(s){
+
+    if(!Array.isArray(LAB_CODES)){
+
+        return null;
+
+    }
+
+    let mejor = null;
+
+    let mejorScore = 0;
+
+    const texto = normStrong(s);
+
+    for(const item of LAB_CODES){
+
+        const descripcion = normStrong(item.description);
+
+        if(!descripcion){
+
+            continue;
+
+        }
+
+        let score = sim(texto,descripcion);
+
+        /*
+           Bonus si una descripción está contenida
+        */
+
+        if(
+            texto.length > 5 &&
+            descripcion.includes(texto)
+        ){
+
+            score += .20;
+
+        }
+
+        if(
+            descripcion.length > 5 &&
+            texto.includes(descripcion)
+        ){
+
+            score += .20;
+
+        }
+
+        if(score > mejorScore){
+
+            mejorScore = score;
+
+            mejor = item;
+
+        }
+
+    }
+
+    if(mejor && mejorScore >= .55){
+
+        return {
+
+            description:mejor.description,
+
+            code:mejor.code,
+
+            confidence:
+                mejorScore >= .80
+                ? "PROBABLE"
+                : "REVISAR"
+
+        };
+
+    }
+
+    return null;
+
+}
+
+
+/* =========================================================
+   BUSCAR PRESTACIÓN
+   ========================================================= */
+
+function buscarPrestacion(texto){
+
+    if(!texto){
+
+        return null;
+
+    }
+
+    const e = exact(texto);
+
+    if(e){
+
+        return e;
+
+    }
+
+    return fuzzy(texto);
+
+}
+
+
+/* =========================================================
+   OBTENER LÍNEAS DEL PDF
+   ========================================================= */
+
+function obtenerLineas(items){
+
+    const lineas = [];
+
+    for(const item of items){
+
+        if(
+            !item.str ||
+            !item.str.trim()
+        ){
+
+            continue;
+
+        }
+
+        const x = item.transform[4];
+
+        const y = item.transform[5];
+
+        let linea = null;
+
+        for(const l of lineas){
+
+            if(Math.abs(l.y-y) < 4){
+
+                linea = l;
+
+                break;
+
             }
+
+        }
+
+        if(!linea){
+
+            linea = {
+
+                y:y,
+
+                items:[]
+
+            };
+
+            lineas.push(linea);
+
+        }
+
+        linea.items.push({
+
+            texto:item.str,
+
+            x:x,
+
+            item:item
+
         });
 
-        // Desduplicar prestaciones por código
-        detectedCodes = detectedCodes.filter((item, index, self) =>
-            index === self.findIndex(t => t.code === item.code)
+    }
+
+
+    return lineas
+
+        .map(l => {
+
+            l.items.sort(
+                (a,b) => a.x-b.x
+            );
+
+            const texto =
+                l.items
+                    .map(x => x.texto)
+                    .join(" ")
+                    .replace(/\s+/g," ")
+                    .trim();
+
+            return {
+
+                text:texto,
+
+                x:l.items[0]
+                    ? l.items[0].x
+                    : 20,
+
+                y:l.y
+
+            };
+
+        })
+
+        .filter(x => x.text);
+
+}
+
+
+/* =========================================================
+   EVITAR DETECCIONES DUPLICADAS
+   ========================================================= */
+
+function eliminarDuplicados(){
+
+    const vistos = new Set();
+
+    detections = detections.filter(x => {
+
+        const clave =
+            x.page +
+            "|" +
+            norm(x.source) +
+            "|" +
+            x.code;
+
+        if(vistos.has(clave)){
+
+            return false;
+
+        }
+
+        vistos.add(clave);
+
+        return true;
+
+    });
+
+}
+
+
+/* =========================================================
+   ANALIZAR
+   ========================================================= */
+
+async function analizar(){
+
+    const input =
+        document.getElementById("pdf");
+
+    const status =
+        document.getElementById("status");
+
+    const progress =
+        document.getElementById("progressBar");
+
+    const file =
+        input.files[0];
+
+
+    if(!file){
+
+        status.textContent =
+            "Seleccioná un PDF.";
+
+        status.className =
+            "status warn";
+
+        return;
+
+    }
+
+
+    if(
+        file.type &&
+        file.type !== "application/pdf"
+    ){
+
+        status.textContent =
+            "El archivo seleccionado no parece ser un PDF.";
+
+        status.className =
+            "status err";
+
+        return;
+
+    }
+
+
+    try{
+
+        sourceName = file.name;
+
+        sourceBytes =
+            new Uint8Array(
+                await file.arrayBuffer()
+            );
+
+        detections = [];
+
+        allText = [];
+
+        pagesData = [];
+
+        hayLaboratorio = false;
+
+
+        progress.style.width = "0%";
+
+
+        status.textContent =
+            "Abriendo PDF…";
+
+        status.className =
+            "status";
+
+
+        /*
+           Verificación real del encabezado PDF.
+        */
+
+        const encabezado =
+            new TextDecoder()
+                .decode(
+                    sourceBytes.slice(0,20)
+                );
+
+
+        if(
+            !encabezado.startsWith("%PDF")
+        ){
+
+            throw new Error(
+                "El archivo seleccionado no contiene un encabezado PDF válido."
+            );
+
+        }
+
+
+        const pdf =
+            await pdfjsLib
+                .getDocument({
+                    data:sourceBytes
+                })
+                .promise;
+
+
+        status.textContent =
+            "Analizando " +
+            pdf.numPages +
+            " página(s)…";
+
+
+        for(
+            let numeroPagina=1;
+            numeroPagina<=pdf.numPages;
+            numeroPagina++
+        ){
+
+            const page =
+                await pdf.getPage(numeroPagina);
+
+
+            const tc =
+                await page.getTextContent();
+
+
+            const lineas =
+                obtenerLineas(tc.items);
+
+
+            pagesData.push({
+
+                page:numeroPagina,
+
+                lines:lineas
+
+            });
+
+
+            /*
+               Guardamos todo el texto.
+            */
+
+            for(const linea of lineas){
+
+                allText.push({
+
+                    page:numeroPagina,
+
+                    text:linea.text,
+
+                    x:linea.x,
+
+                    y:linea.y
+
+                });
+
+            }
+
+
+            /*
+               AHORA NO IMPORTA SI ESTÁ:
+
+               MAYÚSCULA
+               minúscula
+               negrita
+               normal
+               etc.
+            */
+
+            for(const linea of lineas){
+
+                const texto =
+                    linea.text.trim();
+
+
+                if(texto.length < 3){
+
+                    continue;
+
+                }
+
+
+                const resultado =
+                    buscarPrestacion(texto);
+
+
+                if(resultado){
+
+                    detections.push({
+
+                        page:numeroPagina,
+
+                        source:texto,
+
+                        description:
+                            resultado.description,
+
+                        code:
+                            resultado.code,
+
+                        confidence:
+                            resultado.confidence,
+
+                        x:linea.x,
+
+                        y:linea.y
+
+                    });
+
+
+                    if(
+                        String(resultado.code)
+                            .startsWith("LAB.")
+                    ){
+
+                        hayLaboratorio = true;
+
+                    }
+
+                }
+
+            }
+
+
+            progress.style.width =
+                Math.round(
+                    numeroPagina /
+                    pdf.numPages *
+                    100
+                ) + "%";
+
+        }
+
+
+        /*
+           ELIMINAR DUPLICADOS
+        */
+
+        eliminarDuplicados();
+
+
+        /*
+           ACTO BIOQUÍMICO
+        */
+
+        if(
+            hayLaboratorio &&
+            !detections.some(
+                x => x.code === "LAB.00.001"
+            )
+        ){
+
+            detections.unshift({
+
+                page:1,
+
+                source:"ACTO BIOQUÍMICO",
+
+                description:
+                    "Acto Bioquímico",
+
+                code:"LAB.00.001",
+
+                confidence:"REGLA",
+
+                x:20,
+
+                y:30
+
+            });
+
+        }
+
+
+        status.textContent =
+            "Análisis terminado. " +
+            detections.length +
+            " prestación(es) detectada(s).";
+
+
+        status.className =
+            detections.length
+            ? "status ok"
+            : "status warn";
+
+
+        document
+            .getElementById("resultado")
+            .style.display="block";
+
+
+        render();
+
+
+    }catch(error){
+
+        console.error(error);
+
+
+        status.textContent =
+            "ERROR AL ANALIZAR PDF:\n" +
+            error.message;
+
+
+        status.className =
+            "status err";
+
+
+        document
+            .getElementById("resultado")
+            .style.display="block";
+
+
+        document
+            .getElementById("lista")
+            .innerHTML =
+                '<div class="status err">' +
+                '<b>No se pudo analizar el PDF.</b><br><br>' +
+                esc(error.message) +
+                '</div>';
+
+    }
+
+}
+
+
+/* =========================================================
+   MOSTRAR RESULTADO
+   ========================================================= */
+
+function render(){
+
+    const aviso =
+        document.getElementById("aviso");
+
+    const lista =
+        document.getElementById("lista");
+
+    const generar =
+        document.getElementById("generar");
+
+
+    /*
+       YA NO MOSTRAMOS:
+
+       "Prestaciones MAYÚSCULA + NEGRITA"
+    */
+
+
+    if(hayLaboratorio){
+
+        aviso.innerHTML =
+
+            '<div class="acto">' +
+
+            '<b>ACTO BIOQUÍMICO</b><br>' +
+
+            'Código: ' +
+
+            '<strong>LAB.00.001</strong>' +
+
+            '<br>' +
+
+            '<span class="small">' +
+
+            'Agregado automáticamente por tratarse de prestaciones de laboratorio.' +
+
+            '</span>' +
+
+            '</div>';
+
+    }else{
+
+        aviso.innerHTML = "";
+
+    }
+
+
+    if(!detections.length){
+
+        lista.innerHTML =
+
+            '<div class="status warn">' +
+
+            '<b>No se encontraron coincidencias automáticas.</b>' +
+
+            '<br><br>' +
+
+            'El PDF fue leído, pero ninguna línea coincidió suficientemente con el nomenclador cargado.' +
+
+            '</div>';
+
+        generar.disabled = true;
+
+        return;
+
+    }
+
+
+    lista.innerHTML = detections.map(x => {
+
+        let clase = "";
+
+        if(
+            x.confidence === "REVISAR"
+        ){
+
+            clase = "manual";
+
+        }
+
+
+        return (
+
+            '<div class="item ' +
+            clase +
+            '">' +
+
+            '<b>' +
+            esc(x.source) +
+            '</b>' +
+
+            '<br>' +
+
+            '→ ' +
+            esc(x.description) +
+
+            '<br>' +
+
+            '<span class="code">' +
+            esc(x.code) +
+            '</span>' +
+
+            '<br>' +
+
+            '<span class="small">' +
+
+            'Página ' +
+            x.page +
+
+            ' · ' +
+
+            '<span class="badge">' +
+            esc(x.confidence) +
+            '</span>' +
+
+            '</span>' +
+
+            '</div>'
+
         );
 
-        // 4. Renderizar Lista de Resultados
-        resultsList.innerHTML = '';
-        detectedCodes.forEach(item => {
-            const div = document.createElement('div');
-            div.className = 'result-item';
-            div.innerHTML = `<span class="result-name">${item.description}</span><span class="result-code">${item.code}</span>`;
-            resultsList.appendChild(div);
-        });
+    }).join("");
 
-        counterBadge.textContent = `${detectedCodes.length} prestaciones codificadas`;
 
-        // 5. Generar y Modificar el PDF agregando la hoja de resumen
-        status.textContent = '📄 Anexando carátula de codificación al PDF original...';
-        await generateAndInjectPdf(typedArray);
+    generar.disabled =
+        detections.length === 0;
 
-        updateProgress(100);
-        setTimeout(() => updateProgress(-1), 1000);
-        status.textContent = `✅ ¡Proceso completado con éxito! Se detectaron y estamparon ${detectedCodes.length} prestaciones.`;
-        document.getElementById('downloadBtn').disabled = false;
-
-    } catch (err) {
-        console.error(err);
-        updateProgress(-1);
-        status.textContent = '❌ Error al procesar el documento. Verifica el archivo cargado.';
-    }
-});
-
-// Función para insertar la página de codificación al inicio del PDF original
-async function generateAndInjectPdf(originalBytes) {
-    const pdfDoc = await PDFLib.PDFDocument.load(originalBytes);
-    
-    // Insertar la página de codificación al inicio (índice 0)
-    const newPage = pdfDoc.insertPage(0, [595, 842]); // A4
-    const fontBold = await pdfDoc.embedFont(PDFLib.StandardFonts.HelveticaBold);
-    const fontRegular = await pdfDoc.embedFont(PDFLib.StandardFonts.Helvetica);
-
-    // Fondo / Encabezado
-    newPage.drawRectangle({
-        x: 0,
-        y: 760,
-        width: 595,
-        height: 82,
-        color: PDFLib.rgb(0.06, 0.09, 0.16)
-    });
-
-    newPage.drawText('AUDITORÍA BIOQUÍMICA - CODIFICACIÓN', {
-        x: 40,
-        y: 805,
-        size: 16,
-        font: fontBold,
-        color: PDFLib.rgb(1, 1, 1)
-    });
-
-    newPage.drawText('Nomenclador Provincia de Mendoza · Anexo generado automáticamente', {
-        x: 40,
-        y: 780,
-        size: 10,
-        font: fontRegular,
-        color: PDFLib.rgb(0.7, 0.8, 0.9)
-    });
-
-    // Detalle de fecha y resumen
-    const now = new Date();
-    const dateStr = now.toLocaleDateString('es-AR') + ' ' + now.toLocaleTimeString('es-AR', {hour:'2-digit', minute:'2-digit'});
-
-    newPage.drawText(`Fecha de liquidación: ${dateStr}`, { x: 40, y: 735, size: 9, font: fontRegular, color: PDFLib.rgb(0.3, 0.3, 0.3) });
-    newPage.drawText(`Archivo: ${globalPdfFile.name}`, { x: 40, y: 720, size: 9, font: fontRegular, color: PDFLib.rgb(0.3, 0.3, 0.3) });
-
-    newPage.drawLine({
-        start: { x: 40, y: 705 },
-        end: { x: 555, y: 705 },
-        thickness: 1,
-        color: PDFLib.rgb(0.85, 0.85, 0.85)
-    });
-
-    // Tabla de códigos
-    let y = 675;
-
-    newPage.drawText('CÓDIGO', { x: 50, y, size: 10, font: fontBold, color: PDFLib.rgb(0.2, 0.2, 0.2) });
-    newPage.drawText('DESCRIPCIÓN DE LA PRESTACIÓN', { x: 160, y, size: 10, font: fontBold, color: PDFLib.rgb(0.2, 0.2, 0.2) });
-    
-    y -= 15;
-    newPage.drawLine({ start: { x: 40, y }, end: { x: 555, y }, thickness: 0.5, color: PDFLib.rgb(0.7, 0.7, 0.7) });
-    y -= 20;
-
-    detectedCodes.forEach(item => {
-        // Fondo alternado ligero
-        newPage.drawRectangle({
-            x: 40,
-            y: y - 4,
-            width: 515,
-            height: 18,
-            color: PDFLib.rgb(0.96, 0.97, 0.99)
-        });
-
-        newPage.drawText(item.code, { x: 50, y, size: 10, font: fontBold, color: PDFLib.rgb(0.01, 0.4, 0.8) });
-        newPage.drawText(item.description, { x: 160, y, size: 10, font: fontRegular, color: PDFLib.rgb(0.1, 0.1, 0.1) });
-        y -= 22;
-    });
-
-    // Pie de página de la carátula
-    newPage.drawText('Nota: Este anexo se adjunta al estudio original sin modificar el contenido médico original.', {
-        x: 40,
-        y: 40,
-        size: 8,
-        font: fontRegular,
-        color: PDFLib.rgb(0.5, 0.5, 0.5)
-    });
-
-    modifiedPdfBytes = await pdfDoc.save();
-    const blob = new Blob([modifiedPdfBytes], { type: 'application/pdf' });
-    modifiedPdfBlobUrl = URL.createObjectURL(blob);
-
-    const iframe = document.getElementById('pdfPreview');
-    iframe.src = modifiedPdfBlobUrl;
-    iframe.style.display = 'block';
 }
 
-// Descargar el PDF Modificado al hacer clic
-document.getElementById('downloadBtn').addEventListener('click', () => {
-    if (!modifiedPdfBytes) return;
 
-    const blob = new Blob([modifiedPdfBytes], { type: 'application/pdf' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `CODIFICADO_${globalPdfFile.name}`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-});
+/* =========================================================
+   ESCAPAR HTML
+   ========================================================= */
 
-// Limpiar todo
-document.getElementById('clearBtn').addEventListener('click', () => {
-    document.getElementById('pdfInput').value = '';
-    document.getElementById('resultsList').innerHTML = 'Esperando análisis...';
-    document.getElementById('counterBadge').textContent = '';
-    document.getElementById('status').textContent = 'Seleccioná un archivo PDF para comenzar.';
-    document.getElementById('ocrNotice').style.display = 'none';
-    document.getElementById('pdfPreview').style.display = 'none';
-    document.getElementById('downloadBtn').disabled = true;
-    updateProgress(-1);
-    globalPdfFile = null;
-    detectedCodes = [];
-    modifiedPdfBlobUrl = null;
-    modifiedPdfBytes = null;
-});
+function esc(s){
+
+    return String(s)
+
+        .replace(
+            /[&<>"']/g,
+
+            m => ({
+
+                "&":"&amp;",
+                "<":"&lt;",
+                ">":"&gt;",
+                '"':"&quot;",
+                "'":"&#039;"
+
+            }[m])
+
+        );
+
+}
+
+
+/* =========================================================
+   GENERAR PDF
+   ========================================================= */
+
+async function generarPDF(){
+
+    const status =
+        document.getElementById("status");
+
+    const boton =
+        document.getElementById("generar");
+
+
+    if(!sourceBytes){
+
+        status.textContent =
+            "Primero seleccioná y analizá un PDF.";
+
+        status.className =
+            "status warn";
+
+        return;
+
+    }
+
+
+    try{
+
+        boton.disabled = true;
+
+        status.textContent =
+            "Generando PDF codificado…";
+
+        status.className =
+            "status";
+
+
+        /*
+           VERIFICACIÓN
+        */
+
+        const header =
+            new TextDecoder()
+                .decode(
+                    sourceBytes.slice(0,20)
+                );
+
+
+        if(
+            !header.startsWith("%PDF")
+        ){
+
+            throw new Error(
+                "El archivo original no contiene un encabezado PDF válido."
+            );
+
+        }
+
+
+        /*
+           CARGAR PDF
+        */
+
+        const doc =
+            await PDFLib.PDFDocument.load(
+                sourceBytes,
+                {
+                    ignoreEncryption:false
+                }
+            );
+
+
+        /*
+           FUENTE
+        */
+
+        const font =
+            await doc.embedFont(
+                PDFLib.StandardFonts.HelveticaBold
+            );
+
+
+        /*
+           COLOCAR CÓDIGOS
+        */
+
+        for(const x of detections){
+
+            /*
+               No dibujar dos veces el acto bioquímico
+               si hay varios laboratorios.
+            */
+
+            const page =
+                doc.getPage(
+                    x.page - 1
+                );
+
+
+            const width =
+                page.getWidth();
+
+            const height =
+                page.getHeight();
+
+
+            /*
+               PDF.js y PDF-lib utilizan sistemas
+               de coordenadas diferentes.
+
+               Ajustamos la posición.
+            */
+
+            let posX =
+                Number(x.x) || 20;
+
+
+            let posY =
+                height -
+                (Number(x.y) || 20);
+
+
+            /*
+               Evitar que el código salga de la página.
+            */
+
+            if(posX < 10){
+
+                posX = 10;
+
+            }
+
+
+            if(posY < 10){
+
+                posY = 10;
+
+            }
+
+
+            if(posX > width - 130){
+
+                posX =
+                    width - 130;
+
+            }
+
+
+            /*
+               Código.
+            */
+
+            page.drawText(
+
+                " [" +
+                x.code +
+                "]",
+
+                {
+
+                    x:posX,
+
+                    y:posY,
+
+                    size:8,
+
+                    font:font
+
+                }
+
+            );
+
+        }
+
+
+        /*
+           GUARDAR
+        */
+
+        const bytes =
+            await doc.save();
+
+
+        /*
+           CREAR BLOB
+        */
+
+        const blob =
+            new Blob(
+                [bytes],
+                {
+                    type:"application/pdf"
+                }
+            );
+
+
+        const url =
+            URL.createObjectURL(blob);
+
+
+        const a =
+            document.createElement("a");
+
+
+        a.href = url;
+
+
+        a.download =
+            sourceName
+                .replace(
+                    /\.pdf$/i,
+                    ""
+                ) +
+            "_CODIFICADO.pdf";
+
+
+        document.body.appendChild(a);
+
+
+        a.click();
+
+
+        document.body.removeChild(a);
+
+
+        setTimeout(
+
+            () => {
+
+                URL.revokeObjectURL(url);
+
+            },
+
+            10000
+
+        );
+
+
+        status.textContent =
+            "PDF codificado generado correctamente.";
+
+        status.className =
+            "status ok";
+
+
+    }catch(error){
+
+        console.error(error);
+
+
+        status.textContent =
+            "Error al generar PDF:\n" +
+            error.message;
+
+        status.className =
+            "status err";
+
+
+    }finally{
+
+        boton.disabled = false;
+
+    }
+
+}
+
+
+/* =========================================================
+   COMPROBACIÓN INICIAL
+   ========================================================= */
+
+window.addEventListener(
+    "load",
+    () => {
+
+        if(
+            typeof pdfjsLib === "undefined"
+        ){
+
+            document.getElementById(
+                "status"
+            ).textContent =
+                "ERROR: PDF.js no pudo cargarse.";
+
+            document.getElementById(
+                "status"
+            ).className =
+                "status err";
+
+        }
+
+
+        if(
+            typeof PDFLib === "undefined"
+        ){
+
+            document.getElementById(
+                "status"
+            ).textContent =
+                "ERROR: PDF-lib no pudo cargarse.";
+
+            document.getElementById(
+                "status"
+            ).className =
+                "status err";
+
+        }
+
+    }
+
+);
+
 </script>
 
 </body>
