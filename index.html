@@ -109,7 +109,7 @@ async function analizar(){
    const page=await pdf.getPage(p),tc=await page.getTextContent();
    if(tc.items.length)anyText=true;
    for(const r of rowsFromText(tc.items,tc.styles)){
-    if(!r.bold||!isUpper(r.text))continue;
+    if(!isUpper(r.text))continue;
     const h=exact(r.text)||fuzzy(r.text);
     if(h)detections.push({page:p,source:r.text,description:h.description,code:h.code,confidence:h.confidence,x:r.x,y:r.y});
    }
