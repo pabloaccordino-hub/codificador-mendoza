@@ -54,16 +54,72 @@
 <script>
   pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-  // Nomenclador Mendoza con términos estrictos y límites de palabra (\b)
+  // Nomenclador Mendoza - Ampliado
   const NOMENCLADOR = [
-    { codigo: "01.073", nombre: "GLUCEMIA", regex: /\b(GLUCOSA|GLUCEMIA|GLUCOSA EN SUERO)\b/i },
-    { codigo: "01.890", nombre: "PROTEINA C REACTIVA (PCR)", regex: /\b(PROTEINA C REACTIVA|PCR ULTRASENSIBLE)\b/i },
-    { codigo: "01.815", nombre: "TIEMPO DE PROTROMBINA (TP)", regex: /\b(TIEMPO DE PROTROMBINA|TIEMPO DE QUICK|TP\/QUICK)\b/i },
-    { codigo: "01.030", nombre: "ANTICUERPOS ANTINUCLEARES (ANA)", regex: /\b(ANTICUERPOS ANTINUCLEARES|FAN)\b/i },
-    { codigo: "01.480", nombre: "HIV 1/2 ANTICUERPOS", regex: /\b(HIV 1\/2|SEROLOGIA HIV|HIV AG\/AC)\b/i },
-    { codigo: "01.401", nombre: "HEMOGRAMA COMPLETO", regex: /\b(HEMOGRAMA|RECUENTO DE GLOBULOS)\b/i },
+    // --- METABOLISMO DE HIDRATOS DE CARBONO Y LIPIDOS ---
+    { codigo: "01.073", nombre: "GLUCEMIA", regex: /\b(GLUCOSA|GLUCEMIA|GLUCOSA EN SUERO|GLUCEMIA EN SANGRE)\b/i },
+    { codigo: "01.074", nombre: "CURVA DE TOLERANCIA A LA GLUCOSA", regex: /\b(CURVA DE TOLERANCIA|PTOG|PRUEBA DE TOLERANCIA A LA GLUCOSA)\b/i },
+    { codigo: "01.075", nombre: "HEMOGLOBINA GLICOSILADA (HB A1C)", regex: /\b(HEMOGLOBINA GLICOSILADA|HBA1C|HB A1C)\b/i },
+    { codigo: "01.180", nombre: "COLESTEROL TOTAL", regex: /\b(COLESTEROL|COLESTEROL TOTAL)\b/i },
+    { codigo: "01.181", nombre: "COLESTEROL HDL", regex: /\b(HDL|COLESTEROL HDL|HDL-COLESTEROL)\b/i },
+    { codigo: "01.182", nombre: "COLESTEROL LDL", regex: /\b(LDL|COLESTEROL LDL|LDL-COLESTEROL)\b/i },
+    { codigo: "01.910", nombre: "TRIGLICERIDOS", regex: /\b(TRIGLICERIDOS|TRIGLICERIDEMIA)\b/i },
+    { codigo: "01.085", nombre: "LIPIDOGRAMA ELECTROFORETICO", regex: /\b(LIPIDOGRAMA|LIPIDOGRAMA ELECTROFORETICO)\b/i },
+
+    // --- FUNCIÓN RENAL Y HEPÁTICA ---
     { codigo: "01.885", nombre: "UREA EN SANGRE", regex: /\b(UREA|UREMIA)\b/i },
-    { codigo: "01.190", nombre: "CREATININA EN SANGRE", regex: /\b(CREATININA|CREATININEMIA)\b/i }
+    { codigo: "01.190", nombre: "CREATININA EN SANGRE", regex: /\b(CREATININA|CREATININEMIA)\b/i },
+    { codigo: "01.191", nombre: "ACIDO URICO", regex: /\b(ACIDO URICO|URICEMIA)\b/i },
+    { codigo: "01.115", nombre: "BILIRRUBINA TOTAL Y FRACCIONADA", regex: /\b(BILIRRUBINA|BILIRRUBINEMIA|BILIRRUBINA TOTAL)\b/i },
+    { codigo: "01.405", nombre: "GOT / AST", regex: /\b(GOT|AST|TRANSAMINASA GLUTAMICO OXALACETICA)\b/i },
+    { codigo: "01.406", nombre: "GPT / ALT", regex: /\b(GPT|ALT|TRANSAMINASA GLUTAMICO PIRUVICA)\b/i },
+    { codigo: "01.370", nombre: "FOSFATASA ALCALINA (FAL)", regex: /\b(FOSFATASA ALCALINA|FAL)\b/i },
+    { codigo: "01.385", nombre: "GAMA GLUTAMIL TRANSPEPTIDASA (GGT)", regex: /\b(GAMA GT|GGT|GAMMA GLUTAMIL)\b/i },
+
+    // --- HEMATOLOGÍA Y COAGULACIÓN ---
+    { codigo: "01.401", nombre: "HEMOGRAMA COMPLETO", regex: /\b(HEMOGRAMA|RECUENTO DE GLOBULOS|HEMOGRAMA COMPLETO)\b/i },
+    { codigo: "01.295", nombre: "ERITROSEDIMENTACION (VSG)", regex: /\b(ERITROSEDIMENTACION|VSG|VELOCIDAD DE SEDIMENTACION)\b/i },
+    { codigo: "01.815", nombre: "TIEMPO DE PROTROMBINA (TP)", regex: /\b(TIEMPO DE PROTROMBINA|TIEMPO DE QUICK|TP\/QUICK|TP)\b/i },
+    { codigo: "01.820", nombre: "KPTT / APTT", regex: /\b(KPTT|APTT|TIEMPO DE TROMBOPLASTINA)\b/i },
+    { codigo: "01.350", nombre: "FIBRINOGENO", regex: /\b(FIBRINOGENO)\b/i },
+    { codigo: "01.710", nombre: "RECUENTO DE PLAQUETAS", regex: /\b(PLAQUETAS|RECUENTO DE PLAQUETAS)\b/i },
+    { codigo: "01.340", nombre: "FERRITINA", regex: /\b(FERRITINA|FERRITINEMIA)\b/i },
+    { codigo: "01.345", nombre: "HIERRO SERICO (SIDEREMIA)", regex: /\b(HIERRO SERICO|SIDEREMIA|HIERRO)\b/i },
+
+    // --- IONOGRAMA Y MINERALES ---
+    { codigo: "01.810", nombre: "SODIO EN SANGRE", regex: /\b(SODIO|NATREMIA)\b/i },
+    { codigo: "01.700", nombre: "POTASIO EN SANGRE", regex: /\b(POTASIO|KALEMIA)\b/i },
+    { codigo: "01.160", nombre: "CLORO EN SANGRE", regex: /\b(CLORO|CLOREMIA)\b/i },
+    { codigo: "01.140", nombre: "CALCIO TOTAL", regex: /\b(CALCIO|CALCEMIA)\b/i },
+    { codigo: "01.380", nombre: "FOSFORO EN SANGRE", regex: /\b(FOSFORO|FOSFATEMIA)\b/i },
+    { codigo: "01.520", nombre: "MAGNESIO EN SANGRE", regex: /\b(MAGNESIO|MAGNESEMIA)\b/i },
+    { codigo: "01.500", nombre: "IONOGRAMA PLASMATICO", regex: /\b(IONOGRAMA|IONOGRAMA PLASMATICO)\b/i },
+
+    // --- HORMONAS Y ENDOCRINOLOGÍA ---
+    { codigo: "01.870", nombre: "TSH (HORMONA TIRESTIMULANTE)", regex: /\b(TSH|HORMONA TIRESTIMULANTE)\b/i },
+    { codigo: "01.860", nombre: "T4 LIBRE", regex: /\b(T4 LIBRE|TIROXINA LIBRE)\b/i },
+    { codigo: "01.855", nombre: "T4 TOTAL", regex: /\b(T4|T4 TOTAL|TIROXINA TOTAL)\b/i },
+    { codigo: "01.850", nombre: "T3 TOTAL", regex: /\b(T3|T3 TOTAL|TRIYODOTIRONINA)\b/i },
+    { codigo: "01.505", nombre: "INSULINA", regex: /\b(INSULINA|INSULINEMIA)\b/i },
+    { codigo: "01.210", nombre: "CORTISOL", regex: /\b(CORTISOL|CORTISOLEMIA)\b/i },
+    { codigo: "01.720", nombre: "PROLACTINA", regex: /\b(PROLACTINA|PRL)\b/i },
+    { codigo: "01.730", nombre: "PSA TOTAL", regex: /\b(PSA|PSA TOTAL|ANTIGENO PROSTATICO)\b/i },
+
+    // --- IMMUNOLOGÍA Y SEROLOGÍA ---
+    { codigo: "01.890", nombre: "PROTEINA C REACTIVA (PCR)", regex: /\b(PROTEINA C REACTIVA|PCR ULTRASENSIBLE|PCR)\b/i },
+    { codigo: "01.030", nombre: "ANTICUERPOS ANTINUCLEARES (ANA)", regex: /\b(ANTICUERPOS ANTINUCLEARES|FAN|ANA)\b/i },
+    { codigo: "01.480", nombre: "HIV 1/2 ANTICUERPOS", regex: /\b(HIV 1\/2|SEROLOGIA HIV|HIV AG\/AC|HIV)\b/i },
+    { codigo: "01.930", nombre: "VDRL / SIFILIS", regex: /\b(VDRL|SEROLOGIA SIFILIS|SIFILIS)\b/i },
+    { codigo: "01.420", nombre: "HEPATITIS B (HBSAG)", regex: /\b(HBSAG|HEPATITIS B|ANTIGENO DE SUPERFICIE)\b/i },
+    { codigo: "01.430", nombre: "HEPATITIS C (ANTI HCV)", regex: /\b(HEPATITIS C|ANTI HCV|HCV)\b/i },
+    { codigo: "01.200", nombre: "CHAGAS (MACHADO GUERREIRO / HAI)", regex: /\b(CHAGAS|SEROLOGIA CHAGAS|HAI CHAGAS)\b/i },
+    { codigo: "01.895", nombre: "FACTOR REUMATOIDE (RA TEST)", regex: /\b(FACTOR REUMATOIDE|RA TEST|LATEX REUMA)\b/i },
+
+    // --- ORINA Y OTROS EXÁMENES ---
+    { codigo: "01.600", nombre: "ORINA COMPLETA", regex: /\b(ORINA COMPLETA|EXAMEN DE ORINA|ANALISIS DE ORINA)\b/i },
+    { codigo: "01.610", nombre: "UROCULTIVO", regex: /\b(UROCULTIVO|CULTIVO DE ORINA)\b/i },
+    { codigo: "01.220", nombre: "COPROCULTIVO", regex: /\b(COPROCULTIVO|CULTIVO DE MATERIA FECAL)\b/i },
+    { codigo: "01.170", nombre: "PARASITOLOGICO EN MATERIA FECAL", regex: /\b(PARASITOLOGICO|PARASITOS EN MATERIA FECAL)\b/i }
   ];
 
   let pdfBytesOriginal = null;
@@ -94,14 +150,12 @@
       const textContent = await page.getTextContent();
       const viewport = page.getViewport({ scale: 1.0 });
 
-      // Agrupar elementos por proximidad física
       for (const item of textContent.items) {
         const textoLimpio = limpiarTexto(item.str);
         if (textoLimpio.trim().length < 3) continue;
 
         for (const itemNom of NOMENCLADOR) {
           if (itemNom.regex.test(textoLimpio)) {
-            // Validar que no se haya detectado ya en la misma posición aproximada
             const yaExiste = detecciones.some(d => d.pagina === pageIdx && d.codigo === itemNom.codigo);
             if (!yaExiste) {
               detecciones.push({
@@ -119,7 +173,7 @@
       }
     }
 
-    // Agregar Acto Bioquímico obligatorio
+    // Agregar Acto Bioquímico obligatorio si existen prestaciones
     if (detecciones.length > 0) {
       detecciones.unshift({
         pagina: 1,
@@ -166,21 +220,20 @@
     const pdfDoc = await PDFDocument.load(pdfBytesOriginal);
     const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
 
-    // 1. Estampar los códigos en el cuerpo del PDF (sobre las páginas originales)
+    // Estampar en las páginas del PDF
     detecciones.forEach(d => {
-      if (d.codigo === "01.001") return; // El acto bioquímico va directo al anexo
+      if (d.codigo === "01.001") return; // El acto bioquímico va únicamente al anexo
 
       const page = pdfDoc.getPage(d.pagina - 1);
       const etiqueta = `[${d.codigo}]`;
       const fontSize = 9;
 
-      // Columna fija en X para alineación limpia en el margen derecho
-      const xPos = 430;
+      const xPos = 430; // Columna fija en el margen derecho
       const yPos = d.y - 1; 
 
       const textWidth = fontBold.widthOfTextAtSize(etiqueta, fontSize);
 
-      // Recuadro contenedor con fondo suave
+      // Fondo recuadro contenedor
       page.drawRectangle({
         x: xPos - 2,
         y: yPos - 2,
@@ -191,7 +244,7 @@
         borderWidth: 0.5,
       });
 
-      // Texto del código estampado
+      // Texto del código
       page.drawText(etiqueta, {
         x: xPos,
         y: yPos,
@@ -201,7 +254,7 @@
       });
     });
 
-    // 2. Agregar carátula / Anexo al final
+    // Agregar Anexo
     const anexo = pdfDoc.addPage([595.28, 841.89]);
     let y = 800;
 
