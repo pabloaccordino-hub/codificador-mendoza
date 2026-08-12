@@ -1,87 +1,1822 @@
 {
-  "GLUCOSA EN SUERO": {
-    "code": "LAB.01.073",
-    "description": "Glucemia",
-    "confidence": "confirmada"
+  "LAB.01.092": {
+    "descripcion": "Howel, tiempo de",
+    "valor": 4
   },
-  "HEMOGRAMA COMPLETO": {
-    "code": "LAB.01.085",
-    "description": "Hemograma",
-    "confidence": "confirmada"
+  "LAB.04.161": {
+    "descripcion": "HTLV 1 + 2 Ac. anti (ELISA)",
+    "valor": 23
   },
-  "UREMIA": {
-    "code": "LAB.01.157",
-    "description": "Urea plasmática",
-    "confidence": "validada por equivalencia"
+  "LAB.08.036": {
+    "descripcion": "HTLV 1 + 2 confirmatorio",
+    "valor": 118
   },
-  "URICEMIA": {
-    "code": "LAB.01.003",
-    "description": "Ácido úrico en suero y plasma",
-    "confidence": "confirmada"
+  "LAB.04.162": {
+    "descripcion": "HTLV 1 + 2, Ac. anti (partículas de gelatina)",
+    "valor": 23
   },
-  "COLESTEROL EN SUERO": {
-    "code": "LAB.02.020",
-    "description": "Colesterol total libre y esterificado",
-    "confidence": "revisar"
+  "LAB.08.037": {
+    "descripcion": "Hu/ANNA-1",
+    "valor": 118
   },
-  "COLESTEROL HDL": {
-    "code": "LAB.02.018",
-    "description": "Colesterol HDL libre y esterificado",
-    "confidence": "revisar"
+  "LAB.04.163": {
+    "descripcion": "Hubbner, test de",
+    "valor": 23
   },
-  "COLESTEROL LDL": {
-    "code": "LAB.02.019",
-    "description": "Colesterol LDL libre y esterificado",
-    "confidence": "revisar"
+  "LAB.01.093": {
+    "descripcion": "Huddlesson, reacción",
+    "valor": 4
   },
-  "TRIGLICÉRIDOS": {
-    "code": "LAB.01.154",
-    "description": "Triglicéridos",
-    "confidence": "confirmada"
+  "LAB.08.038": {
+    "descripcion": "Identificación microbiológica por espectrometría de masas",
+    "valor": 118
   },
-  "FAL - FOSFATASA ALCALINA": {
-    "code": "LAB.01.065",
-    "description": "Fosfatasa alcalina",
-    "confidence": "confirmada"
+  "LAB.06.042": {
+    "descripcion": "Identificación microbiológica por PCR",
+    "valor": 66
   },
-  "GOT (AST) - ASPARTATO AMINOTRANSFERASA": {
-    "code": "LAB.01.152",
-    "description": "Transaminasa, glutámico oxalacética (GOT, AST)",
-    "confidence": "confirmada"
+  "LAB.02.036": {
+    "descripcion": "Identificación serológica de gérmenes",
+    "valor": 8
   },
-  "GPT (ALT) - ALANINO AMINO TRANSFERASA": {
-    "code": "LAB.01.153",
-    "description": "Transaminasa, glutámico pirúvica (GPT, AGT)",
-    "confidence": "confirmada"
+  "LAB.06.043": {
+    "descripcion": "IGF BP3 plasmática, prot. de unión a factor de crecimiento",
+    "valor": 66
   },
-  "BILIRRUBINEMIA": {
-    "code": "LAB.01.014",
-    "description": "Bilirrubina total",
-    "confidence": "validada por equivalencia"
+  "LAB.04.164": {
+    "descripcion": "ILK 1 o 2, Integrin-linked kinase 1 o 2",
+    "valor": 23
   },
-  "CREATININA + FILTRADO GLOMERULAR": {
-    "code": "LAB.01.040",
-    "description": "Creatinina en plasma o suero",
-    "confidence": "confirmada"
+  "LAB.03.122": {
+    "descripcion": "Índice adsorbido en caolin",
+    "valor": 13
   },
-  "T4 TOTAL - TIROXINA TOTAL": {
-    "code": "LAB.02.063",
-    "description": "T4 total (tiroxina total)",
-    "confidence": "confirmada"
+  "LAB.03.123": {
+    "descripcion": "Índice de filtrado glomerular estimado (IFGe)",
+    "valor": 13
   },
-  "TSH - TIROTROFINA": {
-    "code": "LAB.02.069",
-    "description": "TSH, tirotrofina plasmática",
-    "confidence": "confirmada"
+  "LAB.04.165": {
+    "descripcion": "Inestabilidad microsatelital (IMS)",
+    "valor": 23
   },
-  "T3 - TRIIODOTIRONINA": {
-    "code": "LAB.02.061",
-    "description": "T3 total (triiodotironina total)",
-    "confidence": "confirmada"
+  "LAB.04.166": {
+    "descripcion": "Influenza A, Ac. anti",
+    "valor": 23
   },
-  "ORINA COMPLETA": {
-    "code": "LAB.01.124",
-    "description": "Orina completa",
-    "confidence": "confirmada"
+  "LAB.08.039": {
+    "descripcion": "Influenza A, H1N1 (PCR)",
+    "valor": 118
+  },
+  "LAB.08.040": {
+    "descripcion": "Influenza B (PCR)",
+    "valor": 118
+  },
+  "LAB.04.167": {
+    "descripcion": "Influenza B, Ac",
+    "valor": 23
+  },
+  "LAB.08.041": {
+    "descripcion": "Influenza B, Antígenos (Ags) - Material: hisopado nasal / faringeo / aspirados - PCR",
+    "valor": 118
+  },
+  "LAB.07.011": {
+    "descripcion": "Influenza IgM, Ac. anti",
+    "valor": 87
+  },
+  "LAB.08.042": {
+    "descripcion": "Influenza, cultivo en células (PCR)",
+    "valor": 118
+  },
+  "LAB.05.110": {
+    "descripcion": "Inmunocomplejos inducidos por drogas",
+    "valor": 39
+  },
+  "LAB.09.019": {
+    "descripcion": "Inmunoelectroforesis en orina (24 hs)",
+    "valor": 157
+  },
+  "LAB.09.020": {
+    "descripcion": "Inmunofijación - LCR",
+    "valor": 157
+  },
+  "LAB.09.021": {
+    "descripcion": "Inmunofijación - sérica",
+    "valor": 157
+  },
+  "LAB.09.022": {
+    "descripcion": "Inmunofijación - urinaria",
+    "valor": 157
+  },
+  "LAB.01.094": {
+    "descripcion": "Inmunoglobulina A, IgA, cadena alfa cuantitativa",
+    "valor": 4
+  },
+  "LAB.03.124": {
+    "descripcion": "Inmunoglobulina A, IgA, secretora (saliva - moco)",
+    "valor": 13
+  },
+  "LAB.10.007": {
+    "descripcion": "Inmunoglobulina D, IgD, cadena delta cuantitativa",
+    "valor": 195
+  },
+  "LAB.03.125": {
+    "descripcion": "Inmunoglobulina E, IgE",
+    "valor": 13
+  },
+  "LAB.03.126": {
+    "descripcion": "Inmunoglobulina G, IgG, cadena gamma cuantitativa",
+    "valor": 13
+  },
+  "LAB.03.127": {
+    "descripcion": "Inmunoglobulina M, IgM, cadena mu cuantitativa",
+    "valor": 13
+  },
+  "LAB.03.128": {
+    "descripcion": "Inmunoglobulinas de superficie",
+    "valor": 13
+  },
+  "LAB.09.023": {
+    "descripcion": "Inmunosupresores, dosaje de",
+    "valor": 157
+  },
+  "LAB.03.129": {
+    "descripcion": "Insulina",
+    "valor": 13
+  },
+  "LAB.07.012": {
+    "descripcion": "Insulina (TTOG), prueba de ayuno",
+    "valor": 87
+  },
+  "LAB.05.111": {
+    "descripcion": "Insulina, Ac. anti",
+    "valor": 39
+  },
+  "LAB.05.112": {
+    "descripcion": "Insulina, Ac. Anti- (Ac. Anti- IAA)",
+    "valor": 39
+  },
+  "LAB.05.113": {
+    "descripcion": "Interleukina 2 dosaje en suero",
+    "valor": 39
+  },
+  "LAB.05.114": {
+    "descripcion": "Interleukina 6 dosaje en suero",
+    "valor": 39
+  },
+  "LAB.02.037": {
+    "descripcion": "Iodo en orina",
+    "valor": 8
+  },
+  "LAB.02.073": {
+    "descripcion": "Ionograma materia fecal",
+    "valor": 8
+  },
+  "LAB.01.095": {
+    "descripcion": "Ionograma plasmático",
+    "valor": 4
+  },
+  "LAB.01.165": {
+    "descripcion": "Ionograma sérico",
+    "valor": 4
+  },
+  "LAB.01.096": {
+    "descripcion": "Ionograma urinario",
+    "valor": 4
+  },
+  "LAB.06.044": {
+    "descripcion": "Islote Langerhans pancreáticos, Ac. anti (ICA)",
+    "valor": 66
+  },
+  "LAB.04.168": {
+    "descripcion": "JO-1, Ac. anti",
+    "valor": 23
+  },
+  "LAB.04.169": {
+    "descripcion": "Klebsiella pneumoniae carbapenemasa (KPC)",
+    "valor": 23
+  },
+  "LAB.01.097": {
+    "descripcion": "KPTT",
+    "valor": 4
+  },
+  "LAB.01.098": {
+    "descripcion": "Kunkel, reacción de",
+    "valor": 4
+  },
+  "LAB.02.038": {
+    "descripcion": "L.E. LATEX",
+    "valor": 8
+  },
+  "LAB.03.130": {
+    "descripcion": "LA, Ac. anti",
+    "valor": 13
+  },
+  "LAB.03.131": {
+    "descripcion": "Lactamasa, prueba de",
+    "valor": 13
+  },
+  "LAB.01.099": {
+    "descripcion": "Láctico dehidroxigenasa (LDH)",
+    "valor": 4
+  },
+  "LAB.02.039": {
+    "descripcion": "Láctico dehidroxigenasa / isoenzimas",
+    "valor": 8
+  },
+  "LAB.08.043": {
+    "descripcion": "Lavado bronquial inmunocitológico",
+    "valor": 118
+  },
+  "LAB.11.003": {
+    "descripcion": "Lavado de semen",
+    "valor": 243
+  },
+  "LAB.01.100": {
+    "descripcion": "Lazo, prueba del",
+    "valor": 4
+  },
+  "LAB.04.170": {
+    "descripcion": "LC 1, Ac. anti",
+    "valor": 23
+  },
+  "LAB.01.101": {
+    "descripcion": "Leche materna, examen de",
+    "valor": 4
+  },
+  "LAB.04.171": {
+    "descripcion": "Legionella pneumophyla, Ag",
+    "valor": 23
+  },
+  "LAB.04.172": {
+    "descripcion": "Legionella, Ac. anti",
+    "valor": 23
+  },
+  "LAB.04.173": {
+    "descripcion": "Legionella, cultivo",
+    "valor": 23
+  },
+  "LAB.04.174": {
+    "descripcion": "Leishmaniasis (IFI)",
+    "valor": 23
+  },
+  "LAB.04.175": {
+    "descripcion": "Leishmaniasis, intradermoreacción",
+    "valor": 23
+  },
+  "LAB.05.115": {
+    "descripcion": "Lepra, bacilo de Hansen",
+    "valor": 39
+  },
+  "LAB.05.116": {
+    "descripcion": "Leptospira (mat. aglutinación)",
+    "valor": 39
+  },
+  "LAB.06.045": {
+    "descripcion": "Leptospira (tr. aglutinacion)",
+    "valor": 66
+  },
+  "LAB.04.176": {
+    "descripcion": "Leptospirosis (serología)",
+    "valor": 23
+  },
+  "LAB.03.132": {
+    "descripcion": "Leucinaminopeptidasa",
+    "valor": 13
+  },
+  "LAB.01.102": {
+    "descripcion": "Leucocitos, formula",
+    "valor": 4
+  },
+  "LAB.01.103": {
+    "descripcion": "Leucocitos, microagregación",
+    "valor": 4
+  },
+  "LAB.01.104": {
+    "descripcion": "Leucocitos, recuento de (glóbulos blancos)",
+    "valor": 4
+  },
+  "LAB.05.117": {
+    "descripcion": "Levaduras, tipificación",
+    "valor": 39
+  },
+  "LAB.08.044": {
+    "descripcion": "LGI1 (Leucin - Rich Glioma Inactivated Protein)",
+    "valor": 118
+  },
+  "LAB.03.133": {
+    "descripcion": "LH (hormona luteinizante)",
+    "valor": 13
+  },
+  "LAB.06.046": {
+    "descripcion": "LH post LHRH (hormona luteinizante post LHRH)",
+    "valor": 66
+  },
+  "LAB.04.177": {
+    "descripcion": "Lidocaína",
+    "valor": 23
+  },
+  "LAB.03.134": {
+    "descripcion": "Lipasa - urinaria (Lipasuria)",
+    "valor": 13
+  },
+  "LAB.03.135": {
+    "descripcion": "Lipasa en plasma o suero",
+    "valor": 13
+  },
+  "LAB.03.136": {
+    "descripcion": "Lipemia / lipidemia total en sangre",
+    "valor": 13
+  },
+  "LAB.02.040": {
+    "descripcion": "Lipidograma electroforético",
+    "valor": 8
+  },
+  "LAB.03.137": {
+    "descripcion": "Liquido amniótico, cuerpos lamelares en",
+    "valor": 13
+  },
+  "LAB.01.105": {
+    "descripcion": "Liquido amniótico, espectrofotometría (test Liley)",
+    "valor": 4
+  },
+  "LAB.03.138": {
+    "descripcion": "Liquido amniótico, índice meconial de",
+    "valor": 13
+  },
+  "LAB.01.106": {
+    "descripcion": "Liquido amniótico, porcentaje células naranjas en",
+    "valor": 4
+  },
+  "LAB.01.107": {
+    "descripcion": "Liquido amniótico, relación lecitina - esfingomielina en",
+    "valor": 4
+  },
+  "LAB.03.139": {
+    "descripcion": "Liquido amniótico, test Clemens, Skack test",
+    "valor": 13
+  },
+  "LAB.03.140": {
+    "descripcion": "Liquido ascítico, bacteriológico",
+    "valor": 13
+  },
+  "LAB.03.141": {
+    "descripcion": "Liquido ascítico, físico-químico",
+    "valor": 13
+  },
+  "LAB.03.142": {
+    "descripcion": "Liquido ascítico, gradiente de albúmina",
+    "valor": 13
+  },
+  "LAB.04.178": {
+    "descripcion": "Liquido biológico o de punción, adenosin deaminasa en",
+    "valor": 23
+  },
+  "LAB.05.118": {
+    "descripcion": "Liquido biológico o de punción, Cryptococcus antigenemia en",
+    "valor": 39
+  },
+  "LAB.02.041": {
+    "descripcion": "Liquido cefalorraquídeo, albumina en",
+    "valor": 8
+  },
+  "LAB.04.179": {
+    "descripcion": "Liquido cefalorraquídeo, alfa fetoproteina en",
+    "valor": 23
+  },
+  "LAB.03.143": {
+    "descripcion": "Liquido cefalorraquídeo, antigenorraquia",
+    "valor": 13
+  },
+  "LAB.04.180": {
+    "descripcion": "Liquido cefalorraquídeo, bacteriológico",
+    "valor": 23
+  },
+  "LAB.04.181": {
+    "descripcion": "Liquido cefalorraquídeo, bandas monoclonales",
+    "valor": 23
+  },
+  "LAB.04.182": {
+    "descripcion": "Liquido cefalorraquídeo, citológico",
+    "valor": 23
+  },
+  "LAB.05.119": {
+    "descripcion": "Liquido cefalorraquídeo, Cryptococcus Ac. anti",
+    "valor": 39
+  },
+  "LAB.05.120": {
+    "descripcion": "Liquido cefalorraquídeo, Estreptococo grupo B diagnóstico rápido en",
+    "valor": 39
+  },
+  "LAB.04.183": {
+    "descripcion": "Liquido cefalorraquídeo, físico-químico",
+    "valor": 23
+  },
+  "LAB.10.008": {
+    "descripcion": "Liquido cefalorraquídeo, HIV cultivo de",
+    "valor": 195
+  },
+  "LAB.09.024": {
+    "descripcion": "Liquido cefalorraquídeo, neurovirus en",
+    "valor": 157
+  },
+  "LAB.04.184": {
+    "descripcion": "Liquido cefalorraquídeo, parasitológico",
+    "valor": 23
+  },
+  "LAB.03.144": {
+    "descripcion": "Liquido cefalorraquídeo, proteínas totales en",
+    "valor": 13
+  },
+  "LAB.03.145": {
+    "descripcion": "Liquido cefalorraquídeo, VDRL en",
+    "valor": 13
+  },
+  "LAB.03.146": {
+    "descripcion": "Líquido pancreático, físico-químico",
+    "valor": 13
+  },
+  "LAB.03.147": {
+    "descripcion": "Liquido sinovial, citológico",
+    "valor": 13
+  },
+  "LAB.01.108": {
+    "descripcion": "Liquido sinovial, cristalografia",
+    "valor": 4
+  },
+  "LAB.03.148": {
+    "descripcion": "Liquido sinovial, físico-químico",
+    "valor": 13
+  },
+  "LAB.03.149": {
+    "descripcion": "Líquidos biológicos o de punción, bacteriológico",
+    "valor": 13
+  },
+  "LAB.01.109": {
+    "descripcion": "Líquidos biológicos o de punción, células neoplásicas en",
+    "valor": 4
+  },
+  "LAB.03.150": {
+    "descripcion": "Líquidos biológicos o de punción, citológico",
+    "valor": 13
+  },
+  "LAB.06.047": {
+    "descripcion": "Líquidos biológicos o de punción, citomegalovirus cultivo",
+    "valor": 66
+  },
+  "LAB.01.110": {
+    "descripcion": "Líquidos biológicos o de punción, cloro en",
+    "valor": 4
+  },
+  "LAB.04.185": {
+    "descripcion": "Líquidos biológicos o de punción, cultivo de TBC",
+    "valor": 23
+  },
+  "LAB.03.151": {
+    "descripcion": "Líquidos biológicos o de punción, físico-químico",
+    "valor": 13
+  },
+  "LAB.10.009": {
+    "descripcion": "Líquidos biológicos o de punción, HIV cultivo de",
+    "valor": 195
+  },
+  "LAB.09.025": {
+    "descripcion": "Líquidos biológicos o de punción, inmunoelectroforesis",
+    "valor": 157
+  },
+  "LAB.04.186": {
+    "descripcion": "Líquidos biológicos o de punción, proteinograma",
+    "valor": 23
+  },
+  "LAB.03.152": {
+    "descripcion": "Líquidos de punción nodular, cristales de colesterol",
+    "valor": 13
+  },
+  "LAB.02.042": {
+    "descripcion": "Lisina - vasopresina, test de",
+    "valor": 8
+  },
+  "LAB.02.043": {
+    "descripcion": "Lisis por sucrosa, prueba de",
+    "valor": 8
+  },
+  "LAB.03.153": {
+    "descripcion": "Listeria, cultivo",
+    "valor": 13
+  },
+  "LAB.02.044": {
+    "descripcion": "Litio en orina",
+    "valor": 8
+  },
+  "LAB.04.187": {
+    "descripcion": "Litio en sangre",
+    "valor": 23
+  },
+  "LAB.04.188": {
+    "descripcion": "LKM. 1, Ac. anti",
+    "valor": 23
+  },
+  "LAB.04.189": {
+    "descripcion": "LKM. 2, Ac. anti",
+    "valor": 23
+  },
+  "LAB.05.121": {
+    "descripcion": "M2, Ac. anti",
+    "valor": 39
+  },
+  "LAB.01.111": {
+    "descripcion": "Mac Lagan, reacción de timol",
+    "valor": 4
+  },
+  "LAB.01.112": {
+    "descripcion": "Magnesio en orina",
+    "valor": 4
+  },
+  "LAB.01.113": {
+    "descripcion": "Magnesio en sangre",
+    "valor": 4
+  },
+  "LAB.04.190": {
+    "descripcion": "Manganeso en sangre",
+    "valor": 23
+  },
+  "LAB.04.256": {
+    "descripcion": "Mantoux, Intradermo-Reacción de (PPD)",
+    "valor": 23
+  },
+  "LAB.02.045": {
+    "descripcion": "Materia fecal, acido láctico en",
+    "valor": 8
+  },
+  "LAB.04.191": {
+    "descripcion": "Materia fecal, Adenovirus Ag en",
+    "valor": 23
+  },
+  "LAB.04.192": {
+    "descripcion": "Materia fecal, Candida. Recuento de colonias en",
+    "valor": 23
+  },
+  "LAB.06.048": {
+    "descripcion": "Materia fecal, Clostridium difficile, toxina",
+    "valor": 66
+  },
+  "LAB.04.193": {
+    "descripcion": "Materia fecal, coprocultivo con Campylobacter",
+    "valor": 23
+  },
+  "LAB.04.194": {
+    "descripcion": "Materia fecal, coprocultivo con Yersina",
+    "valor": 23
+  },
+  "LAB.05.122": {
+    "descripcion": "Materia fecal, directo",
+    "valor": 39
+  },
+  "LAB.02.046": {
+    "descripcion": "Materia fecal, esteatocrito",
+    "valor": 8
+  },
+  "LAB.02.047": {
+    "descripcion": "Materia fecal, examen fresco con coloraciones",
+    "valor": 8
+  },
+  "LAB.03.154": {
+    "descripcion": "Materia fecal, grasas cualitativo",
+    "valor": 13
+  },
+  "LAB.03.155": {
+    "descripcion": "Materia fecal, grasas cuantitativo, van de Kamer",
+    "valor": 13
+  },
+  "LAB.05.123": {
+    "descripcion": "Materia fecal, Helicobacter pylori, Ag en",
+    "valor": 39
+  },
+  "LAB.01.114": {
+    "descripcion": "Materia fecal, leucocitos en",
+    "valor": 4
+  },
+  "LAB.01.115": {
+    "descripcion": "Materia fecal, parasitológico seriado",
+    "valor": 4
+  },
+  "LAB.02.048": {
+    "descripcion": "Materia fecal, parásitos hemáticos",
+    "valor": 8
+  },
+  "LAB.05.124": {
+    "descripcion": "Materia fecal, Rotavirus Ag en",
+    "valor": 39
+  },
+  "LAB.03.156": {
+    "descripcion": "Materia fecal, sangre oculta en (SOMF) - Inmunológico",
+    "valor": 13
+  },
+  "LAB.05.125": {
+    "descripcion": "MBG, Ac. Anti",
+    "valor": 39
+  },
+  "LAB.02.049": {
+    "descripcion": "Medulograma",
+    "valor": 8
+  },
+  "LAB.02.050": {
+    "descripcion": "Membrana basal, Ac. Anti-",
+    "valor": 8
+  },
+  "LAB.05.126": {
+    "descripcion": "Meningitis (Neumo, H. influenzae tipo B, Meningococo ABC) test rápido",
+    "valor": 39
+  },
+  "LAB.04.195": {
+    "descripcion": "Metadona",
+    "valor": 23
+  },
+  "LAB.03.157": {
+    "descripcion": "Metahemoglobina",
+    "valor": 13
+  },
+  "LAB.06.049": {
+    "descripcion": "Metanefrinas fraccionadas urinarias",
+    "valor": 66
+  },
+  "LAB.08.045": {
+    "descripcion": "Metapneumovirus (PCR)",
+    "valor": 118
+  },
+  "LAB.05.127": {
+    "descripcion": "Metotrexate, dosaje de",
+    "valor": 39
+  },
+  "LAB.04.196": {
+    "descripcion": "Micobacterias, cultivo (método radiométrico rápido)",
+    "valor": 23
+  },
+  "LAB.05.128": {
+    "descripcion": "Micofenolato, dosaje de",
+    "valor": 39
+  },
+  "LAB.03.158": {
+    "descripcion": "Micosis profundas, cultivos e identificación",
+    "valor": 13
+  },
+  "LAB.03.159": {
+    "descripcion": "Micosis profundas, estudio directo",
+    "valor": 13
+  },
+  "LAB.03.160": {
+    "descripcion": "Micosis profundas, estudio directo con coloración",
+    "valor": 13
+  },
+  "LAB.03.161": {
+    "descripcion": "Micosis superficiales, cultivo e identificación",
+    "valor": 13
+  },
+  "LAB.02.051": {
+    "descripcion": "Micosis superficiales, estudio directo",
+    "valor": 8
+  },
+  "LAB.03.162": {
+    "descripcion": "Micosis superficiales, estudio directo con coloración",
+    "valor": 13
+  },
+  "LAB.03.163": {
+    "descripcion": "Microalbuminuria",
+    "valor": 13
+  },
+  "LAB.04.197": {
+    "descripcion": "Microglobulina B2",
+    "valor": 23
+  },
+  "LAB.05.129": {
+    "descripcion": "Microsomal tiroideo, Ac. Anti-",
+    "valor": 39
+  },
+  "LAB.03.164": {
+    "descripcion": "Mieloperoxidasa, (Citoquímica)",
+    "valor": 13
+  },
+  "LAB.02.052": {
+    "descripcion": "Miocardio, Ac. anti",
+    "valor": 8
+  },
+  "LAB.03.165": {
+    "descripcion": "Mioglobina",
+    "valor": 13
+  },
+  "LAB.04.198": {
+    "descripcion": "Mitocondrial, Ac. anti (AMA M2)",
+    "valor": 23
+  },
+  "LAB.04.199": {
+    "descripcion": "Mitocondrial, Ac. anti (AMA M4)",
+    "valor": 23
+  },
+  "LAB.01.116": {
+    "descripcion": "Moco cervical, cristalización de",
+    "valor": 4
+  },
+  "LAB.01.117": {
+    "descripcion": "Moco nasal, PH y citológico",
+    "valor": 4
+  },
+  "LAB.10.010": {
+    "descripcion": "MOG, Ac Anti-",
+    "valor": 195
+  },
+  "LAB.01.118": {
+    "descripcion": "Mononucleosis hemoaglutinación (P. Bunnel)",
+    "valor": 4
+  },
+  "LAB.01.119": {
+    "descripcion": "Mononucleosis hemolit. (Peterson)",
+    "valor": 4
+  },
+  "LAB.01.120": {
+    "descripcion": "Mononucleosis monotest",
+    "valor": 4
+  },
+  "LAB.01.121": {
+    "descripcion": "Mononucleosis, test de Davidson - Paul Bunell",
+    "valor": 4
+  },
+  "LAB.01.122": {
+    "descripcion": "Monóxido de carbono",
+    "valor": 4
+  },
+  "LAB.01.123": {
+    "descripcion": "Mucoproteinas",
+    "valor": 4
+  },
+  "LAB.04.200": {
+    "descripcion": "Mucosemen cruzado",
+    "valor": 23
+  },
+  "LAB.03.166": {
+    "descripcion": "Músculo esquelético, Ac. anti (músculo estriado) (RNP)",
+    "valor": 13
+  },
+  "LAB.06.050": {
+    "descripcion": "Mycobacterium TBC (PCR)",
+    "valor": 66
+  },
+  "LAB.04.201": {
+    "descripcion": "Mycobacterium TBC, cultivo de",
+    "valor": 23
+  },
+  "LAB.03.167": {
+    "descripcion": "Mycobacterium, identificación",
+    "valor": 13
+  },
+  "LAB.04.202": {
+    "descripcion": "Mycoplasma genitalium, cultivo",
+    "valor": 23
+  },
+  "LAB.04.203": {
+    "descripcion": "Mycoplasma hominis, cultivo",
+    "valor": 23
+  },
+  "LAB.08.046": {
+    "descripcion": "Mycoplasma pneumoniae (PCR)",
+    "valor": 118
+  },
+  "LAB.04.204": {
+    "descripcion": "Mycoplasma pneumoniae Ac. anti (LATEX)",
+    "valor": 23
+  },
+  "LAB.04.205": {
+    "descripcion": "Mycoplasma pneumoniae IgG, Ac. anti (IFI)",
+    "valor": 23
+  },
+  "LAB.04.206": {
+    "descripcion": "Mycoplasma pneumoniae IgM, Ac. anti (IFI)",
+    "valor": 23
+  },
+  "LAB.02.053": {
+    "descripcion": "Mycoplasma PPLO (IFI)",
+    "valor": 8
+  },
+  "LAB.04.207": {
+    "descripcion": "Mycoplasma urealitico, cultivo",
+    "valor": 23
+  },
+  "LAB.04.208": {
+    "descripcion": "Mycoplasma, antibiograma",
+    "valor": 23
+  },
+  "LAB.09.026": {
+    "descripcion": "Neisseria gonorrheae (búsqueda en caso de abuso) - PCR",
+    "valor": 157
+  },
+  "LAB.03.168": {
+    "descripcion": "Neisseria meningitidis, cultivo",
+    "valor": 13
+  },
+  "LAB.08.047": {
+    "descripcion": "Neumococo, Ac. anti",
+    "valor": 118
+  },
+  "LAB.08.048": {
+    "descripcion": "Neumococo, contrainmunoelectroforesis",
+    "valor": 118
+  },
+  "LAB.10.011": {
+    "descripcion": "Neutrófilos, adhesividad estudios funcionales",
+    "valor": 195
+  },
+  "LAB.10.012": {
+    "descripcion": "Neutrófilos, fagocitosis estudios funcionales",
+    "valor": 195
+  },
+  "LAB.04.209": {
+    "descripcion": "Noradrenalina plasmática",
+    "valor": 23
+  },
+  "LAB.04.210": {
+    "descripcion": "Noradrenalina urinaria",
+    "valor": 23
+  },
+  "LAB.02.054": {
+    "descripcion": "Nucleares, Ac. anti (ANA, FAN)",
+    "valor": 8
+  },
+  "LAB.03.169": {
+    "descripcion": "Nucleolar, Ac. anti",
+    "valor": 13
+  },
+  "LAB.03.170": {
+    "descripcion": "Nucleotidasa 5'",
+    "valor": 13
+  },
+  "LAB.04.211": {
+    "descripcion": "Opiáceos",
+    "valor": 23
+  },
+  "LAB.01.124": {
+    "descripcion": "Orina completa",
+    "valor": 4
+  },
+  "LAB.01.125": {
+    "descripcion": "Osmolal, clearence",
+    "valor": 4
+  },
+  "LAB.01.126": {
+    "descripcion": "Osmolaridad, orina",
+    "valor": 4
+  },
+  "LAB.01.127": {
+    "descripcion": "Osmolaridad, suero",
+    "valor": 4
+  },
+  "LAB.04.212": {
+    "descripcion": "Osteocalcina",
+    "valor": 23
+  },
+  "LAB.06.051": {
+    "descripcion": "Ovario, Ac. anti",
+    "valor": 66
+  },
+  "LAB.03.171": {
+    "descripcion": "Oxigeno en sangre-PO2",
+    "valor": 13
+  },
+  "LAB.06.052": {
+    "descripcion": "P5O",
+    "valor": 66
+  },
+  "LAB.06.053": {
+    "descripcion": "Paludismo, Ac. anti (IFI)",
+    "valor": 66
+  },
+  "LAB.12.003": {
+    "descripcion": "Panel filmarray para 30 gérmenes",
+    "valor": 290
+  },
+  "LAB.02.055": {
+    "descripcion": "Pap endocervical",
+    "valor": 8
+  },
+  "LAB.02.056": {
+    "descripcion": "Pap exocervical",
+    "valor": 8
+  },
+  "LAB.08.049": {
+    "descripcion": "Papilloma humano virus (HPV) (PCR)",
+    "valor": 118
+  },
+  "LAB.08.050": {
+    "descripcion": "Papilloma humano virus (HPV) en biopsia",
+    "valor": 118
+  },
+  "LAB.08.051": {
+    "descripcion": "Papilloma humano virus (HPV) en extendido",
+    "valor": 118
+  },
+  "LAB.08.052": {
+    "descripcion": "Papilloma humano virus (HPV) hibridación",
+    "valor": 118
+  },
+  "LAB.02.057": {
+    "descripcion": "Paracoccidiodina, intradermoreacción",
+    "valor": 8
+  },
+  "LAB.04.213": {
+    "descripcion": "Paracoccidioides, Ac. anti (contrainmunoelectroforesis)",
+    "valor": 23
+  },
+  "LAB.04.214": {
+    "descripcion": "Paracoccidioides, Ac. anti (fijación complemento)",
+    "valor": 23
+  },
+  "LAB.04.215": {
+    "descripcion": "Paracoccidioides, Ac. anti (inmunodifusión)",
+    "valor": 23
+  },
+  "LAB.04.216": {
+    "descripcion": "Parainfluenza IgG, Ac. anti",
+    "valor": 23
+  },
+  "LAB.04.217": {
+    "descripcion": "Parainfluenza IgM, Ac. anti",
+    "valor": 23
+  },
+  "LAB.09.027": {
+    "descripcion": "Parainfluenza, cultivo de virus en célula (PCR)",
+    "valor": 157
+  },
+  "LAB.04.218": {
+    "descripcion": "Parásitos macroscópicos, identificación de",
+    "valor": 23
+  },
+  "LAB.03.172": {
+    "descripcion": "Parathormona plasmática (PTH)",
+    "valor": 13
+  },
+  "LAB.04.219": {
+    "descripcion": "Parotiditis (PCR)",
+    "valor": 23
+  },
+  "LAB.03.173": {
+    "descripcion": "Parotiditis IgG, Ac. anti (IFI)",
+    "valor": 13
+  },
+  "LAB.04.220": {
+    "descripcion": "Parotiditis IgM, Ac. anti (IFI)",
+    "valor": 23
+  },
+  "LAB.04.221": {
+    "descripcion": "Parotiditis, cultivo",
+    "valor": 23
+  },
+  "LAB.05.130": {
+    "descripcion": "Parvovirus B19 IgG, Ac. anti (IFI)",
+    "valor": 39
+  },
+  "LAB.05.131": {
+    "descripcion": "Parvovirus B19 IgM, Ac. anti (IFI)",
+    "valor": 39
+  },
+  "LAB.08.053": {
+    "descripcion": "Parvovirus, PCR en biopsia",
+    "valor": 118
+  },
+  "LAB.08.054": {
+    "descripcion": "Parvovirus, PCR en sangre",
+    "valor": 118
+  },
+  "LAB.11.004": {
+    "descripcion": "PCR HIV en semen",
+    "valor": 243
+  },
+  "LAB.04.222": {
+    "descripcion": "Péptido C de insulina",
+    "valor": 23
+  },
+  "LAB.04.223": {
+    "descripcion": "Péptido deaminado de gliadina (celiaquía)",
+    "valor": 23
+  },
+  "LAB.06.054": {
+    "descripcion": "Péptidos citrulinados cíclicos, Ac. anti (CCP)",
+    "valor": 66
+  },
+  "LAB.03.174": {
+    "descripcion": "Peroxidasa, Ac. anti",
+    "valor": 13
+  },
+  "LAB.01.128": {
+    "descripcion": "Peroxidasas",
+    "valor": 4
+  },
+  "LAB.05.132": {
+    "descripcion": "Piridolina urinaria",
+    "valor": 39
+  },
+  "LAB.02.058": {
+    "descripcion": "Piruvato-quinasa",
+    "valor": 8
+  },
+  "LAB.03.175": {
+    "descripcion": "Plaquetarios, factores",
+    "valor": 13
+  },
+  "LAB.04.224": {
+    "descripcion": "Plaquetas, adhesividad",
+    "valor": 23
+  },
+  "LAB.04.225": {
+    "descripcion": "Plaquetas, microagregación",
+    "valor": 23
+  },
+  "LAB.01.129": {
+    "descripcion": "Plaquetas, recuento de",
+    "valor": 4
+  },
+  "LAB.01.130": {
+    "descripcion": "Plasma recalcificado, tiempo de",
+    "valor": 4
+  },
+  "LAB.09.028": {
+    "descripcion": "PlFG (factor de crecimiento placentario humano)",
+    "valor": 157
+  },
+  "LAB.09.029": {
+    "descripcion": "Pneumocystis carinii, Gram - Giemsa",
+    "valor": 157
+  },
+  "LAB.09.030": {
+    "descripcion": "Pneumocystis carinii, inmunofluorescencia",
+    "valor": 157
+  },
+  "LAB.05.133": {
+    "descripcion": "Pneumocystis carinii, tricrómica en biopsia",
+    "valor": 39
+  },
+  "LAB.03.176": {
+    "descripcion": "Pneumocystis carinii, tricrómica en sangre",
+    "valor": 13
+  },
+  "LAB.09.031": {
+    "descripcion": "Pneumocystis jiroveci, inmunofluorescencia",
+    "valor": 157
+  },
+  "LAB.08.055": {
+    "descripcion": "PNMA2 (Ma2/Ta)",
+    "valor": 118
+  },
+  "LAB.09.032": {
+    "descripcion": "Polimerasa en cadena",
+    "valor": 157
+  },
+  "LAB.08.056": {
+    "descripcion": "Polyomavirus BK (PCR)",
+    "valor": 118
+  },
+  "LAB.08.057": {
+    "descripcion": "Polyomavirus JC (PCR)",
+    "valor": 118
+  },
+  "LAB.03.177": {
+    "descripcion": "Porfobilinógeno en orina",
+    "valor": 13
+  },
+  "LAB.01.131": {
+    "descripcion": "Potasio en orina",
+    "valor": 4
+  },
+  "LAB.01.132": {
+    "descripcion": "Potasio en plasma",
+    "valor": 4
+  },
+  "LAB.03.178": {
+    "descripcion": "Pregnanotriol",
+    "valor": 13
+  },
+  "LAB.06.055": {
+    "descripcion": "Pro BNP",
+    "valor": 66
+  },
+  "LAB.06.056": {
+    "descripcion": "Procalcitonina (PCT)",
+    "valor": 66
+  },
+  "LAB.03.179": {
+    "descripcion": "Progesterona",
+    "valor": 13
+  },
+  "LAB.03.180": {
+    "descripcion": "Progesterona, 17 hidroxi",
+    "valor": 13
+  },
+  "LAB.07.013": {
+    "descripcion": "Progesterona, 17 hidroxi (prueba de ACTH)",
+    "valor": 87
+  },
+  "LAB.06.057": {
+    "descripcion": "Progesterona, receptores de",
+    "valor": 66
+  },
+  "LAB.03.181": {
+    "descripcion": "Prolactina (Prl)",
+    "valor": 13
+  },
+  "LAB.09.033": {
+    "descripcion": "Proteína A plasmática asociada al embarazo (PAPP-A)",
+    "valor": 157
+  },
+  "LAB.05.134": {
+    "descripcion": "Proteína C activada resistencia a (RCPA)",
+    "valor": 39
+  },
+  "LAB.05.135": {
+    "descripcion": "Proteína C funcional",
+    "valor": 39
+  },
+  "LAB.06.058": {
+    "descripcion": "Proteína C inhibidor",
+    "valor": 66
+  },
+  "LAB.03.182": {
+    "descripcion": "Proteína C Reactiva - Ultrasensible (PCRus)",
+    "valor": 13
+  },
+  "LAB.01.133": {
+    "descripcion": "Proteína C reactiva (PCR)",
+    "valor": 4
+  },
+  "LAB.05.136": {
+    "descripcion": "Proteína de unión a lipopolisacáridos (LBP)",
+    "valor": 39
+  },
+  "LAB.07.014": {
+    "descripcion": "Proteína S funcional",
+    "valor": 87
+  },
+  "LAB.05.137": {
+    "descripcion": "Proteína S inhibidor",
+    "valor": 39
+  },
+  "LAB.05.138": {
+    "descripcion": "Proteína S total",
+    "valor": 39
+  },
+  "LAB.05.139": {
+    "descripcion": "Proteína transportadora tiroxina (TBG)",
+    "valor": 39
+  },
+  "LAB.01.134": {
+    "descripcion": "Proteínas en orina",
+    "valor": 4
+  },
+  "LAB.01.135": {
+    "descripcion": "Proteínas totales en plasma o suero",
+    "valor": 4
+  },
+  "LAB.01.136": {
+    "descripcion": "Proteínas, fracción albúmina",
+    "valor": 4
+  },
+  "LAB.01.137": {
+    "descripcion": "Proteínas, fracción prealbúmina",
+    "valor": 4
+  },
+  "LAB.01.138": {
+    "descripcion": "Proteínas, fracciones globulinas",
+    "valor": 4
+  },
+  "LAB.06.059": {
+    "descripcion": "Proteinasa 3, Ac. anti (PR3)",
+    "valor": 66
+  },
+  "LAB.05.140": {
+    "descripcion": "Proteinograma electroforético - LCR",
+    "valor": 39
+  },
+  "LAB.04.226": {
+    "descripcion": "Proteinograma electroforético, en suero",
+    "valor": 23
+  },
+  "LAB.01.139": {
+    "descripcion": "Proteinuria 24 horas",
+    "valor": 4
+  },
+  "LAB.06.060": {
+    "descripcion": "Protrombina G20210A",
+    "valor": 66
+  },
+  "LAB.08.058": {
+    "descripcion": "Protrombina, 20.210",
+    "valor": 118
+  },
+  "LAB.01.140": {
+    "descripcion": "Protrombina, consumo de",
+    "valor": 4
+  },
+  "LAB.01.141": {
+    "descripcion": "Protrombina, RIN",
+    "valor": 4
+  },
+  "LAB.01.142": {
+    "descripcion": "Protrombina, tiempo de (TP)",
+    "valor": 4
+  },
+  "LAB.10.013": {
+    "descripcion": "Psicofarmacos / drogas de abuso por HPLC, determinación de",
+    "valor": 195
+  },
+  "LAB.01.143": {
+    "descripcion": "Psitacosis, reacción de Bedson",
+    "valor": 4
+  },
+  "LAB.08.059": {
+    "descripcion": "Queratina, Ac. anti",
+    "valor": 118
+  },
+  "LAB.04.227": {
+    "descripcion": "Rast, prueba de - IgE",
+    "valor": 23
+  },
+  "LAB.05.141": {
+    "descripcion": "Receptor de TSH, Ac. anti (TRAB,TBII)",
+    "valor": 39
+  },
+  "LAB.07.015": {
+    "descripcion": "Receptores de Glutamato ( tipo NMDA)",
+    "valor": 87
+  },
+  "LAB.07.016": {
+    "descripcion": "Receptores de Glutamato (tipo AMPA1 Y AMPA2 (Glu R1 y Glu R2))",
+    "valor": 87
+  },
+  "LAB.08.060": {
+    "descripcion": "Recoverina",
+    "valor": 118
+  },
+  "LAB.05.142": {
+    "descripcion": "Relación Kappa / Lamba (en orina)",
+    "valor": 39
+  },
+  "LAB.09.034": {
+    "descripcion": "Relación Kappa / Lamba (en plasma)",
+    "valor": 157
+  },
+  "LAB.05.143": {
+    "descripcion": "Relación Kappa / Lamba (sérica)",
+    "valor": 39
+  },
+  "LAB.04.228": {
+    "descripcion": "Renina angiotensina plasmática",
+    "valor": 23
+  },
+  "LAB.07.017": {
+    "descripcion": "Reovirus, Ac. anti",
+    "valor": 87
+  },
+  "LAB.04.229": {
+    "descripcion": "Reptilasa, tiempo de",
+    "valor": 23
+  },
+  "LAB.09.035": {
+    "descripcion": "Resistencia a antirretrovirales HIV por genotipificación",
+    "valor": 157
+  },
+  "LAB.01.144": {
+    "descripcion": "Resistencia capilar (petequimetria)",
+    "valor": 4
+  },
+  "LAB.03.183": {
+    "descripcion": "Reticulina, Ac. Anti (ARA)",
+    "valor": 13
+  },
+  "LAB.01.145": {
+    "descripcion": "Reticulocitos, recuento de",
+    "valor": 4
+  },
+  "LAB.09.036": {
+    "descripcion": "Rhinovirus (PCR)",
+    "valor": 157
+  },
+  "LAB.04.230": {
+    "descripcion": "Rhinovirus, cultivo en células humanas",
+    "valor": 23
+  },
+  "LAB.08.061": {
+    "descripcion": "Ri/ANNA-2",
+    "valor": 118
+  },
+  "LAB.04.231": {
+    "descripcion": "Ribonucleoproteina RNP, Ac. anti (ENA o Sm)",
+    "valor": 23
+  },
+  "LAB.06.061": {
+    "descripcion": "Ribosomal P, Ac. anti",
+    "valor": 66
+  },
+  "LAB.05.144": {
+    "descripcion": "Richetsias, reacción de Weil",
+    "valor": 39
+  },
+  "LAB.06.062": {
+    "descripcion": "Ristocetina, cofactor de",
+    "valor": 66
+  },
+  "LAB.03.184": {
+    "descripcion": "RO/SSA, Ac. anti",
+    "valor": 13
+  },
+  "LAB.01.146": {
+    "descripcion": "Rose Ragan, prueba de",
+    "valor": 4
+  },
+  "LAB.04.232": {
+    "descripcion": "Rosetas EA",
+    "valor": 23
+  },
+  "LAB.03.185": {
+    "descripcion": "Rubeola IgG, Ac. anti",
+    "valor": 13
+  },
+  "LAB.03.186": {
+    "descripcion": "Rubeola IgM, Ac. anti",
+    "valor": 13
+  },
+  "LAB.03.187": {
+    "descripcion": "Salicilatos",
+    "valor": 13
+  },
+  "LAB.08.062": {
+    "descripcion": "SAMR, Staphylococcus aureus meticilino resistente - PCR",
+    "valor": 118
+  },
+  "LAB.09.037": {
+    "descripcion": "SAMR, Staphylococcus aureus meticilino resistente (PCR)",
+    "valor": 157
+  },
+  "LAB.05.145": {
+    "descripcion": "Sarampión en aspirado nasofaríngeo (IFI)",
+    "valor": 39
+  },
+  "LAB.03.188": {
+    "descripcion": "Sarampión IgG, Ac. anti",
+    "valor": 13
+  },
+  "LAB.04.233": {
+    "descripcion": "Sarampión IgM, Ac. anti",
+    "valor": 23
+  },
+  "LAB.04.234": {
+    "descripcion": "SCL 70, Ac. anti",
+    "valor": 23
+  },
+  "LAB.01.147": {
+    "descripcion": "Sedimento de orina",
+    "valor": 4
+  },
+  "LAB.04.235": {
+    "descripcion": "Serología pre-quirúrgica por quimioluminiscencia HIV-MBU-HCV-A-CORI, cada uno",
+    "valor": 23
+  },
+  "LAB.04.236": {
+    "descripcion": "Serotonina",
+    "valor": 23
+  },
+  "LAB.09.038": {
+    "descripcion": "sFlt-1 (Tirosincinasa-1 soluble fmS)",
+    "valor": 157
+  },
+  "LAB.04.237": {
+    "descripcion": "SHBG, globulina ligadora de hormonas sexuales",
+    "valor": 23
+  },
+  "LAB.01.148": {
+    "descripcion": "Sia, test de",
+    "valor": 4
+  },
+  "LAB.02.059": {
+    "descripcion": "Sickling, test de",
+    "valor": 8
+  },
+  "LAB.02.060": {
+    "descripcion": "Siderofilina, capac.de saturac.",
+    "valor": 8
+  },
+  "LAB.03.211": {
+    "descripcion": "Sifilis (Elisa / Elisa recombinante)",
+    "valor": 13
+  },
+  "LAB.04.238": {
+    "descripcion": "Sims Hubbner, test de",
+    "valor": 23
+  },
+  "LAB.04.253": {
+    "descripcion": "Sincicial Respiratorio, Ac. IgG Anti- (VSR IgG)",
+    "valor": 23
+  },
+  "LAB.04.254": {
+    "descripcion": "Sincicial Respiratorio, Ac. IgMG Anti- (VSR IgM)",
+    "valor": 23
+  },
+  "LAB.04.255": {
+    "descripcion": "Sincicial Respiratorio, Antígeno (Ag.) (VSR Ag)",
+    "valor": 23
+  },
+  "LAB.05.146": {
+    "descripcion": "SLA, Ac. anti",
+    "valor": 39
+  },
+  "LAB.01.149": {
+    "descripcion": "Sodio en orina (Na U)",
+    "valor": 4
+  },
+  "LAB.01.150": {
+    "descripcion": "Sodio en plasma (Na)",
+    "valor": 4
+  },
+  "LAB.05.147": {
+    "descripcion": "Somatomedina IG F1",
+    "valor": 39
+  },
+  "LAB.03.189": {
+    "descripcion": "Somatotrofina-hormona de crecimiento (GH) en plasma",
+    "valor": 13
+  },
+  "LAB.07.018": {
+    "descripcion": "Somatotrofina, prueba de arginina",
+    "valor": 87
+  },
+  "LAB.07.019": {
+    "descripcion": "Somatotrofina, prueba de ayuno",
+    "valor": 87
+  },
+  "LAB.07.020": {
+    "descripcion": "Somatotrofina, prueba de clonidina",
+    "valor": 87
+  },
+  "LAB.08.063": {
+    "descripcion": "SOX-1",
+    "valor": 118
+  },
+  "LAB.05.148": {
+    "descripcion": "SP 100, Ac. anti",
+    "valor": 39
+  },
+  "LAB.03.190": {
+    "descripcion": "SSB/La, Ac. anti",
+    "valor": 13
+  },
+  "LAB.04.239": {
+    "descripcion": "Streptococcus, grupo B",
+    "valor": 23
+  },
+  "LAB.03.191": {
+    "descripcion": "Sucrosa, prueba de",
+    "valor": 13
+  },
+  "LAB.06.063": {
+    "descripcion": "Sudor, test de electrolitos",
+    "valor": 66
+  },
+  "LAB.03.192": {
+    "descripcion": "Sulfato de protamina, prueba de",
+    "valor": 13
+  },
+  "LAB.05.149": {
+    "descripcion": "Sulfohemoglobina",
+    "valor": 39
+  },
+  "LAB.05.150": {
+    "descripcion": "Superóxido dismutasa",
+    "valor": 39
+  },
+  "LAB.05.151": {
+    "descripcion": "Suprarrenal, Ac. anti",
+    "valor": 39
+  },
+  "LAB.06.064": {
+    "descripcion": "Sustancia cementante, Ac. anti (ICS)",
+    "valor": 66
+  },
+  "LAB.03.193": {
+    "descripcion": "T3 libre (triiodotironina libre)",
+    "valor": 13
+  },
+  "LAB.02.061": {
+    "descripcion": "T3 total (triiodotironina total)",
+    "valor": 8
+  },
+  "LAB.02.062": {
+    "descripcion": "T4 libre (tiroxina libre)",
+    "valor": 8
+  },
+  "LAB.02.063": {
+    "descripcion": "T4 total (tiroxina total)",
+    "valor": 8
+  },
+  "LAB.05.152": {
+    "descripcion": "Tejidos y partes blandas, cultivo bacteriológico de",
+    "valor": 39
+  },
+  "LAB.03.194": {
+    "descripcion": "Teofilina",
+    "valor": 13
+  },
+  "LAB.03.195": {
+    "descripcion": "Test rápido en fauces para Streptococcus β-Hemolítico Grupo \"A\"",
+    "valor": 13
+  },
+  "LAB.12.004": {
+    "descripcion": "Testeo espermatozoide (PCR)",
+    "valor": 290
+  },
+  "LAB.03.196": {
+    "descripcion": "Testosterona libre plasmática",
+    "valor": 13
+  },
+  "LAB.03.197": {
+    "descripcion": "Testosterona libre urinaria",
+    "valor": 13
+  },
+  "LAB.03.198": {
+    "descripcion": "Testosterona plasmática total",
+    "valor": 13
+  },
+  "LAB.03.199": {
+    "descripcion": "Tiroglobulina plasmática (TG)",
+    "valor": 13
+  },
+  "LAB.04.240": {
+    "descripcion": "Tiroglobulina ultra sensible, Ac. anti",
+    "valor": 23
+  },
+  "LAB.08.064": {
+    "descripcion": "Titin",
+    "valor": 118
+  },
+  "LAB.04.241": {
+    "descripcion": "Titulación \"O\" peligroso",
+    "valor": 23
+  },
+  "LAB.03.200": {
+    "descripcion": "Tolerancia a la glucosa, test de (TTG) (Prueba de Conn y Fajans)",
+    "valor": 13
+  },
+  "LAB.08.065": {
+    "descripcion": "TORCH IgG, Ac. anti",
+    "valor": 118
+  },
+  "LAB.05.153": {
+    "descripcion": "Toxocara",
+    "valor": 39
+  },
+  "LAB.01.151": {
+    "descripcion": "Toxoplasmosis (aglutinación directa)",
+    "valor": 4
+  },
+  "LAB.02.064": {
+    "descripcion": "Toxoplasmosis (aglutinación indirecta)",
+    "valor": 8
+  },
+  "LAB.02.065": {
+    "descripcion": "Toxoplasmosis (fijac. complem.)",
+    "valor": 8
+  },
+  "LAB.06.065": {
+    "descripcion": "Toxoplasmosis cultivo en células",
+    "valor": 66
+  },
+  "LAB.02.066": {
+    "descripcion": "Toxoplasmosis IgG (IFI)",
+    "valor": 8
+  },
+  "LAB.03.201": {
+    "descripcion": "Toxoplasmosis IgG, Ac. anti",
+    "valor": 13
+  },
+  "LAB.03.202": {
+    "descripcion": "Toxoplasmosis IgM, Ac. anti",
+    "valor": 13
+  },
+  "LAB.05.154": {
+    "descripcion": "Toxoplasmosis, test de avidez, Ac IgG",
+    "valor": 39
+  },
+  "LAB.08.066": {
+    "descripcion": "TR (DNER)",
+    "valor": 118
+  },
+  "LAB.01.152": {
+    "descripcion": "Transaminasa, glutámico oxalacética (GOT, AST)",
+    "valor": 4
+  },
+  "LAB.01.153": {
+    "descripcion": "Transaminasa, glutámico pirúvica (GPT, AGT)",
+    "valor": 4
+  },
+  "LAB.02.067": {
+    "descripcion": "Transferrina",
+    "valor": 8
+  },
+  "LAB.05.155": {
+    "descripcion": "Transferrina, % de saturación",
+    "valor": 39
+  },
+  "LAB.04.242": {
+    "descripcion": "Transglutaminasa IgA, Ac. anti",
+    "valor": 23
+  },
+  "LAB.04.243": {
+    "descripcion": "Transglutaminasa IgG, Ac. anti",
+    "valor": 23
+  },
+  "LAB.03.203": {
+    "descripcion": "Treponema pallidum, (hemoaglutinación). TPHA IgG",
+    "valor": 13
+  },
+  "LAB.04.244": {
+    "descripcion": "Treponema pallidum, (hemoaglutinación).TPHA IgM",
+    "valor": 23
+  },
+  "LAB.04.245": {
+    "descripcion": "Treponema pallidum, quimioluminiscencia",
+    "valor": 23
+  },
+  "LAB.02.068": {
+    "descripcion": "Tricofitina, intradermorreacción",
+    "valor": 8
+  },
+  "LAB.01.154": {
+    "descripcion": "Triglicéridos",
+    "valor": 4
+  },
+  "LAB.01.155": {
+    "descripcion": "Trombina, tiempo de",
+    "valor": 4
+  },
+  "LAB.06.066": {
+    "descripcion": "Tromboelastografia rotacional",
+    "valor": 66
+  },
+  "LAB.01.156": {
+    "descripcion": "Tromboplastina, tiempo de",
+    "valor": 4
+  },
+  "LAB.04.246": {
+    "descripcion": "Troponina I",
+    "valor": 23
+  },
+  "LAB.04.247": {
+    "descripcion": "TSH tirotrofina neonatal",
+    "valor": 23
+  },
+  "LAB.02.069": {
+    "descripcion": "TSH, tirotrofina plasmática",
+    "valor": 8
+  },
+  "LAB.03.204": {
+    "descripcion": "TSH, tirotrofina plasmática ultrasensible",
+    "valor": 13
+  },
+  "LAB.06.067": {
+    "descripcion": "TSH, tirotrofina post TRH",
+    "valor": 66
+  },
+  "LAB.03.205": {
+    "descripcion": "Tzanck, citodiagnóstico de",
+    "valor": 13
+  },
+  "LAB.06.068": {
+    "descripcion": "U1RNP, Ac. anti",
+    "valor": 66
+  },
+  "LAB.01.157": {
+    "descripcion": "Urea plasmática",
+    "valor": 4
+  },
+  "LAB.01.158": {
+    "descripcion": "Urea urinaria",
+    "valor": 4
+  },
+  "LAB.01.159": {
+    "descripcion": "Urea, clearence",
+    "valor": 4
+  },
+  "LAB.05.156": {
+    "descripcion": "Ureaplasma urealyticum, cultivo",
+    "valor": 39
+  },
+  "LAB.01.160": {
+    "descripcion": "Urobilina cuantitativa en orina",
+    "valor": 4
+  },
+  "LAB.01.161": {
+    "descripcion": "Urocitograma, una muestra",
+    "valor": 4
+  },
+  "LAB.02.070": {
+    "descripcion": "Urocitograma/ 4 muestras o un ciclo",
+    "valor": 8
+  },
+  "LAB.03.206": {
+    "descripcion": "Urocultivo",
+    "valor": 13
+  },
+  "LAB.03.207": {
+    "descripcion": "Vainillin mandélico en orina",
+    "valor": 13
+  },
+  "LAB.04.248": {
+    "descripcion": "Vancomicina, dosaje en suero. Vancocinemia",
+    "valor": 23
+  },
+  "LAB.06.069": {
+    "descripcion": "Varicela directa, monotest",
+    "valor": 66
+  },
+  "LAB.06.070": {
+    "descripcion": "Varicela zoster (PCR) (VZV)",
+    "valor": 66
+  },
+  "LAB.04.249": {
+    "descripcion": "Varicela zoster directo IgG, Ac. anti",
+    "valor": 23
+  },
+  "LAB.04.250": {
+    "descripcion": "Varicela zoster directo IgM, Ac. anti",
+    "valor": 23
+  },
+  "LAB.06.071": {
+    "descripcion": "Varicela zoster, cultivo en células",
+    "valor": 66
+  },
+  "LAB.01.162": {
+    "descripcion": "VDRL",
+    "valor": 4
+  },
+  "LAB.02.071": {
+    "descripcion": "Ventana cutánea",
+    "valor": 8
+  },
+  "LAB.06.072": {
+    "descripcion": "Verotoxina 0157",
+    "valor": 66
+  },
+  "LAB.04.251": {
+    "descripcion": "Vibrio cholerae, cultivo e identificación",
+    "valor": 23
+  },
+  "LAB.09.039": {
+    "descripcion": "Virus Junín (PCR)",
+    "valor": 157
+  },
+  "LAB.05.157": {
+    "descripcion": "Virus Junín IgG, Ac. anti",
+    "valor": 39
+  },
+  "LAB.05.158": {
+    "descripcion": "Virus Junín IgM, Ac. anti",
+    "valor": 39
+  },
+  "LAB.04.252": {
+    "descripcion": "Virus respiratorios (IFI)",
+    "valor": 23
+  },
+  "LAB.06.073": {
+    "descripcion": "Virus respiratorios, diag. rápido",
+    "valor": 66
+  },
+  "LAB.09.040": {
+    "descripcion": "Virus Saint Louis (PCR) (Virus San Luis)",
+    "valor": 157
+  },
+  "LAB.09.041": {
+    "descripcion": "Virus sincicial respiratorio (PCR)",
+    "valor": 157
+  },
+  "LAB.03.208": {
+    "descripcion": "Vitamina B12",
+    "valor": 13
+  },
+  "LAB.08.067": {
+    "descripcion": "Vitamina D (1,25-Dihidroxicolecalciferol o Calcitriol - 1,25)",
+    "valor": 118
+  },
+  "LAB.05.159": {
+    "descripcion": "Vitamina D3",
+    "valor": 39
+  },
+  "LAB.01.163": {
+    "descripcion": "Widal, reacción de",
+    "valor": 4
+  },
+  "LAB.05.160": {
+    "descripcion": "XA, Ac. anti (Heparinemia)",
+    "valor": 39
+  },
+  "LAB.08.068": {
+    "descripcion": "Yo/PCA1",
+    "valor": 118
+  },
+  "LAB.08.069": {
+    "descripcion": "Zica - Ac. Anti-",
+    "valor": null
   }
 }
