@@ -1,7 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Codificador de Prestaciones - Mendoza Marzo 2026</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs" type="module"></script>
+<script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f3f4f6;
+    color:#111827;
+}
+
+.container{
+    max-width:1100px;
+    margin:30px auto;
+    padding:25px;
+}
+
+.card{
+    background:white;
+    border-radius:14px;
+    padding:25px;
+    box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
+
+h1{
+    margin:0 0 5px;
+    font-size:28px;
+}
+
+.subtitle{
+    color:#6b7280;
+    margin-bottom:25px;
+}
+
+.buttons{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin:20px 0;
+}
+
+button{
+    border:0;
+    border-radius:8px;
+    padding:12px 18px;
+    font-size:15px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+#analyzeBtn{
+    background:#111827;
+    color:white;
+}
+
+#clearBtn{
+    background:#e5e7eb;
+    color:#111827;
+}
+
+#generateBtn{
+    background:#2563eb;
+    color:white;
+    display:none;
+}
+
+button:disabled{
+    opacity:.5;
+    cursor:not-allowed;
+}
+
+input[type=file]{
+    width:100%;
+    padding:14px;
+    border:2px dashed #d1d5db;
+    border-radius:10px;
+    background:#fafafa;
+}
+
+.status{
+    margin-top:15px;
+    padding:14px;
+    border-radius:8px;
+    background:#f3f4f6;
+    display:none;
+}
+
+.status.ok{
+    display:block;
+    background:#ecfdf5;
+    color:#065f46;
+}
+
+.status.error{
+    display:block;
+    background:#fef2f2;
+    color:#991b1b;
+}
+
+.status.info{
+    display:block;
+    background:#eff6ff;
+    color:#1e40af;
+}
+
+.result{
+    margin-top:25px;
+}
+
+.result h2{
+    margin-bottom:15px;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    font-size:14px;
+}
+
+th,td{
+    padding:11px;
+    border-bottom:1px solid #e5e7eb;
+    text-align:left;
+}
+
+th{
+    background:#f9fafb;
+}
+
+.code{
+    font-weight:bold;
+    white-space:nowrap;
+}
+
+.badge{
+    display:inline-block;
+    padding:4px 8px;
+    border-radius:5px;
+    background:#dcfce7;
+    color:#166534;
+    font-weight:bold;
+}
+
+.empty{
+    padding:20px;
+    background:#fff7ed;
+    color:#9a3412;
+    border-radius:8px;
+}
+
+.loading{
+    display:none;
+    margin-top:15px;
+}
+
+.spinner{
+    display:inline-block;
+    width:18px;
+    height:18px;
+    border:3px solid #ddd;
+    border-top-color:#111827;
+    border-radius:50%;
+    animation:spin .8s linear infinite;
+    vertical-align:middle;
+    margin-right:8px;
+}
+
+@keyframes spin{
+    to{transform:rotate(360deg)}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="card">
+    <h1>Codificador de Prestaciones</h1>
+    <div class="subtitle">Nomenclador Mendoza · Marzo 2026</div>
+
+    <input id="pdfInput" type="file" accept="application/pdf">
+
+    <div class="buttons">
+      <button id="analyzeBtn">ANALIZAR ESTUDIO</button>
+      <button id="clearBtn">LIMPIAR</button>
+      <button id="generateBtn">GENERAR PDF CODIFICADO</button>
+    </div>
+
+    <div id="loading" class="loading">
+      <span class="spinner"></span>
+      Analizando estudio...
+    </div>
+
+    <div id="status" class="status"></div>
+    <div id="result" class="result"></div>
+  </div>
+</div>
+
 <script type="module">
 
 /* =========================================================
-   1. INICIALIZACIÓN DE PDF.JS Y VARIABLES GLOBALES
+   1. CONFIGURACIÓN DE PDF.JS
 ========================================================= */
 const pdfjsLib = await import(
     "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.4.168/pdf.min.mjs"
@@ -13,7 +220,6 @@ pdfjsLib.GlobalWorkerOptions.workerSrc =
 let NOMENCLADOR = [];
 let EQUIVALENCIAS = {};
 
-// Elementos de la interfaz (DOM)
 const pdfInput = document.getElementById('pdfInput');
 const analyzeBtn = document.getElementById('analyzeBtn');
 const clearBtn = document.getElementById('clearBtn');
@@ -24,43 +230,41 @@ const resultDiv = document.getElementById('result');
 
 
 /* =========================================================
-   2. CARGA ASÍNCRONA DE NOMENCLADOR Y EQUIVALENCIAS
+   2. CARGA DE ARCHIVOS JSON
 ========================================================= */
 async function cargarCatalogos() {
     try {
         mostrarEstado("Cargando catálogo y equivalencias...", "info");
         
-        // Fetch paralelo para obtener ambos JSON
         const [resNomenclador, resEquivalencias] = await Promise.all([
             fetch('./nomenclador.json'),
             fetch('./equivalencias.json')
         ]);
 
         if (!resNomenclador.ok || !resEquivalencias.ok) {
-            throw new Error("No se pudieron cargar los archivos JSON.");
+            throw new Error("No se encontraron los archivos JSON en la raíz.");
         }
 
         NOMENCLADOR = await resNomenclador.json();
         EQUIVALENCIAS = await resEquivalencias.json();
 
-        mostrarEstado("Catálogos cargados correctamente.", "ok");
+        mostrarEstado("Bases de datos cargadas correctamente.", "ok");
     } catch (error) {
-        console.error("Error al cargar los JSON:", error);
-        mostrarEstado("Error al cargar nomenclador.json o equivalencias.json. Verifica las rutas del proyecto.", "error");
+        console.error("Error al cargar JSONs:", error);
+        mostrarEstado("Error al cargar nomenclador.json o equivalencias.json.", "error");
     }
 }
 
-// Iniciar la carga al abrir la página
 cargarCatalogos();
 
 
 /* =========================================================
-   3. EXTRACCIÓN SEGURO DE TEXTO DESDE PDF
+   3. LECTURA DE PDF (PREVENCION DE ARRAYBUFFER DETACHED)
 ========================================================= */
 async function extraerTextoPDF(file) {
     const arrayBuffer = await file.arrayBuffer();
     
-    // NOTA: Se utiliza .slice(0) para prevenir el error "detached ArrayBuffer"
+    // .slice(0) evita perder la referencia del ArrayBuffer
     const loadingTask = pdfjsLib.getDocument({ data: new Uint8Array(arrayBuffer.slice(0)) });
     const pdf = await loadingTask.promise;
     
@@ -78,41 +282,83 @@ async function extraerTextoPDF(file) {
 
 
 /* =========================================================
-   4. LÓGICA DE BÚSQUEDA Y MAPEO DE CÓDIGOS
+   4. NORMALIZACIÓN Y BÚSQUEDA
 ========================================================= */
+function normalizarTexto(str) {
+    if (!str) return "";
+    return str
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "") 
+        .replace(/[^a-z0-9\s]/g, " ")   
+        .replace(/\s+/g, " ")           
+        .trim();
+}
+
 function procesarEstudio(textoExtraido) {
-    const textoNormalizado = textoExtraido.toLowerCase();
-    const resultados = [];
+    const textoLimpio = normalizarTexto(textoExtraido);
+    const hallazgos = [];
+    const codigosProcesados = new Set();
 
-    // Recorrer las entradas del Nomenclador
+    if (!textoLimpio) return [];
+
+    // Busca por Nomenclador
     NOMENCLADOR.forEach(item => {
-        const descripcionBuscada = item.description ? item.description.toLowerCase() : "";
-        
-        // Comprobar si la descripción existe en el texto extraído
-        if (descripcionBuscada && textoNormalizado.includes(descripcionBuscada)) {
-            
-            // 1. Obtener equivalencia si existiera asignada
-            const codigoEquivalente = EQUIVALENCIAS[item.code] || item.code;
+        const descOficial = normalizarTexto(item.description || item.descripcion);
+        const codigo = item.code || item.codigo;
 
-            resultados.push({
-                codigoOficial: item.code,
-                codigoMapeado: codigoEquivalente,
-                descripcion: item.description
+        if (!descOficial) return;
+
+        let coincide = textoLimpio.includes(descOficial);
+
+        if (!coincide) {
+            const palabrasClave = descOficial.split(" ").filter(p => p.length > 3);
+            if (palabrasClave.length > 0) {
+                coincide = palabrasClave.every(p => textoLimpio.includes(p));
+            }
+        }
+
+        if (coincide && !codigosProcesados.has(codigo)) {
+            codigosProcesados.add(codigo);
+            hallazgos.push({
+                codigoOficial: codigo,
+                codigoMapeado: EQUIVALENCIAS[codigo] || codigo,
+                descripcion: item.description || item.descripcion
             });
         }
     });
 
-    return resultados;
+    // Busca por Claves de Equivalencias
+    Object.keys(EQUIVALENCIAS).forEach(claveOrigen => {
+        const claveLimpia = normalizarTexto(claveOrigen);
+        
+        if (claveLimpia.length > 3 && textoLimpio.includes(claveLimpia)) {
+            const codMapeado = EQUIVALENCIAS[claveOrigen];
+            
+            if (!codigosProcesados.has(codMapeado)) {
+                const itemOficial = NOMENCLADOR.find(n => (n.code || n.codigo) === codMapeado);
+                
+                codigosProcesados.add(codMapeado);
+                hallazgos.push({
+                    codigoOficial: codMapeado,
+                    codigoMapeado: codMapeado,
+                    descripcion: itemOficial ? (itemOficial.description || itemOficial.descripcion) : `Mapeado de (${claveOrigen})`
+                });
+            }
+        }
+    });
+
+    return hallazgos;
 }
 
 
 /* =========================================================
-   5. INTERFAZ Y EVENTOS
+   5. CONTROLADORES DE EVENTOS DE INTERFAZ
 ========================================================= */
 analyzeBtn.addEventListener('click', async () => {
     const file = pdfInput.files[0];
     if (!file) {
-        mostrarEstado("Por favor, selecciona un archivo PDF primero.", "error");
+        mostrarEstado("Por favor, selecciona un archivo PDF.", "error");
         return;
     }
 
@@ -128,20 +374,19 @@ analyzeBtn.addEventListener('click', async () => {
     } catch (err) {
         console.error(err);
         mostrarCargando(false);
-        mostrarEstado("Error procesando el documento PDF: " + err.message, "error");
+        mostrarEstado("Error al procesar el PDF: " + err.message, "error");
     }
 });
 
 clearBtn.addEventListener('click', () => {
     pdfInput.value = "";
     limpiarResultados();
-    mostrarEstado("", "");
-    statusDiv.style.display = "none";
+    mostrarEstado("Listo para cargar un nuevo archivo.", "info");
 });
 
 function renderizarTabla(lista) {
     if (lista.length === 0) {
-        resultDiv.innerHTML = `<div class="empty">No se encontraron prestaciones del catálogo en el documento.</div>`;
+        resultDiv.innerHTML = `<div class="empty">No se encontró una prestación codificable con las reglas actuales.</div>`;
         return;
     }
 
@@ -151,7 +396,7 @@ function renderizarTabla(lista) {
             <thead>
                 <tr>
                     <th>Código Nomenclador</th>
-                    <th>Código Equivalente</th>
+                    <th>Código Mapeado</th>
                     <th>Descripción</th>
                     <th>Estado</th>
                 </tr>
@@ -191,3 +436,5 @@ function limpiarResultados() {
 }
 
 </script>
+</body>
+</html>
