@@ -867,4 +867,15 @@
     "descripcion": "SHBG, globulina ligadora de hormonas sexuales",
     "valor": 23
   }
+  "HEPATITIS B ANTÃGENO DE SUPERFICIE": {
+    "code": "LAB.03.115",
+    "description": "",
+    "confidence": "revisar"
+  },
+  "AST": {
+    "code": "LAB.01.152",
+    "description": "",
+    "confidence": "revisar"
+  }
+}
 }
