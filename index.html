@@ -1,285 +1,874 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Codificador Bioquímico Mendoza v2</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <script src="https://unpkg.com/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body { font-family: system-ui, -apple-system, sans-serif; margin: 20px; background: #f4f6f8; color: #1a202c; }
-    .container { max-width: 900px; margin: 0 auto; }
-    .card { background: white; padding: 24px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; }
-    h1 { font-size: 1.25rem; color: #2c5282; margin-top: 0; }
-    .btn { background: #3182ce; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-weight: 600; }
-    .btn:disabled { background: #cbd5e0; cursor: not-allowed; }
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    th, td { border: 1px solid #e2e8f0; padding: 8px 12px; text-align: left; font-size: 0.875rem; }
-    th { background: #edf2f7; }
-    .code-tag { background: #ebf8ff; color: #2b6cb0; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-family: monospace; }
-    #status { margin-top: 12px; font-size: 0.9rem; color: #4a5568; }
-  </style>
+    <title>Codificador de Prestaciones Médicas</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f4f6f8;
+            color: #222;
+        }
+
+        header {
+            background: #0d47a1;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 26px;
+        }
+
+        header p {
+            margin: 8px 0 0;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            margin-top: 0;
+            color: #0d47a1;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 14px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background: #0d47a1;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #08306f;
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #222;
+        }
+
+        .btn-success {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #c62828;
+            color: white;
+        }
+
+        .status {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background: #e3f2fd;
+            color: #0d47a1;
+        }
+
+        .error {
+            background: #ffebee;
+            color: #b71c1c;
+        }
+
+        .success {
+            background: #e8f5e9;
+            color: #1b5e20;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th {
+            background: #0d47a1;
+            color: white;
+            padding: 12px;
+            text-align: left;
+        }
+
+        td {
+            padding: 11px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        .codigo {
+            font-weight: bold;
+            color: #0d47a1;
+            white-space: nowrap;
+        }
+
+        .valor {
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 6px;
+            background: #e3f2fd;
+            color: #0d47a1;
+            font-size: 13px;
+        }
+
+        .upload-area {
+            border: 2px dashed #90caf9;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            background: #f8fbff;
+        }
+
+        .upload-area input {
+            margin-top: 15px;
+        }
+
+        .result-item {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background: white;
+        }
+
+        .result-item strong {
+            color: #0d47a1;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .empty {
+            text-align: center;
+            color: #777;
+            padding: 30px;
+        }
+
+        @media (max-width: 700px) {
+
+            .search-box {
+                flex-direction: column;
+            }
+
+            table {
+                font-size: 13px;
+            }
+
+            th,
+            td {
+                padding: 8px;
+            }
+
+            .container {
+                padding: 0 10px;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
-<div class="container">
-  <div class="card">
-    <h1>Codificador de Protocolos Bioquímicos (Mendoza)</h1>
-    <p style="font-size: 0.875rem; color: #718096;">Selecciona el PDF para identificar las prestaciones y estampar los códigos sobre el documento original.</p>
-    <input type="file" id="pdfInput" accept="application/pdf">
-    <button class="btn" id="processBtn" onclick="procesarDocumento()">Procesar PDF</button>
-    <div id="status"></div>
-  </div>
+<header>
+    <h1>Codificador de Prestaciones Médicas</h1>
+    <p>Nomenclador de Laboratorio – Mendoza</p>
+</header>
 
-  <div id="resultsCard" class="card" style="display:none;">
-    <h2>Prestaciones Detectadas</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>Pág.</th>
-          <th>Texto Detectado</th>
-          <th>Prestación Asignada</th>
-          <th>Código</th>
-          <th>Ubicación (X, Y)</th>
-        </tr>
-      </thead>
-      <tbody id="auditTableBody"></tbody>
-    </table>
-    <br>
-    <button class="btn" onclick="descargarPDF()">Descargar PDF Marcado + Anexo</button>
-  </div>
+
+<div class="container">
+
+    <!-- ESTADO DEL SISTEMA -->
+    <div class="card">
+
+        <h2>Estado del nomenclador</h2>
+
+        <div id="estado" class="status">
+            Cargando nomenclador...
+        </div>
+
+    </div>
+
+
+    <!-- BUSCADOR -->
+    <div class="card">
+
+        <h2>Buscar prestación</h2>
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="busqueda"
+                placeholder="Ej.: glucosa, hemograma, TSH, urocultivo..."
+                autocomplete="off"
+            >
+
+            <button
+                class="btn-primary"
+                onclick="buscarPrestacion()"
+            >
+                Buscar
+            </button>
+
+        </div>
+
+        <div id="resultados">
+
+            <div class="empty">
+                Escriba una prestación para comenzar la búsqueda.
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- CARGAR ESTUDIO -->
+    <div class="card">
+
+        <h2>Procesar estudio médico</h2>
+
+        <div class="upload-area">
+
+            <p>
+                Seleccione el PDF del estudio médico.
+            </p>
+
+            <p>
+                El sistema identificará las prestaciones y
+                buscará automáticamente sus códigos.
+            </p>
+
+            <input
+                type="file"
+                id="archivoPDF"
+                accept=".pdf"
+            >
+
+        </div>
+
+        <div class="actions">
+
+            <button
+                class="btn-primary"
+                onclick="procesarPDF()"
+            >
+                Procesar PDF
+            </button>
+
+            <button
+                class="btn-secondary"
+                onclick="limpiarResultados()"
+            >
+                Limpiar
+            </button>
+
+        </div>
+
+        <div id="resultadoPDF"></div>
+
+    </div>
+
+
+    <!-- PRESTACIONES DETECTADAS -->
+    <div class="card">
+
+        <h2>Prestaciones detectadas</h2>
+
+        <div id="tablaPrestaciones">
+
+            <div class="empty">
+                Todavía no se procesó ningún estudio.
+            </div>
+
+        </div>
+
+    </div>
+
 </div>
 
+
 <script>
-  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-  // Nomenclador Mendoza - Ampliado
-  const NOMENCLADOR = [
-    // --- METABOLISMO DE HIDRATOS DE CARBONO Y LIPIDOS ---
-    { codigo: "01.073", nombre: "GLUCEMIA", regex: /\b(GLUCOSA|GLUCEMIA|GLUCOSA EN SUERO|GLUCEMIA EN SANGRE)\b/i },
-    { codigo: "01.074", nombre: "CURVA DE TOLERANCIA A LA GLUCOSA", regex: /\b(CURVA DE TOLERANCIA|PTOG|PRUEBA DE TOLERANCIA A LA GLUCOSA)\b/i },
-    { codigo: "01.075", nombre: "HEMOGLOBINA GLICOSILADA (HB A1C)", regex: /\b(HEMOGLOBINA GLICOSILADA|HBA1C|HB A1C)\b/i },
-    { codigo: "01.180", nombre: "COLESTEROL TOTAL", regex: /\b(COLESTEROL|COLESTEROL TOTAL)\b/i },
-    { codigo: "01.181", nombre: "COLESTEROL HDL", regex: /\b(HDL|COLESTEROL HDL|HDL-COLESTEROL)\b/i },
-    { codigo: "01.182", nombre: "COLESTEROL LDL", regex: /\b(LDL|COLESTEROL LDL|LDL-COLESTEROL)\b/i },
-    { codigo: "01.910", nombre: "TRIGLICERIDOS", regex: /\b(TRIGLICERIDOS|TRIGLICERIDEMIA)\b/i },
-    { codigo: "01.085", nombre: "LIPIDOGRAMA ELECTROFORETICO", regex: /\b(LIPIDOGRAMA|LIPIDOGRAMA ELECTROFORETICO)\b/i },
+/*
+=========================================================
+ VARIABLES PRINCIPALES
+=========================================================
+*/
 
-    // --- FUNCIÓN RENAL Y HEPÁTICA ---
-    { codigo: "01.885", nombre: "UREA EN SANGRE", regex: /\b(UREA|UREMIA)\b/i },
-    { codigo: "01.190", nombre: "CREATININA EN SANGRE", regex: /\b(CREATININA|CREATININEMIA)\b/i },
-    { codigo: "01.191", nombre: "ACIDO URICO", regex: /\b(ACIDO URICO|URICEMIA)\b/i },
-    { codigo: "01.115", nombre: "BILIRRUBINA TOTAL Y FRACCIONADA", regex: /\b(BILIRRUBINA|BILIRRUBINEMIA|BILIRRUBINA TOTAL)\b/i },
-    { codigo: "01.405", nombre: "GOT / AST", regex: /\b(GOT|AST|TRANSAMINASA GLUTAMICO OXALACETICA)\b/i },
-    { codigo: "01.406", nombre: "GPT / ALT", regex: /\b(GPT|ALT|TRANSAMINASA GLUTAMICO PIRUVICA)\b/i },
-    { codigo: "01.370", nombre: "FOSFATASA ALCALINA (FAL)", regex: /\b(FOSFATASA ALCALINA|FAL)\b/i },
-    { codigo: "01.385", nombre: "GAMA GLUTAMIL TRANSPEPTIDASA (GGT)", regex: /\b(GAMA GT|GGT|GAMMA GLUTAMIL)\b/i },
+let nomenclador = [];
 
-    // --- HEMATOLOGÍA Y COAGULACIÓN ---
-    { codigo: "01.401", nombre: "HEMOGRAMA COMPLETO", regex: /\b(HEMOGRAMA|RECUENTO DE GLOBULOS|HEMOGRAMA COMPLETO)\b/i },
-    { codigo: "01.295", nombre: "ERITROSEDIMENTACION (VSG)", regex: /\b(ERITROSEDIMENTACION|VSG|VELOCIDAD DE SEDIMENTACION)\b/i },
-    { codigo: "01.815", nombre: "TIEMPO DE PROTROMBINA (TP)", regex: /\b(TIEMPO DE PROTROMBINA|TIEMPO DE QUICK|TP\/QUICK|TP)\b/i },
-    { codigo: "01.820", nombre: "KPTT / APTT", regex: /\b(KPTT|APTT|TIEMPO DE TROMBOPLASTINA)\b/i },
-    { codigo: "01.350", nombre: "FIBRINOGENO", regex: /\b(FIBRINOGENO)\b/i },
-    { codigo: "01.710", nombre: "RECUENTO DE PLAQUETAS", regex: /\b(PLAQUETAS|RECUENTO DE PLAQUETAS)\b/i },
-    { codigo: "01.340", nombre: "FERRITINA", regex: /\b(FERRITINA|FERRITINEMIA)\b/i },
-    { codigo: "01.345", nombre: "HIERRO SERICO (SIDEREMIA)", regex: /\b(HIERRO SERICO|SIDEREMIA|HIERRO)\b/i },
+let prestacionesEncontradas = [];
 
-    // --- IONOGRAMA Y MINERALES ---
-    { codigo: "01.810", nombre: "SODIO EN SANGRE", regex: /\b(SODIO|NATREMIA)\b/i },
-    { codigo: "01.700", nombre: "POTASIO EN SANGRE", regex: /\b(POTASIO|KALEMIA)\b/i },
-    { codigo: "01.160", nombre: "CLORO EN SANGRE", regex: /\b(CLORO|CLOREMIA)\b/i },
-    { codigo: "01.140", nombre: "CALCIO TOTAL", regex: /\b(CALCIO|CALCEMIA)\b/i },
-    { codigo: "01.380", nombre: "FOSFORO EN SANGRE", regex: /\b(FOSFORO|FOSFATEMIA)\b/i },
-    { codigo: "01.520", nombre: "MAGNESIO EN SANGRE", regex: /\b(MAGNESIO|MAGNESEMIA)\b/i },
-    { codigo: "01.500", nombre: "IONOGRAMA PLASMATICO", regex: /\b(IONOGRAMA|IONOGRAMA PLASMATICO)\b/i },
 
-    // --- HORMONAS Y ENDOCRINOLOGÍA ---
-    { codigo: "01.870", nombre: "TSH (HORMONA TIRESTIMULANTE)", regex: /\b(TSH|HORMONA TIRESTIMULANTE)\b/i },
-    { codigo: "01.860", nombre: "T4 LIBRE", regex: /\b(T4 LIBRE|TIROXINA LIBRE)\b/i },
-    { codigo: "01.855", nombre: "T4 TOTAL", regex: /\b(T4|T4 TOTAL|TIROXINA TOTAL)\b/i },
-    { codigo: "01.850", nombre: "T3 TOTAL", regex: /\b(T3|T3 TOTAL|TRIYODOTIRONINA)\b/i },
-    { codigo: "01.505", nombre: "INSULINA", regex: /\b(INSULINA|INSULINEMIA)\b/i },
-    { codigo: "01.210", nombre: "CORTISOL", regex: /\b(CORTISOL|CORTISOLEMIA)\b/i },
-    { codigo: "01.720", nombre: "PROLACTINA", regex: /\b(PROLACTINA|PRL)\b/i },
-    { codigo: "01.730", nombre: "PSA TOTAL", regex: /\b(PSA|PSA TOTAL|ANTIGENO PROSTATICO)\b/i },
+/*
+=========================================================
+ CARGAR NOMENCLADOR
+=========================================================
+*/
 
-    // --- IMMUNOLOGÍA Y SEROLOGÍA ---
-    { codigo: "01.890", nombre: "PROTEINA C REACTIVA (PCR)", regex: /\b(PROTEINA C REACTIVA|PCR ULTRASENSIBLE|PCR)\b/i },
-    { codigo: "01.030", nombre: "ANTICUERPOS ANTINUCLEARES (ANA)", regex: /\b(ANTICUERPOS ANTINUCLEARES|FAN|ANA)\b/i },
-    { codigo: "01.480", nombre: "HIV 1/2 ANTICUERPOS", regex: /\b(HIV 1\/2|SEROLOGIA HIV|HIV AG\/AC|HIV)\b/i },
-    { codigo: "01.930", nombre: "VDRL / SIFILIS", regex: /\b(VDRL|SEROLOGIA SIFILIS|SIFILIS)\b/i },
-    { codigo: "01.420", nombre: "HEPATITIS B (HBSAG)", regex: /\b(HBSAG|HEPATITIS B|ANTIGENO DE SUPERFICIE)\b/i },
-    { codigo: "01.430", nombre: "HEPATITIS C (ANTI HCV)", regex: /\b(HEPATITIS C|ANTI HCV|HCV)\b/i },
-    { codigo: "01.200", nombre: "CHAGAS (MACHADO GUERREIRO / HAI)", regex: /\b(CHAGAS|SEROLOGIA CHAGAS|HAI CHAGAS)\b/i },
-    { codigo: "01.895", nombre: "FACTOR REUMATOIDE (RA TEST)", regex: /\b(FACTOR REUMATOIDE|RA TEST|LATEX REUMA)\b/i },
+async function cargarNomenclador() {
 
-    // --- ORINA Y OTROS EXÁMENES ---
-    { codigo: "01.600", nombre: "ORINA COMPLETA", regex: /\b(ORINA COMPLETA|EXAMEN DE ORINA|ANALISIS DE ORINA)\b/i },
-    { codigo: "01.610", nombre: "UROCULTIVO", regex: /\b(UROCULTIVO|CULTIVO DE ORINA)\b/i },
-    { codigo: "01.220", nombre: "COPROCULTIVO", regex: /\b(COPROCULTIVO|CULTIVO DE MATERIA FECAL)\b/i },
-    { codigo: "01.170", nombre: "PARASITOLOGICO EN MATERIA FECAL", regex: /\b(PARASITOLOGICO|PARASITOS EN MATERIA FECAL)\b/i }
-  ];
+    const estado = document.getElementById("estado");
 
-  let pdfBytesOriginal = null;
-  let pdfBytesModificado = null;
+    try {
 
-  function limpiarTexto(str) {
-    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
-  }
+        const respuesta = await fetch("nomenclador_lab.json");
 
-  async function procesarDocumento() {
-    const input = document.getElementById('pdfInput');
-    const status = document.getElementById('status');
-    const btn = document.getElementById('processBtn');
-
-    if (!input.files.length) return alert("Selecciona un archivo PDF primero.");
-
-    btn.disabled = true;
-    status.innerText = "Leyendo archivo PDF...";
-
-    pdfBytesOriginal = await input.files[0].arrayBuffer();
-    const pdfDocJS = await pdfjsLib.getDocument({ data: pdfBytesOriginal.slice(0) }).promise;
-
-    let detecciones = [];
-
-    for (let pageIdx = 1; pageIdx <= pdfDocJS.numPages; pageIdx++) {
-      status.innerText = `Escaneando página ${pageIdx} de ${pdfDocJS.numPages}...`;
-      const page = await pdfDocJS.getPage(pageIdx);
-      const textContent = await page.getTextContent();
-      const viewport = page.getViewport({ scale: 1.0 });
-
-      for (const item of textContent.items) {
-        const textoLimpio = limpiarTexto(item.str);
-        if (textoLimpio.trim().length < 3) continue;
-
-        for (const itemNom of NOMENCLADOR) {
-          if (itemNom.regex.test(textoLimpio)) {
-            const yaExiste = detecciones.some(d => d.pagina === pageIdx && d.codigo === itemNom.codigo);
-            if (!yaExiste) {
-              detecciones.push({
-                pagina: pageIdx,
-                textoEncontrado: item.str.trim(),
-                nombre: itemNom.nombre,
-                codigo: itemNom.codigo,
-                x: item.transform[4],
-                y: item.transform[5],
-                pageHeight: viewport.height
-              });
-            }
-          }
+        if (!respuesta.ok) {
+            throw new Error(
+                "No se pudo cargar nomenclador_lab.json"
+            );
         }
-      }
+
+        const datos = await respuesta.json();
+
+        /*
+         ------------------------------------------------
+         Aceptamos distintos formatos de JSON
+         ------------------------------------------------
+        */
+
+        if (Array.isArray(datos)) {
+
+            nomenclador = datos;
+
+        } else if (Array.isArray(datos.prestaciones)) {
+
+            nomenclador = datos.prestaciones;
+
+        } else if (Array.isArray(datos.laboratorio)) {
+
+            nomenclador = datos.laboratorio;
+
+        } else {
+
+            throw new Error(
+                "El formato del nomenclador_lab.json no es válido."
+            );
+
+        }
+
+
+        /*
+         ------------------------------------------------
+         Normalizamos los registros
+         ------------------------------------------------
+        */
+
+        nomenclador = nomenclador.map(item => {
+
+            return {
+
+                codigo:
+                    item.codigo ||
+                    item.code ||
+                    item.cod ||
+                    "",
+
+                nombre:
+                    item.nombre ||
+                    item.descripcion ||
+                    item.prestacion ||
+                    "",
+
+                valor:
+                    item.valor ||
+                    item.unidades ||
+                    item.orden ||
+                    ""
+
+            };
+
+        });
+
+
+        estado.className = "status success";
+
+        estado.innerHTML =
+            "✓ Nomenclador cargado correctamente. " +
+            nomenclador.length +
+            " prestaciones disponibles.";
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        estado.className = "status error";
+
+        estado.innerHTML =
+            "✗ Error al cargar el nomenclador. " +
+            "Verifique que <strong>nomenclador_lab.json</strong> " +
+            "esté en la misma carpeta que este index.html.";
+
     }
 
-    // Agregar Acto Bioquímico obligatorio si existen prestaciones
-    if (detecciones.length > 0) {
-      detecciones.unshift({
-        pagina: 1,
-        textoEncontrado: "[AUTOMATICO]",
-        nombre: "ACTO BIOQUIMICO",
-        codigo: "01.001",
-        x: 40,
-        y: 750,
-        pageHeight: 841
-      });
+}
+
+
+/*
+=========================================================
+ NORMALIZAR TEXTO
+=========================================================
+*/
+
+function normalizarTexto(texto) {
+
+    return String(texto || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^\w\s]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+
+}
+
+
+/*
+=========================================================
+ BUSCADOR
+=========================================================
+*/
+
+function buscarPrestacion() {
+
+    const texto =
+        document.getElementById("busqueda").value.trim();
+
+    const resultados =
+        document.getElementById("resultados");
+
+
+    if (!texto) {
+
+        resultados.innerHTML =
+            '<div class="empty">' +
+            'Escriba una prestación para buscar.' +
+            '</div>';
+
+        return;
+
     }
 
-    mostrarTablaAudit(detecciones);
-    await estamparPDF(detecciones);
 
-    status.innerText = "Proceso finalizado con éxito.";
-    btn.disabled = false;
-  }
+    const busqueda =
+        normalizarTexto(texto);
 
-  function mostrarTablaAudit(lista) {
-    const tbody = document.getElementById('auditTableBody');
-    tbody.innerHTML = '';
 
-    if (lista.length === 0) {
-      tbody.innerHTML = '<tr><td colspan="5">No se encontraron prestaciones del nomenclador.</td></tr>';
-    } else {
-      lista.forEach(item => {
-        tbody.innerHTML += `
-          <tr>
-            <td>${item.pagina}</td>
-            <td><code>${item.textoEncontrado}</code></td>
-            <td><strong>${item.nombre}</strong></td>
-            <td><span class="code-tag">${item.codigo}</span></td>
-            <td>X: ${Math.round(item.x)}, Y: ${Math.round(item.y)}</td>
-          </tr>
+    const palabras =
+        busqueda.split(" ");
+
+
+    const encontrados =
+        nomenclador
+            .map(item => {
+
+                const nombre =
+                    normalizarTexto(item.nombre);
+
+                let coincidencias = 0;
+
+                palabras.forEach(palabra => {
+
+                    if (nombre.includes(palabra)) {
+                        coincidencias++;
+                    }
+
+                });
+
+
+                return {
+
+                    ...item,
+
+                    coincidencias
+
+                };
+
+            })
+            .filter(item => item.coincidencias > 0)
+            .sort(
+                (a, b) =>
+                    b.coincidencias -
+                    a.coincidencias
+            );
+
+
+    if (encontrados.length === 0) {
+
+        resultados.innerHTML =
+            '<div class="empty">' +
+            'No se encontraron prestaciones coincidentes.' +
+            '</div>';
+
+        return;
+
+    }
+
+
+    resultados.innerHTML = encontrados
+        .slice(0, 100)
+        .map(item => `
+
+            <div class="result-item">
+
+                <strong>${escapeHTML(item.codigo)}</strong>
+
+                <br>
+
+                ${escapeHTML(item.nombre)}
+
+                ${
+                    item.valor !== ""
+                    ?
+                    `<br><span class="badge">
+                        Valor: ${escapeHTML(item.valor)}
+                    </span>`
+                    :
+                    ""
+                }
+
+            </div>
+
+        `)
+        .join("");
+
+}
+
+
+/*
+=========================================================
+ ENTER PARA BUSCAR
+=========================================================
+*/
+
+document
+    .getElementById("busqueda")
+    .addEventListener(
+        "keydown",
+        function(event) {
+
+            if (event.key === "Enter") {
+
+                buscarPrestacion();
+
+            }
+
+        }
+    );
+
+
+/*
+=========================================================
+ PROCESAR PDF
+=========================================================
+*/
+
+async function procesarPDF() {
+
+    const archivo =
+        document.getElementById("archivoPDF").files[0];
+
+    const resultado =
+        document.getElementById("resultadoPDF");
+
+
+    if (!archivo) {
+
+        resultado.innerHTML =
+            '<div class="status error">' +
+            'Seleccione primero un archivo PDF.' +
+            '</div>';
+
+        return;
+
+    }
+
+
+    resultado.innerHTML =
+        '<div class="status">' +
+        'Procesando PDF...' +
+        '</div>';
+
+
+    /*
+     -----------------------------------------------------
+     IMPORTANTE:
+     En esta primera versión dejamos preparada
+     la estructura para integrar el lector de PDF.
+     -----------------------------------------------------
+    */
+
+
+    resultado.innerHTML = `
+
+        <div class="status success">
+
+            ✓ Archivo seleccionado correctamente.
+
+            <br><br>
+
+            <strong>
+                ${escapeHTML(archivo.name)}
+            </strong>
+
+            <br>
+
+            Tamaño:
+            ${formatearBytes(archivo.size)}
+
+        </div>
+
+        <div class="status">
+
+            El lector automático de PDF se integrará
+            en el siguiente módulo.
+
+        </div>
+
+    `;
+
+}
+
+
+/*
+=========================================================
+ MOSTRAR PRESTACIONES
+=========================================================
+*/
+
+function mostrarPrestaciones(lista) {
+
+    const contenedor =
+        document.getElementById("tablaPrestaciones");
+
+
+    if (!lista || lista.length === 0) {
+
+        contenedor.innerHTML =
+            '<div class="empty">' +
+            'No se encontraron prestaciones.' +
+            '</div>';
+
+        return;
+
+    }
+
+
+    let html = `
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Código</th>
+
+                    <th>Prestación</th>
+
+                    <th>Valor</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+    `;
+
+
+    lista.forEach(item => {
+
+        html += `
+
+            <tr>
+
+                <td class="codigo">
+                    ${escapeHTML(item.codigo)}
+                </td>
+
+                <td>
+                    ${escapeHTML(item.nombre)}
+                </td>
+
+                <td class="valor">
+                    ${escapeHTML(item.valor)}
+                </td>
+
+            </tr>
+
         `;
-      });
+
+    });
+
+
+    html += `
+
+            </tbody>
+
+        </table>
+
+    `;
+
+
+    contenedor.innerHTML = html;
+
+}
+
+
+/*
+=========================================================
+ LIMPIAR
+=========================================================
+*/
+
+function limpiarResultados() {
+
+    document.getElementById("busqueda").value = "";
+
+    document.getElementById("resultados").innerHTML =
+        '<div class="empty">' +
+        'Escriba una prestación para comenzar la búsqueda.' +
+        '</div>';
+
+    document.getElementById("resultadoPDF").innerHTML = "";
+
+    document.getElementById("tablaPrestaciones").innerHTML =
+        '<div class="empty">' +
+        'Todavía no se procesó ningún estudio.' +
+        '</div>';
+
+}
+
+
+/*
+=========================================================
+ SEGURIDAD HTML
+=========================================================
+*/
+
+function escapeHTML(texto) {
+
+    return String(texto || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/*
+=========================================================
+ FORMATEAR BYTES
+=========================================================
+*/
+
+function formatearBytes(bytes) {
+
+    if (bytes === 0) {
+        return "0 Bytes";
     }
-    document.getElementById('resultsCard').style.display = 'block';
-  }
 
-  async function estamparPDF(detecciones) {
-    const { PDFDocument, rgb, StandardFonts } = PDFLib;
-    const pdfDoc = await PDFDocument.load(pdfBytesOriginal);
-    const fontBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+    const unidades = [
+        "Bytes",
+        "KB",
+        "MB",
+        "GB"
+    ];
 
-    // Estampar en las páginas del PDF
-    detecciones.forEach(d => {
-      if (d.codigo === "01.001") return; // El acto bioquímico va únicamente al anexo
+    const indice =
+        Math.floor(
+            Math.log(bytes) /
+            Math.log(1024)
+        );
 
-      const page = pdfDoc.getPage(d.pagina - 1);
-      const etiqueta = `[${d.codigo}]`;
-      const fontSize = 9;
+    return (
+        parseFloat(
+            (
+                bytes /
+                Math.pow(1024, indice)
+            ).toFixed(2)
+        ) +
+        " " +
+        unidades[indice]
+    );
 
-      const xPos = 430; // Columna fija en el margen derecho
-      const yPos = d.y - 1; 
+}
 
-      const textWidth = fontBold.widthOfTextAtSize(etiqueta, fontSize);
 
-      // Fondo recuadro contenedor
-      page.drawRectangle({
-        x: xPos - 2,
-        y: yPos - 2,
-        width: textWidth + 4,
-        height: fontSize + 3,
-        color: rgb(0.92, 0.95, 1.0),
-        borderColor: rgb(0.1, 0.3, 0.8),
-        borderWidth: 0.5,
-      });
+/*
+=========================================================
+ INICIAR
+=========================================================
+*/
 
-      // Texto del código
-      page.drawText(etiqueta, {
-        x: xPos,
-        y: yPos,
-        size: fontSize,
-        font: fontBold,
-        color: rgb(0.1, 0.3, 0.8)
-      });
-    });
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
 
-    // Agregar Anexo
-    const anexo = pdfDoc.addPage([595.28, 841.89]);
-    let y = 800;
+        cargarNomenclador();
 
-    anexo.drawText("ANEXO DE CODIFICACIÓN BIOQUÍMICA (NOMENCLADOR MENDOZA)", {
-      x: 40, y: y, size: 11, font: fontBold, color: rgb(0.2, 0.2, 0.2)
-    });
+    }
+);
 
-    y -= 25;
-    detecciones.forEach(d => {
-      anexo.drawText(`${d.codigo} - ${d.nombre}`, { x: 40, y: y, size: 9, font: fontBold });
-      anexo.drawText(`(Pág. ${d.pagina})`, { x: 450, y: y, size: 9, font: fontBold });
-      y -= 18;
-    });
-
-    pdfBytesModificado = await pdfDoc.save();
-  }
-
-  function descargarPDF() {
-    if (!pdfBytesModificado) return;
-    const blob = new Blob([pdfBytesModificado], { type: 'application/pdf' });
-    const a = document.createElement('a');
-    a.href = URL.ObjectURL(blob);
-    a.download = "protocolo_codificado_mendoza.pdf";
-    a.click();
-  }
 </script>
 
 </body>
